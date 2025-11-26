@@ -1,0 +1,7 @@
+{
+  "name": "service-scheduling",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
