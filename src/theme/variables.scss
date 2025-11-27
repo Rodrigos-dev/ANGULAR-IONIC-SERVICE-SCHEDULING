@@ -1,8 +1,30 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
 
-// https://ionicframework.com/docs/theming/color-generator
-//site acima montei as cores so ir com o #numero que ele gera num txt abaixo td
+/* 
+------------ Cores site para montar e exemplo de uso
+https://ionicframework.com/docs/theming/color-generator
+site acima montei as cores so ir com o #numero que ele gera num txt abaixo td
+
+ h2 {
+            color: var(--cor-verde-medio);
+            font-weight: 700;
+        }
+*/
+
+/*
+******fontes exemplo de uso
+
+ion-content {
+  // O seletor ::part(scroll) é comum para estilizar conteúdo interno do Ionic
+  &::part(scroll) {
+    font-family: 'Roboto', sans-serif;							// AKI
+  }
+}
+*/
+
+@import "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap";
 
 :root {
   --cor-verde-escuro: #002e34;
