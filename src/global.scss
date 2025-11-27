@@ -34,4 +34,79 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+ion-toast.custom-toast {
+  --background: #f4f4fa;
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --color: var(--cor-verde-medio);
+}
+
+ion-toast.custom-toast::part(message) {
+  font-style: italic;
+}
+
+ion-toast.custom-toast::part(button) {
+  border-left: 1px solid var(--cor-cinza-claro);
+  color: var(--cor-verde-medio);
+  font-size: 15px;
+}
+
+ion-alert .alert-wrapper {
+  --min-width: 80dvw;
+}
+
+.custom-alert {
+  border-radius: 20px;
+
+  .alert-button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .alert-button-1,
+  .alert-button-2,
+  .alert-button-1-full {
+    margin: 10px 0;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .alert-button-1-full {
+    width: 100%;
+    background-color: var(--cor-verde-medio);
+    color: var(--cor-branco);
+    display: grid;
+  }
+
+  .alert-button-1 {
+    width: 48%;
+    background-color: var(--cor-verde-medio);
+    color: var(--cor-branco);
+    display: grid;
+  }
+
+  .alert-button-2 {
+    width: 48%;
+    background-color: var(--cor-branco);
+    color: var(--cor-verde-medio);
+    display: grid;
+    border: 1px solid var(--cor-verde-medio);
+  }
+
+  .alert-head {
+    h2 {
+      color: var(--cor-verde-medio);
+      font-weight: 700;
+    }
+
+    text-align: center;
+    width: 100%;
+  }
+
+  .alert-wrapper {
+    border-radius: 12px;
+    padding: 10px;
+  }
+}
