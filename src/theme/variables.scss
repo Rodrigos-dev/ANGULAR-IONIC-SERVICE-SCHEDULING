@@ -1,2 +1,107 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+// https://ionicframework.com/docs/theming/color-generator
+//site acima montei as cores so ir com o #numero que ele gera num txt abaixo td
+
+:root {
+  --cor-verde-escuro: #002e34;
+  --cor-verde-escuro-rgb: 0, 46, 52;
+  --cor-verde-escuro-contrast: #ffffff;
+  --cor-verde-escuro-contrast-rgb: 255, 255, 255;
+  --cor-verde-escuro-shade: #00282e;
+  --cor-verde-escuro-tint: #1a4348;
+
+  --cor-verde-forte: #004443;
+  --cor-verde-forte-rgb: 0, 68, 67;
+  --cor-verde-forte-contrast: #ffffff;
+  --cor-verde-forte-contrast-rgb: 255, 255, 255;
+  --cor-verde-forte-shade: #003c3b;
+  --cor-verde-forte-tint: #1a5756;
+
+  --cor-verde-medio: #00755c;
+  --cor-verde-medio-rgb: 0, 117, 92;
+  --cor-verde-medio-contrast: #ffffff;
+  --cor-verde-medio-contrast-rgb: 255, 255, 255;
+  --cor-verde-medio-shade: #006751;
+  --cor-verde-medio-tint: #1a836c;
+
+  --cor-verde-claro: #00c16c;
+  --cor-verde-claro-rgb: 0, 193, 108;
+  --cor-verde-claro-contrast: #000000;
+  --cor-verde-claro-contrast-rgb: 0, 0, 0;
+  --cor-verde-claro-shade: #00aa5f;
+  --cor-verde-claro-tint: #1ac77b;
+
+  --cor-verde-limao: #90ff17;
+  --cor-verde-limao-rgb: 144, 255, 23;
+  --cor-verde-limao-contrast: #000000;
+  --cor-verde-limao-contrast-rgb: 0, 0, 0;
+  --cor-verde-limao-shade: #7fe014;
+  --cor-verde-limao-tint: #9bff2e;
+
+  --cor-cinza-medio: #5f5f5f;
+  --cor-cinza-medio-rgb: 95, 95, 95;
+  --cor-cinza-medio-contrast: #ffffff;
+  --cor-cinza-medio-contrast-rgb: 255, 255, 255;
+  --cor-cinza-medio-shade: #545454;
+  --cor-cinza-medio-tint: #6f6f6f;
+
+  --cor-cinza-claro: #f7f7f7;
+  --cor-cinza-claro-rgb: 247, 247, 247;
+  --cor-cinza-claro-contrast: #000000;
+  --cor-cinza-claro-contrast-rgb: 0, 0, 0;
+  --cor-cinza-claro-shade: #d9d9d9;
+  --cor-cinza-claro-tint: #f8f8f8;
+
+  --cor-branco: #fff;
+  --cor-branco-rgb: 255, 255, 255;
+  --cor-branco-contrast: #000000;
+  --cor-branco-contrast-rgb: 0, 0, 0;
+  --cor-branco-shade: #e0e0e0;
+  --cor-branco-tint: #ffffff;
+
+  --cor-preto: #000;
+  --cor-preto-rgb: 0, 0, 0;
+  --cor-preto-contrast: #ffffff;
+  --cor-preto-contrast-rgb: 255, 255, 255;
+  --cor-preto-shade: #000000;
+  --cor-preto-tint: #1a1a1a;
+
+  --cor-vermelho: #ff6666;
+  --cor-vermelho-rgb: 255, 102, 102;
+  --cor-vermelho-contrast: #000000;
+  --cor-vermelho-contrast-rgb: 0, 0, 0;
+  --cor-vermelho-shade: #e05a5a;
+  --cor-vermelho-tint: #ff7575;
+
+  --cor-amarelo: #ffd700;
+  --cor-amarelo-rgb: 255, 215, 0;
+  --cor-amarelo-contrast: #000000;
+  --cor-amarelo-contrast-rgb: 0, 0, 0;
+  --cor-amarelo-shade: #e0bd00;
+  --cor-amarelo-tint: #ffdb1a;
+
+  --ion-color-success: #00c16c;
+  --ion-color-success-rgb: 0, 193, 108;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #00aa5f;
+  --ion-color-success-tint: #1ac77b;
+
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255, 196, 9;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
+
+  --ion-color-danger: #c5000f;
+  --ion-color-danger-rgb: 197, 0, 15;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #ad000d;
+  --ion-color-danger-tint: #cb1a27;
+
+  --ion-safe-area-top: 1.5rem;
+}
