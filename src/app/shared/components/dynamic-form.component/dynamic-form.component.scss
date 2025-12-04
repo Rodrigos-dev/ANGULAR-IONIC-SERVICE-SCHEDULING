@@ -1,12 +1,24 @@
 @use "../../../../theme/medias" as *;
 
 // ----------------
+
+/* Grid responsivo */
+
 .my-grid {
   padding-top: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
   max-width: 1800px;
+}
+
+ion-grid {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 8px;
+}
+
+ion-col {
+  padding: var(--ion-grid-column-padding);
 }
 
 //----------------------

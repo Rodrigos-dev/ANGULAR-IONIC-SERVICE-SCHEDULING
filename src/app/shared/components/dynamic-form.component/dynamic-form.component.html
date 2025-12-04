@@ -2,7 +2,20 @@
 <form [formGroup]="form">
   <ion-grid class="my-grid">
     <ion-col size-lg="12" size-lg="6"></ion-col>
-    <ion-row></ion-row>
+    <ion-row>
+      <!-- loop com os campos enviados na configuracao do formulario -->
+      @for (field of formConfigFields; track field.name) {
+      <ion-col
+        [attr.size-lg]="field.size ?? 12"
+        [attr.size-xs]="field.mobileSize ?? 12"
+        [style.padding-left]="'0'"
+        [style.padding-right]="'0'"
+        [hidden]="field.hidden || form.controls[field.name]?.disabled"
+      >
+      </ion-col>
+      }
+      <!-- fim loop com os campos enviados na configuracao do formulario -->
+    </ion-row>
   </ion-grid>
 </form>
 }
