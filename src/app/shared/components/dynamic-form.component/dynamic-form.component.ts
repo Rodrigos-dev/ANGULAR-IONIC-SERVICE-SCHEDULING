@@ -14,7 +14,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { eFieldDynamicForm } from './enums/field-dynamic-form.enum';
+import { EFieldDynamicForm } from './enums/field-dynamic-form.enum';
 
 // @Pipe({ name: 'formIsRequired', standalone: true })
 // export class FormIsRequiredPipe implements PipeTransform {
@@ -46,7 +46,7 @@ export class DynamicFormComponent implements OnInit {
 
   form: FormGroup = new FormGroup({});
 
-  protected eFieldDynamicForm = eFieldDynamicForm;
+  protected eFieldDynamicForm = EFieldDynamicForm;
 
   ngOnInit() {
     //this.createForm();

@@ -5,6 +5,7 @@
     <ion-row>
       <!-- loop com os campos enviados na configuracao do formulario -->
       @for (field of formConfigFields; track field.name) {
+      <!-- COLUNA CONTAINER -->
       <ion-col
         [attr.size-lg]="field.size ?? 12"
         [attr.size-xs]="field.mobileSize ?? 12"
@@ -12,7 +13,49 @@
         [style.padding-right]="'0'"
         [hidden]="field.hidden || form.controls[field.name]?.disabled"
       >
+        <!-- DIVIDER -->
+        @if (field.typeFieldForm === eFieldDynamicForm.DIVIDER) {
+        <ion-item-divider
+          [style.--padding-start]="
+            field.paddingStart ? field.paddingStart : '1.2rem'
+          "
+          [style.margin-bottom]="'2rem'"
+          [style.width]="'100%'"
+          [style.border]="
+            field.border === 'full'
+              ? '1px solid var(--ion-color-primary)'
+              : null
+          "
+          [style.border-color]="
+            field.border === 'none'
+              ? 'transparent'
+              : field.borderColor
+              ? field.borderColor
+              : 'var(--ion-color-primary)'
+          "
+          [styck]="field.itemDividerStick"
+          [style.borderRadius]="field.borderRadius"
+          [style.background]="field.background"
+        >
+          <!-- caso queira exibir o titulo se nao enviar fica uma linha apenas ou um quadrado dependendo da config do item divider -->
+          @if(field.label){
+          <ion-label
+            [style.width]="'100%'"
+            [style.text-align]="'center'"
+            [style.padding-top]="'10px'"
+            [style.padding-bottom]="'10px'"
+            [style.color]="field.color ?? 'var(--ion-color-primary)'"
+            [style.font-weight]="field.fontWeight ?? '600'"
+            [style.font-size]="field.fontSize ?? '1.1rem'"
+            >{{ field.label }}</ion-label
+          >
+          }
+          <!-- fim do label -->
+        </ion-item-divider>
+        }
+        <!-- FIM if divider -->
       </ion-col>
+
       }
       <!-- fim loop com os campos enviados na configuracao do formulario -->
     </ion-row>
