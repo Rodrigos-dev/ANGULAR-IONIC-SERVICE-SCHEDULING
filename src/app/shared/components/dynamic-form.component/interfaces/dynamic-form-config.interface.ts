@@ -1,13 +1,17 @@
 import { ValidatorFn } from '@angular/forms';
 import { EFieldDynamicForm } from '../enums/field-dynamic-form.enum';
 import { TypeInputField } from '../types/input-field.type';
-import { borderType } from '../types/styles-field.type';
+import { BorderType, TextAlignType } from '../types/styles-field.type';
 
 export interface IDynamicFormConfig {
   name: string; //nome do campo no formulario formname
   typeFieldForm: EFieldDynamicForm; //tipo de campo do formulario desejado ...input..select etc
 
   label?: string; // label para usar no itm...ELE FICA sobre o input em si COM UM TITULO DO CAMPO POREM TEM O INPUT LABEL TB PARA ENVIAR QUE EH O LABEL DO INPUT
+  help?: string; // DICA DO QUE FAZ OU WARNIG DO CAMPO
+
+  //cada icon temos o padrao porem se enviar vai usar o enviado
+  iconName?: string; //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
 
   //grid e responsividades
   size?: number; //tamanho da grid em desktop 'LG' na column porexemplo
@@ -17,9 +21,11 @@ export interface IDynamicFormConfig {
   disabled?: boolean; //disabelita o campo                                                                  -- ion-item-divider
   hidden?: boolean; //esconde o campo                                                                       -- ion-item-divider
   paddingStart?: string; //pode ser uma string como '8px', '0.5rem', etc                                    -- ion-item-divider
+  paddingLeft?: string; // enviar '1px', '1rem',......                                                       -- ion-label
+  marginBottom?: string; //// enviar '1px', '1rem',......                                                    -- ion-label
 
   //relacionado a bordas
-  border?: borderType; //'full' | 'none' | 'bottom'                                                         -- ion-item-divider
+  border?: BorderType; //'full' | 'none' | 'bottom'                                                         -- ion-item-divider
   borderRadius?: string; //30px....1rem etc                                                                 -- ion-item-divider
   borderColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc                              -- ion-item-divider
 
@@ -33,4 +39,10 @@ export interface IDynamicFormConfig {
   //relacionados a font
   fontWeight?: string; // enviar '600' '700' ....                                                           -- ion-item-divider
   fontSize?: string; // enviar '1px', '1rem', .....                                                         -- ion-item-divider
+  textAlign?: TextAlignType; //'left' | 'center' | 'right'//alinhamento do texto label...input etc          -- ion-label
+
+  //relacionado a icon - caso envie o help pode configurar o icon
+  iconMarginLeft?: string; // enviar '1px', '1rem', .....                                                   -- ion-icon
+  iconFontSize?: string; //enviar '1px', '1rem', .....                                                      -- ion-icon
+  iconColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc                                -- ion-icon
 }

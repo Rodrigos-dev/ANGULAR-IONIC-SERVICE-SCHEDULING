@@ -7,20 +7,24 @@
       @for (field of formConfigFields; track field.name) {
       <!-- COLUNA CONTAINER -->
       <ion-col
+        [ngStyle]="{
+          '--padding-start': '0px',
+          '--padding-end': '0px'
+        }"
         [attr.size-lg]="field.size ?? 12"
         [attr.size-xs]="field.mobileSize ?? 12"
-        [style.padding-left]="'0'"
-        [style.padding-right]="'0'"
         [hidden]="field.hidden || form.controls[field.name]?.disabled"
       >
         <!-- DIVIDER -->
         @if (field.typeFieldForm === eFieldDynamicForm.DIVIDER) {
         <ion-item-divider
+          [ngStyle]="{
+            width: '100%',
+            'margin-bottom': '2rem'
+          }"
           [style.--padding-start]="
             field.paddingStart ? field.paddingStart : '1.2rem'
           "
-          [style.margin-bottom]="'2rem'"
-          [style.width]="'100%'"
           [style.border]="
             field.border === 'full'
               ? '1px solid var(--ion-color-primary)'
@@ -39,11 +43,15 @@
         >
           <!-- caso queira exibir o titulo se nao enviar fica uma linha apenas ou um quadrado dependendo da config do item divider -->
           @if(field.label){
+          <!-- label do item-divider -->
           <ion-label
-            [style.width]="'100%'"
-            [style.text-align]="'center'"
-            [style.padding-top]="'10px'"
-            [style.padding-bottom]="'10px'"
+            [ngStyle]="{
+              width: '100%',
+              display: 'block',
+              'padding-top': '10px',
+              'padding-bottom': '10px'
+            }"
+            [style.text-align]="field.textAlign ?? 'left'"
             [style.color]="field.color ?? 'var(--ion-color-primary)'"
             [style.font-weight]="field.fontWeight ?? '600'"
             [style.font-size]="field.fontSize ?? '1.1rem'"
@@ -54,8 +62,53 @@
         </ion-item-divider>
         }
         <!-- FIM if divider -->
-      </ion-col>
 
+        <!-- popover para exibir mensagem quando clicas no icone de ajuda se for enviado o help -->
+        @if (field.help) {
+        <ion-popover
+          [trigger]="'help-icon-' + field.name"
+          trigger-action="click"
+          size="auto"
+        >
+          <ion-content class="ion-padding">
+            <p style="white-space: pre-line">{{ field.help }}</p>
+          </ion-content>
+        </ion-popover>
+        }
+
+        <!-- LABEL (exceto para alguns tipos) -->
+        @if (field.label && field.typeFieldForm !== eFieldDynamicForm.CHECKBOX
+        && field.typeFieldForm !== eFieldDynamicForm.SWITCH &&
+        field.typeFieldForm !== eFieldDynamicForm.SELECT && field.typeFieldForm
+        !== eFieldDynamicForm.DIVIDER) {
+        <ion-label
+          [ngStyle]="{
+            width: '100%',
+            display: 'block',
+            'padding-right': '0'
+          }"
+          [class]="'ion-text-' + (field.textAlign ?? 'left')"
+          [style.color]="field.color ?? 'var(--ion-color-primary)'"
+          [style.padding-left]="field.paddingLeft || '0'"
+          [style.margin-bottom]="field.marginBottom ?? '0.5rem'"
+          [style.font-size]="field.fontSize || '13px'"
+        >
+          {{ field.label }}
+
+          <!-- campo help -->
+          @if (field.help) {
+          <ion-icon
+            id="help-icon-{{ field.name }}"
+            [name]="field.iconName || 'information-circle'"
+            [attr.title]="field.help"
+            [style.margin-left]="field.iconMarginLeft || '0.25rem'"
+            [style.font-size]="field.iconFontSize || '13px'"
+            [style.color]="field.iconColor || 'var(--ion-color-primary)'"
+          ></ion-icon>
+          }
+        </ion-label>
+        }
+      </ion-col>
       }
       <!-- fim loop com os campos enviados na configuracao do formulario -->
     </ion-row>

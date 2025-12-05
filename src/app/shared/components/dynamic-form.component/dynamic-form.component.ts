@@ -1,4 +1,3 @@
-// IMPORTS IONIC EQUIVALENTES
 import { CommonModule } from '@angular/common';
 
 //enums interfaces types
@@ -15,6 +14,7 @@ import {
   Output,
 } from '@angular/core';
 import { EFieldDynamicForm } from './enums/field-dynamic-form.enum';
+import { IonPopover, IonContent } from '@ionic/angular/standalone';
 
 // @Pipe({ name: 'formIsRequired', standalone: true })
 // export class FormIsRequiredPipe implements PipeTransform {
