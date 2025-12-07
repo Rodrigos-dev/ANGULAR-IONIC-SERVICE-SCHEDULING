@@ -9,11 +9,13 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
 } from '@angular/forms';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   EventEmitter,
+  Inject,
   Input,
   OnInit,
   Output,
@@ -24,18 +26,28 @@ import { EInputModeField } from './enums/input-mode-field.enum';
 import { FormIsRequiredPipe } from '../form-dynamic-ok/form-dynamic-ok';
 import { EMaskType } from './enums/mask-types.enum';
 import { InputMaskDirective } from '../../directives/input-maks/input-mask.directive';
+import {
+  UntilDestroy,
+  untilDestroyed,
+} from '../../decorators/until-destroy.decorator';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-// @Pipe({ name: 'formIsRequired', standalone: true })
-// export class FormIsRequiredPipe implements PipeTransform {
-//   transform(value: AbstractControl) {
-//     return value.statusChanges.pipe(
-//       startWith(value),
-//       map(() => {
-//         return !value.hasValidator(Validators.required);
-//       })
-//     );
-//   }
-// }
+import { Pipe, PipeTransform } from '@angular/core';
+import { AbstractControl, Validators } from '@angular/forms';
+import { map, startWith } from 'rxjs';
+import { ERROR_MESSAGES, ErrorMessages } from './form-errors';
+
+@Pipe({ name: 'formValidatorRequired', standalone: true })
+export class FormValidatorsRequiredPipe implements PipeTransform {
+  transform(value: AbstractControl) {
+    return value.statusChanges.pipe(
+      startWith(value),
+      map(() => {
+        return !value.hasValidator(Validators.required);
+      })
+    );
+  }
+}
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
@@ -45,9 +57,10 @@ const DYNAMIC_FORM_MODULES = [
 
   // Pipes e Directives Customizados
   InputMaskDirective,
+  FormValidatorsRequiredPipe,
 ];
 
-//@UntilDestroy()
+@UntilDestroy()
 @Component({
   selector: 'mb-dynamic-form',
   templateUrl: './dynamic-form.component.html',
@@ -66,40 +79,64 @@ export class DynamicFormComponent implements OnInit {
   protected eInputModeField = EInputModeField;
   public readonly eMaskType = EMaskType;
 
-  ngOnInit() {
-    // this.createForm();
-    // this.form.valueChanges
-    //   .pipe(debounceTime(500), distinctUntilChanged(), untilDestroyed(this))
-    //   .subscribe((value) => {
-    //     this.formValueChange.emit(value);
-    //   });
+  constructor(@Inject(ERROR_MESSAGES) private readonly errors: ErrorMessages) {
+    // addIcons({ eye, eyeOff });
   }
 
-  // private createForm() {
-  //   this.formConfigFields?.forEach((control) => {
-  //     if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
-  //       this.form.addControl(
-  //         control.name,
-  //         new FormControl(
-  //           {
-  //             value:
-  //               control.initialValue !== undefined
-  //                 ? control.initialValue
-  //                 : null,
-  //             disabled: control.disabled,
-  //           },
-  //           control.validations
-  //         )
-  //       );
-  //     }
-  //   });
-  // }
+  ngOnInit() {
+    this.createForm();
+    this.form.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged(), untilDestroyed(this))
+      .subscribe((value) => {
+        this.formValueChange.emit(value);
+      });
+  }
+
+  private createForm() {
+    if (!this.formConfigFields)
+      return console.log('formConfigFields undefined');
+
+    for (const control of this.formConfigFields) {
+      if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
+        this.form.addControl(
+          control.name,
+          new FormControl(
+            {
+              value: control.initialValue ?? null,
+              disabled: control.disabled,
+            },
+            control.validations
+          )
+        );
+      }
+    }
+  }
 
   togglePasswordIconVisibility(field: IDynamicFormConfig) {
     const control = this.formConfigFields?.find((c) => c.name === field.name);
     if (!control) return;
 
     control.showPasswordIcon = !control.showPasswordIcon;
+  }
+
+  getErrorMessage(errors: ValidationErrors | null): string | null {
+    console.log(
+      errors,
+      'aaaaaaaa  dynamicform.component.ts:173 - form-dynamic-ok.ts:174'
+    );
+    if (!errors) return null;
+
+    const [firstKey] = Object.keys(errors);
+    const getErrorMessageFn = this.errors[firstKey];
+    if (!getErrorMessageFn) return null;
+
+    const text = getErrorMessageFn(errors[firstKey]);
+
+    console.log(
+      text,
+      'aaaaaaaa  dynamicform.component.ts:182 - form-dynamic-ok.ts:183'
+    );
+    return text;
   }
 }
 

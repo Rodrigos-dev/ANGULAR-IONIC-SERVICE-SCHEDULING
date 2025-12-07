@@ -309,7 +309,18 @@
           }
           <!-- fim if eDynamicField.INPUT -->
           }
+
+          <!-- error -->
+          @if (form.controls[field.name]?.errors &&
+          (form.controls[field.name]?.touched ||
+          form.controls[field.name]?.dirty)) {
+          <ion-note color="danger">
+            {{ getErrorMessage(form.controls[field.name].errors) }}
+          </ion-note>
+          }
         </ion-item>
+
+        <!--  -->
         }
       </ion-col>
       }
