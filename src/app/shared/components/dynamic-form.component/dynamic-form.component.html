@@ -113,7 +113,6 @@
             [style.font-size]="field.fontSize || '16px'"
           >
             {{ field.labelItemTop }}
-
             <!-- campo help -->
             @if (field.help) {
             <ion-icon
@@ -124,6 +123,19 @@
               [style.font-size]="field.iconFontSize || '13px'"
               [style.color]="field.iconColor || 'var(--ion-color-primary)'"
             ></ion-icon>
+            }
+
+            <!-- * para indicar campo necessário -->
+            @if (!(form.controls[field.name] | formValidatorRequired | async) &&
+            field.asteristicRequiredLabelItem) {
+            <span
+              [style.margin-left]="'3px'"
+              [style.color]="
+                field.asteristicRequiredColorLabelItem ||
+                'var(--ion-color-primary)'
+              "
+              >*</span
+            >
             }
           </ion-label>
           }
@@ -188,6 +200,18 @@
               "
               [style.--color]="colorLabelPlaceholderAndTextInput"
             >
+              @if (!(form.controls[field.name] | formValidatorRequired | async)
+              && field.asteristicRequiredInput) {
+              <span
+                [slot]="field.asteristicRequiredSlotInput || 'end'"
+                [style.margin-right]="'10px'"
+                [style.color]="
+                  field.asteristicRequiredColorInput ||
+                  'var(--ion-color-primary)'
+                "
+                >*</span
+              >
+              }
               <!-- logica olho para mostrar ou nao senha e caso nao seja password mostrar o icone desejado-->
               @if (dynamicIconName) {
               <ion-button

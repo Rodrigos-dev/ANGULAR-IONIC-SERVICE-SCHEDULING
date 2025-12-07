@@ -13,3 +13,5 @@ export type JustifyContentButtonDownInputType =
   | 'flex-start'
   | 'flex-end'
   | 'center';
+
+export type AsteristicRequiredType = 'start' | 'end';

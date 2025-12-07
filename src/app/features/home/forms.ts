@@ -57,7 +57,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       typeFieldForm: EFieldDynamicForm.INPUT, // tipo de campo input, number, select, textArea, checkbox, date, time, dateTime, switch, avatar, termsPolicy, selectUser, divider, radio, image, video, videoImageOrDocuments
 
       help: undefined, //balao de dica quando clica - input para nome completo por exemplo
-      labelItemTop: undefined, //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
+      labelItemTop: 'aa', //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
       hint: 'asasas',
       iconName: undefined, //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
 
@@ -69,6 +69,10 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
 
       ionItemDetail: undefined, //true add aquela seta no fim do item
       ionItemNoneLines: 'none', //"full" ｜ "inset" ｜ "none".....
+
+      //parte asteristico * de valor requerido no fim do input
+      asteristicRequiredLabelItem: true, //true or false
+      asteristicRequiredColorLabelItem: 'red', //default primary....enviar 'var()'... rgb ...rgba etc
 
       //inputs data
       eInputModeField: EInputModeField.TEXT, //mode de entrada do input - text,password,email,number,search,tel,url
@@ -89,6 +93,11 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       inputLabel: undefined, //label que aparece na parte superior do input
       autofocus: undefined, //true, false
       mask: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
+
+      //parte asteristico * de valor requerido no fim do input
+      asteristicRequiredInput: undefined, //true or false
+      asteristicRequiredSlotInput: undefined, // 'start' | 'end' - default end; local onde vai ser posicionado
+      asteristicRequiredColorInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
 
       //sobre icones
       showPasswordIcon: false, //controla o olho do password com risco ou sem risco mostrar ou não

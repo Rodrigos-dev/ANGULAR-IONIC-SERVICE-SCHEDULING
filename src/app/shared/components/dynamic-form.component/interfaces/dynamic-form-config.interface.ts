@@ -1,6 +1,7 @@
 import { FormGroup, ValidatorFn } from '@angular/forms';
 import { EFieldDynamicForm } from '../enums/field-dynamic-form.enum';
 import {
+  AsteristicRequiredType,
   FillInputType,
   JustifyContentButtonDownInputType,
   LabelPlacementType,
@@ -18,12 +19,18 @@ export interface IDynamicFormConfig {
   labelItemTop?: string; // label para usar no itm...ELE FICA sobre o input em si COM UM TITULO DO CAMPO POREM TEM O INPUT LABEL TB PARA ENVIAR QUE EH O LABEL DO INPUT
   help?: string; // DICA DO QUE FAZ OU WARNIG DO CAMPO
 
+  hint?: string;
+
   //cada icon temos o padrao porem se enviar vai usar o enviado
   iconName?: string; //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
 
   //grid e responsividades
   size?: number; //tamanho da grid em desktop 'LG' na column porexemplo
   mobileSize?: number; //tamanho da grid em celular 'XS' na colunn por exemplo
+
+  //parte asteristico * de valor requerido no fim do input
+  asteristicRequiredLabelItem?: boolean; //true or false
+  asteristicRequiredColorLabelItem?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
   //relacionados aos estilos *********************
   disabled?: boolean; //disabelita o campo
@@ -78,6 +85,11 @@ export interface IDynamicFormConfig {
   onAddOnIconClick?: (form: FormGroup) => void;
   initialValue?: unknown; //valor inicial do input - para updates etc
   validations?: ValidatorFn | ValidatorFn[]; //erros configurados no validations do input
+
+  //parte asteristico * de valor requerido no fim do input
+  asteristicRequiredInput?: boolean; //true or false
+  asteristicRequiredSlotInput?: AsteristicRequiredType; // 'start' | 'end'; local onde vai ser posicionado
+  asteristicRequiredColorInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
   //botoes de url abaixo do input tipo o esqueceu senha etc...na verdade o esqueceu senha vai ser um desses teremos 2 posiveis opcoes
 
