@@ -20,7 +20,7 @@
         <ion-item-divider
           [ngStyle]="{
             width: '100%',
-            'margin-bottom': '2rem'
+            'margin-bottom': '1rem'
           }"
           [style.--padding-start]="
             field.paddingStart ? field.paddingStart : '1.2rem'
@@ -39,10 +39,10 @@
           "
           [styck]="field.itemDividerStick"
           [style.borderRadius]="field.borderRadius"
-          [style.background]="field.background"
+          [style.background]="field.backgroundItem"
         >
           <!-- caso queira exibir o titulo se nao enviar fica uma linha apenas ou um quadrado dependendo da config do item divider -->
-          @if(field.label){
+          @if(field.labelItemTop){
           <!-- label do item-divider -->
           <ion-label
             [ngStyle]="{
@@ -55,7 +55,7 @@
             [style.color]="field.color ?? 'var(--ion-color-primary)'"
             [style.font-weight]="field.fontWeight ?? '600'"
             [style.font-size]="field.fontSize ?? '1.1rem'"
-            >{{ field.label }}</ion-label
+            >{{ field.labelItemTop }}</ion-label
           >
           }
           <!-- fim do label -->
@@ -76,37 +76,240 @@
         </ion-popover>
         }
 
-        <!-- LABEL (exceto para alguns tipos) -->
-        @if (field.label && field.typeFieldForm !== eFieldDynamicForm.CHECKBOX
-        && field.typeFieldForm !== eFieldDynamicForm.SWITCH &&
-        field.typeFieldForm !== eFieldDynamicForm.SELECT && field.typeFieldForm
-        !== eFieldDynamicForm.DIVIDER) {
-        <ion-label
-          [ngStyle]="{
-            width: '100%',
-            display: 'block',
-            'padding-right': '0'
-          }"
-          [class]="'ion-text-' + (field.textAlign ?? 'left')"
-          [style.color]="field.color ?? 'var(--ion-color-primary)'"
-          [style.padding-left]="field.paddingLeft || '0'"
-          [style.margin-bottom]="field.marginBottom ?? '0.5rem'"
-          [style.font-size]="field.fontSize || '13px'"
-        >
-          {{ field.label }}
+        <!-- CAMPOS DE FORMULÁRIO -->
+        @if (field.typeFieldForm !== eFieldDynamicForm.DIVIDER) {
 
-          <!-- campo help -->
-          @if (field.help) {
-          <ion-icon
-            id="help-icon-{{ field.name }}"
-            [name]="field.iconName || 'information-circle'"
-            [attr.title]="field.help"
-            [style.margin-left]="field.iconMarginLeft || '0.25rem'"
-            [style.font-size]="field.iconFontSize || '13px'"
-            [style.color]="field.iconColor || 'var(--ion-color-primary)'"
-          ></ion-icon>
+        <!-- item que envolve os campos -->
+        <ion-item
+          [style.width]="'100%'"
+          [class.itemWithScroll]="
+            field.typeFieldForm === eFieldDynamicForm.VIDEOIMAGEORDOCUMENTS
+          "
+          [class.itemWithBorder]="
+            field.labelPlacement ||
+            field.borderRadius ||
+            field.typeFieldForm === eFieldDynamicForm.DATE
+          "
+          [detail]="field.ionItemDetail"
+          [lines]="field.ionItemNoneLines"
+        >
+          <!-- LABEL (exceto para alguns tipos) aparece sobre os inputs, não é o interno do input e sim um proprio ou lado etc-->
+          @if (field.labelItemTop && field.typeFieldForm !==
+          eFieldDynamicForm.CHECKBOX && field.typeFieldForm !==
+          eFieldDynamicForm.SWITCH && field.typeFieldForm !==
+          eFieldDynamicForm.SELECT) {
+          <!--  -->
+          <ion-label
+            position="stacked"
+            [ngStyle]="{
+              width: '100%',
+              display: 'block',
+              'padding-right': '0'
+            }"
+            [class]="'ion-text-' + (field.textAlign ?? 'left')"
+            [style.color]="field.color ?? 'var(--ion-color-primary)'"
+            [style.padding-left]="field.paddingLeft || '20px'"
+            [style.margin-bottom]="field.marginBottom ?? '0.5rem'"
+            [style.font-size]="field.fontSize || '16px'"
+          >
+            {{ field.labelItemTop }}
+
+            <!-- campo help -->
+            @if (field.help) {
+            <ion-icon
+              id="help-icon-{{ field.name }}"
+              [name]="field.iconName || 'information-circle'"
+              [attr.title]="field.help"
+              [style.margin-left]="field.iconMarginLeft || '0.25rem'"
+              [style.font-size]="field.iconFontSize || '13px'"
+              [style.color]="field.iconColor || 'var(--ion-color-primary)'"
+            ></ion-icon>
+            }
+          </ion-label>
           }
-        </ion-label>
+
+          <!-- INPUT https://ionicframework.com/docs/api/input-->
+          @if (field.typeFieldForm === eFieldDynamicForm.INPUT) {
+
+          <!-- variaveis usada na logica dos if -->
+          @let isPasswordField = field.eInputModeField ===
+          eInputModeField.PASSWORD ? true : false;
+
+          <!--  -->
+          @let typeInput = field.showPasswordIcon ? eInputModeField.TEXT :
+          field.eInputModeField;
+
+          <!--  -->
+          @let labelPlacementLogic = (field.fill && isPasswordField) ? 'stacked'
+          : field.labelPlacement;
+
+          <!--  -->
+          @let paddingStart = field.paddingStart ? field.paddingStart :
+          field.borderRadius ? field.borderRadius : '0.9rem';
+
+          <!--  -->
+          @let dynamicIconName = (isPasswordField || field.iconName) &&
+          ((!isPasswordField && field.iconName) ? field.iconName :
+          (isPasswordField && field.showPasswordIcon) ? 'eye-off' : 'eye');
+
+          <!--  -->
+          @let boderColorInput = field.boderColorInput ||
+          'var(--ion-color-primary)';
+
+          <!--  -->
+          @let boderWidthInput = field.boderWidthInput || '1px';
+
+          <!--  -->
+          @let colorLabelPlaceholderAndTextInput =
+          field.colorLabelPlaceholderAndTextInput || 'var(--ion-color-primary)';
+
+          <!-- tags -->
+          <ion-row [style.width]="'100%'">
+            <ion-input
+              mode="md"
+              [autofocus]="field.autofocus"
+              [formControlName]="field.name"
+              [appInputMask]="field.mask"
+              [type]="typeInput"
+              [inputmode]="field.eInputModeField"
+              [placeholder]="field.placeholder"
+              [maxlength]="field.maxLengthInput || 1000"
+              [minlength]="field.minLengthInput || 0"
+              [fill]="field.fill"
+              [label]="field.inputLabel"
+              [attr.label-placement]="labelPlacementLogic"
+              [style.--border-radius]="field.borderRadius"
+              [style.--padding-start]="paddingStart"
+              [style.--background]="field.backgroundInput"
+              [style.--border-color]="boderColorInput"
+              [style.--border-width]="boderWidthInput"
+              (ionInput)="
+                field.onChange && field.onChange($event.detail.value, form)
+              "
+              [style.--color]="colorLabelPlaceholderAndTextInput"
+            >
+              <!-- logica olho para mostrar ou nao senha e caso nao seja password mostrar o icone desejado-->
+              @if (dynamicIconName) {
+              <ion-button
+                fill="clear"
+                slot="end"
+                (click)="
+                  isPasswordField
+                    ? togglePasswordIconVisibility(field)
+                    : field.onAddOnIconClick && field.onAddOnIconClick(form)
+                "
+              >
+                <ion-icon
+                  slot="icon-only"
+                  [name]="dynamicIconName"
+                  [style.margin-left]="field.iconMarginLeft || '0.25rem'"
+                  [style.font-size]="field.iconFontSize || '13px'"
+                  [style.color]="field.iconColor || 'var(--ion-color-primary)'"
+                ></ion-icon>
+              </ion-button>
+              }
+            </ion-input>
+          </ion-row>
+
+          @if (field.showButtonOneDownInput || field.showButtonTwoDownInput) {
+
+          <!--  -->
+          @let sizeColumnDefault = (!field.sizeColumnButtonOneDownInput &&
+          !field.sizeColumnButtonTwoDownInput) && (!field.showButtonOneDownInput
+          || !field.showButtonTwoDownInput) ? 12 : null;
+
+          <ion-row [style.width]="'100%'">
+            <!-- vars button one -->
+            @if(field.showButtonOneDownInput){
+            <!--  -->
+            @let sizeColumnButtonOne = field.sizeColumnButtonOneDownInput || 6;
+            <!--  -->
+            @let paddingLeftButtonOne = field.paddingLeftButtonOneDownInput ||
+            '5px';
+            <!--  -->
+            @let justifyContentButtonOne =
+            field.justifyContentButtonOneDownInput || 'flex-start';
+            <!--  -->
+            @let linkButtonOneDownInput = field.linkButtonOneDownInput;
+            <!--  -->
+            @let fontSizebuttonOneDownInput = field.fontSizebuttonOneDownInput
+            || '10px';
+            <!--  -->
+            @let colorTextbuttonOneDownInput = field.colorTextbuttonOneDownInput
+            || 'var(--ion-color-primary)';
+            <!--  -->
+
+            <ion-col
+              [size]="sizeColumnDefault || sizeColumnButtonOne"
+              [style.padding]="'0'"
+              [style.padding-left]="paddingLeftButtonOne"
+              [style.display]="'flex'"
+              [style.justify-content]="justifyContentButtonOne"
+            >
+              <ion-button
+                class="buttonDownInput"
+                fill="clear"
+                [routerLink]="linkButtonOneDownInput"
+                [style.font-size]="fontSizebuttonOneDownInput"
+                [style.padding]="'0'"
+                [style.color]="colorTextbuttonOneDownInput"
+              >
+                {{
+                  field.textButtonOneDownInput ||
+                    "enviar texto do botão 1 abaixo do input"
+                }}
+              </ion-button>
+            </ion-col>
+            }
+
+            <!-- vars button 2 -->
+            @if(field.showButtonTwoDownInput){
+            <!--  -->
+            @let sizeColumnButtonTwo = field.sizeColumnButtonTwoDownInput || 6;
+            <!--  -->
+            @let paddingRightButtonTwo = field.paddingLeftButtonTwoDownInput ||
+            '5px';
+            <!--  -->
+            @let justifyContentButtonTwo =
+            field.justifyContentButtonTwoDownInput || 'flex-end';
+            <!--  -->
+            @let linkButtonTwoDownInput = field.linkButtonTwoDownInput;
+            <!--  -->
+            @let fontSizebuttonTwoDownInput = field.fontSizebuttonTwoDownInput
+            || '10px';
+            <!--  -->
+            @let colorTextbuttonTwoDownInput = field.colorTextbuttonTwoDownInput
+            || 'var(--ion-color-primary)';
+            <!--  -->
+
+            <ion-col
+              [size]="sizeColumnDefault || sizeColumnButtonTwo"
+              [style.padding]="'0'"
+              [style.padding-right]="paddingRightButtonTwo"
+              [style.display]="'flex'"
+              [style.justify-content]="justifyContentButtonTwo"
+            >
+              <ion-button
+                class="buttonDownInput"
+                fill="clear"
+                [routerLink]="linkButtonTwoDownInput"
+                [style.font-size]="fontSizebuttonTwoDownInput"
+                [style.padding]="'0'"
+                [style.color]="colorTextbuttonTwoDownInput"
+              >
+                {{
+                  field.textButtonTwoDownInput ||
+                    "enviar texto do botão 2 abaixo do input"
+                }}
+              </ion-button>
+            </ion-col>
+            }
+          </ion-row>
+
+          }
+          <!-- fim if eDynamicField.INPUT -->
+          }
+        </ion-item>
         }
       </ion-col>
       }

@@ -9,7 +9,7 @@
   padding-right: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
-  max-width: 1800px;
+  max-width: 1000px;
 }
 
 ion-grid {
@@ -21,7 +21,41 @@ ion-col {
   padding: var(--ion-grid-column-padding);
 }
 
-//----------------------
+//------------------ parte ITEM
+
+ion-item {
+  /* 1. Zera o padding do elemento nativo (o ::part(native)) */
+  --padding-start: 0px !important;
+  --padding-end: 0px !important;
+
+  /* 2. Zera o padding do elemento interno (o .item-inner) */
+  --inner-padding-start: 0px !important;
+  --inner-padding-end: 0px !important;
+
+  /* Opcional: Zera o padding total do .item-inner (para garantir) */
+  --inner-padding-top: 0px !important;
+  --inner-padding-bottom: 0px !important;
+}
+
+.itemWithBorder {
+  //para resolver quando come meio nome do campo
+  --min-height: 70px;
+  --border-width: 0;
+  --border-style: none;
+}
+
+//---------------------- parte input
+
+.buttonDownInput::part(native) {
+  padding: 0;
+}
+
+ion-item::part(native) {
+  /* Força a direção de empilhamento vertical */
+  flex-direction: column !important;
+  /* Garante que o display seja flex */
+  display: flex !important;
+}
 
 /////////////antes    ---- ////////////////////////////////////////////////////////////////////////
 .a {

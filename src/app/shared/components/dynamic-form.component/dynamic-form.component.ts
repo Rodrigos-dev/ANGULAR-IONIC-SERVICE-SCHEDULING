@@ -4,7 +4,12 @@ import { CommonModule } from '@angular/common';
 import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
 
 //angular
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -14,7 +19,11 @@ import {
   Output,
 } from '@angular/core';
 import { EFieldDynamicForm } from './enums/field-dynamic-form.enum';
-import { IonPopover, IonContent } from '@ionic/angular/standalone';
+import { IonPopover, IonContent, IonCol } from '@ionic/angular/standalone';
+import { EInputModeField } from './enums/input-mode-field.enum';
+import { FormIsRequiredPipe } from '../form-dynamic-ok/form-dynamic-ok';
+import { EMaskType } from './enums/mask-types.enum';
+import { InputMaskDirective } from '../../directives/input-maks/input-mask.directive';
 
 // @Pipe({ name: 'formIsRequired', standalone: true })
 // export class FormIsRequiredPipe implements PipeTransform {
@@ -29,7 +38,14 @@ import { IonPopover, IonContent } from '@ionic/angular/standalone';
 // }
 
 // MÓDULOS IONIC EQUIVALENTES
-const DYNAMIC_FORM_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
+const DYNAMIC_FORM_MODULES = [
+  CommonModule,
+  FormsModule,
+  ReactiveFormsModule,
+
+  // Pipes e Directives Customizados
+  InputMaskDirective,
+];
 
 //@UntilDestroy()
 @Component({
@@ -47,9 +63,11 @@ export class DynamicFormComponent implements OnInit {
   form: FormGroup = new FormGroup({});
 
   protected eFieldDynamicForm = EFieldDynamicForm;
+  protected eInputModeField = EInputModeField;
+  public readonly eMaskType = EMaskType;
 
   ngOnInit() {
-    //this.createForm();
+    // this.createForm();
     // this.form.valueChanges
     //   .pipe(debounceTime(500), distinctUntilChanged(), untilDestroyed(this))
     //   .subscribe((value) => {
@@ -58,8 +76,8 @@ export class DynamicFormComponent implements OnInit {
   }
 
   // private createForm() {
-  //   this.config?.forEach((control) => {
-  //     if (control.type.field !== eFieldDynamicForm.DIVIDER) {
+  //   this.formConfigFields?.forEach((control) => {
+  //     if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
   //       this.form.addControl(
   //         control.name,
   //         new FormControl(
@@ -76,6 +94,13 @@ export class DynamicFormComponent implements OnInit {
   //     }
   //   });
   // }
+
+  togglePasswordIconVisibility(field: IDynamicFormConfig) {
+    const control = this.formConfigFields?.find((c) => c.name === field.name);
+    if (!control) return;
+
+    control.showPasswordIcon = !control.showPasswordIcon;
+  }
 }
 
 /*
