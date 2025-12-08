@@ -137,7 +137,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       typeFieldForm: EFieldDynamicForm.TEXTAREA, // tipo de campo input, number, select, textArea, checkbox, date, time, dateTime, switch, avatar, termsPolicy, selectUser, divider, radio, image, video, videoImageOrDocuments
 
       help: undefined, //balao de dica quando clica - input para nome completo por exemplo
-      labelItemTop: 'aaaa', //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
+      labelItemTop: undefined, //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
       iconName: undefined, //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
 
       hint: undefined, //compo de dica - do que o campo faz ou o que deve ser feito pelo usuario etc
@@ -258,6 +258,28 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       selectOptionIconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
       selectOptionIconFontSize: undefined, //enviar '1px', '1rem',
       selectBackground: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+    },
+
+    // === CHECKBOX ===
+    {
+      labelItemTop: 'Aceito os termos e condições',
+      name: 'accept_terms',
+      typeFieldForm: EFieldDynamicForm.CHECKBOX,
+      initialValue: false,
+      size: 12,
+      fill: undefined, //'outline',
+      labelPlacement: 'start',
+      borderRadius: '10px',
+      ionItemNoneLines: 'none', //"full" ｜ "inset" ｜ "none".....
+
+      //parte checkBox
+      textCheckBoxColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      checkBorderCheckBoxColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      checkedCheckBoxColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      paddingStart: undefined, //pode ser uma string como '8px', '0.5rem', etc
+      paddingLeft: undefined, // enviar '1px', '1rem',......
+      paddingTop: undefined, //enviar '1px', '1rem', -> aki que controla junto com o padding bottom o height desse input
+      paddingBottom: undefined, //enviar '1px', '1rem', -> aki que controla junto com o padding top o height desse input
     },
   ];
 };

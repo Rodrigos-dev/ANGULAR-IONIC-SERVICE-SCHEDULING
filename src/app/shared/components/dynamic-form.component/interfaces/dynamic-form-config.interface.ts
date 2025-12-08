@@ -39,9 +39,11 @@ export interface IDynamicFormConfig {
   //relacionados aos estilos *********************
   disabled?: boolean; //disabelita o campo
   hidden?: boolean; //esconde o campo
+  marginBottom?: string; //// enviar '1px', '1rem',......
   paddingStart?: string; //pode ser uma string como '8px', '0.5rem', etc
   paddingLeft?: string; // enviar '1px', '1rem',......
-  marginBottom?: string; //// enviar '1px', '1rem',......
+  paddingTop?: string; //enviar '1px', '1rem', -> aki que controla junto com o padding bottom o height do check box
+  paddingBottom?: string; //enviar '1px', '1rem', -> aki que controla junto com o padding top o height do check box
 
   //relacionado a bordas
   border?: BorderType; //'full' | 'none' | 'bottom'
@@ -137,4 +139,9 @@ export interface IDynamicFormConfig {
   selectOptionIconColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   selectOptionIconFontSize?: string; //enviar '1px', '1rem',
   selectBackground?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+
+  //parte checkBox
+  textCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  checkBorderCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  checkedCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 }

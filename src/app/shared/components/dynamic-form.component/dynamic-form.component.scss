@@ -97,6 +97,25 @@ ion-select-option {
   gap: 0.5rem;
 }
 
+//----------------parte check box
+
+/* APLICA BORDA COMPLETA QUANDO O ATRIBUTO 'fill' ESTÁ PRESENTE */
+.itemCheckboxWithFill {
+  /* 2. Aplica a borda CSS tradicional ao redor do componente */
+  border: 1px solid var(--ion-color-secondary, #cccccc);
+
+  /* 4. Garante que o fundo seja sólido */
+  --background: var(--ion-background-color, #ffffff);
+
+  /* 5. Zera a linha divisória interna padrão do Ionic para evitar duplicidade */
+  --inner-border-width: 0 !important;
+  --border-width: 0 !important;
+}
+
+ion-checkbox {
+  padding: 2px;
+}
+
 /////////////antes    ---- ////////////////////////////////////////////////////////////////////////
 .a {
   .my-grid {

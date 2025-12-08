@@ -471,6 +471,44 @@
           </ion-select>
           }
 
+          <!-- CHECKBOX -->
+          @if (field.typeFieldForm === eFieldDynamicForm.CHECKBOX) {
+          <ion-item
+            mode="md"
+            class="itemCheckbox"
+            [lines]="field.ionItemNoneLines"
+            [class.itemCheckboxWithFill]="field.fill"
+            [style.border-radius]="field.borderRadius"
+            [style.width]="'100%'"
+            [style.margin-top]="field.marginTop || '10px'"
+          >
+            <ion-checkbox
+              [formControlName]="field.name"
+              (ionChange)="
+                field.onChange && field.onChange($event.detail.checked, form)
+              "
+              [style.background]="
+                'color-mix(in srgb, var(--ion-color-primary), white 96%)'
+              "
+              [style.padding-left]="field.paddingLeft || '20px'"
+              [style.padding-right]="field.paddingStart || '20px'"
+              [style.color]="
+                field.textCheckBoxColor || 'var(--ion-color-primary)'
+              "
+              [style.--border-color]="
+                field.checkBorderCheckBoxColor || 'var(--ion-color-primary)'
+              "
+              [style.--checkbox-background-checked]="
+                field.checkedCheckBoxColor || 'var(--ion-color-primary)'
+              "
+              [style.padding-top]="field.paddingTop || '12px'"
+              [style.padding-bottom]="field.paddingBottom || '12px'"
+            >
+              {{ field.labelItemTop || field.inputLabel }}
+            </ion-checkbox>
+          </ion-item>
+          }
+
           <!-- hint tag - dica para usuario o que faz o campo -->
           @if (field.hint) {
           <ion-note
