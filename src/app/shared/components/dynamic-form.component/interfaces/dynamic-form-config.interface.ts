@@ -66,7 +66,7 @@ export interface IDynamicFormConfig {
   iconFontSize?: string; //enviar '1px', '1rem', .....
   iconColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
-  //relacionado input
+  //relacionado input e text area- text area nao tem os botoes url abaixo do input igual do inpu
   autofocus?: boolean; //true, false
   backgroundInput?: string; //default transparent....enviar 'var()'... rgb ...rgba etc
   mask?: EMaskType; //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
@@ -94,8 +94,9 @@ export interface IDynamicFormConfig {
   asteristicRequiredSlotInput?: AsteristicRequiredType; // 'start' | 'end'; local onde vai ser posicionado
   asteristicRequiredColorInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
-  //botoes de url abaixo do input tipo o esqueceu senha etc...na verdade o esqueceu senha vai ser um desses teremos 2 posiveis opcoes
+  textAreaRows?: number; //quantidade de linhas disponiveis paratar no text area
 
+  //botoes de url abaixo do input tipo o esqueceu senha etc...na verdade o esqueceu senha vai ser um desses teremos 2 posiveis opcoes
   //botao 1
   showButtonOneDownInput?: boolean; //boolean para exibir o botão essa propriedade é obrigatoria true,
   sizeColumnButtonOneDownInput?: SizeColumnButtonDownInputType; // numero do grid que vai ocupar na coluna 3, 6 ou 12 permitido

@@ -334,6 +334,43 @@
           <!-- fim if eDynamicField.INPUT -->
           }
 
+          <!-- TEXTAREA -->
+          @if (field.typeFieldForm === eFieldDynamicForm.TEXTAREA) {
+
+          <!--  -->
+          @let paddingStart = field.paddingStart ? field.paddingStart :
+          field.borderRadius ? field.borderRadius : '20px';
+
+          <!--  -->
+          @let boderColorInput = field.boderColorInput ||
+          'var(--ion-color-primary)';
+
+          <!--  -->
+          @let boderWidthInput = field.boderWidthInput || '1px';
+
+          <!--  -->
+          @let colorLabelPlaceholderAndTextInput =
+          field.colorLabelPlaceholderAndTextInput || 'var(--ion-color-primary)';
+
+          <ion-textarea
+            mode="md"
+            [formControlName]="field.name"
+            [rows]="field.textAreaRows || 4"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [label]="field.inputLabel"
+            [attr.label-placement]="field.labelPlacement"
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="paddingStart"
+            [style.--background]="field.backgroundInput"
+            [style.--border-color]="boderColorInput"
+            [style.--border-width]="boderWidthInput"
+            [style.--color]="colorLabelPlaceholderAndTextInput"
+            [style.--padding-top]="'20px'"
+            [style.--padding-bottom]="'20px'"
+          ></ion-textarea>
+          }
+
           <!-- hint tag - dica para usuario o que faz o campo -->
           @if (field.hint) {
           <ion-note

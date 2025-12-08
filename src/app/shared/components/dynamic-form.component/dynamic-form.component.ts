@@ -21,9 +21,14 @@ import {
   Output,
 } from '@angular/core';
 import { EFieldDynamicForm } from './enums/field-dynamic-form.enum';
-import { IonPopover, IonContent, IonCol } from '@ionic/angular/standalone';
+import {
+  IonPopover,
+  IonContent,
+  IonCol,
+  IonInput,
+  IonTextarea,
+} from '@ionic/angular/standalone';
 import { EInputModeField } from './enums/input-mode-field.enum';
-import { FormIsRequiredPipe } from '../form-dynamic-ok/form-dynamic-ok';
 import { EMaskType } from './enums/mask-types.enum';
 import { InputMaskDirective } from '../../directives/input-maks/input-mask.directive';
 import {
@@ -32,9 +37,6 @@ import {
 } from '../../decorators/until-destroy.decorator';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { AbstractControl, Validators } from '@angular/forms';
-import { map, startWith } from 'rxjs';
 import { ERROR_MESSAGES, ErrorMessages } from './form-errors';
 import { FormValidatorsRequiredPipe } from '../../pipes/form-validators-required.pipe';
 
@@ -47,6 +49,13 @@ const DYNAMIC_FORM_MODULES = [
   // Pipes e Directives Customizados
   InputMaskDirective,
   FormValidatorsRequiredPipe,
+
+  //inputs usados
+  IonInput,
+  IonTextarea, // <-- ESTE COMPONENTE DEVE ESTAR AQUI!
+  IonPopover,
+  IonContent,
+  IonCol,
 ];
 
 @UntilDestroy()
@@ -83,7 +92,9 @@ export class DynamicFormComponent implements OnInit {
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log('formConfigFields undefined');
+      return console.log(
+        'formConfigFields undefined - dynamic-form.component.ts:95'
+      );
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
