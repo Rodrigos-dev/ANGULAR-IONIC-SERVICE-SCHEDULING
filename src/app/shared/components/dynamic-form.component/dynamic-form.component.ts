@@ -27,6 +27,9 @@ import {
   IonCol,
   IonInput,
   IonTextarea,
+  IonToggle,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { EInputModeField } from './enums/input-mode-field.enum';
 import { EMaskType } from './enums/mask-types.enum';
@@ -52,10 +55,13 @@ const DYNAMIC_FORM_MODULES = [
 
   //inputs usados
   IonInput,
-  IonTextarea, // <-- ESTE COMPONENTE DEVE ESTAR AQUI!
+  IonTextarea,
   IonPopover,
   IonContent,
   IonCol,
+  IonToggle,
+  IonSelect,
+  IonSelectOption,
 ];
 
 @UntilDestroy()
@@ -92,9 +98,7 @@ export class DynamicFormComponent implements OnInit {
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log(
-        'formConfigFields undefined - dynamic-form.component.ts:95'
-      );
+      return console.log('formConfigFields undefined');
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {

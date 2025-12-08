@@ -130,5 +130,134 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       colorTextbuttonTwoDownInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
       textButtonTwoDownInput: 'Criar conta?', //texto do que vai dizer o botao exemplo - esqueceu senha?
     },
+
+    // === INPUT TEXT AREA===
+    {
+      name: 'sobreVoce', //namo do form control field
+      typeFieldForm: EFieldDynamicForm.TEXTAREA, // tipo de campo input, number, select, textArea, checkbox, date, time, dateTime, switch, avatar, termsPolicy, selectUser, divider, radio, image, video, videoImageOrDocuments
+
+      help: undefined, //balao de dica quando clica - input para nome completo por exemplo
+      labelItemTop: 'aaaa', //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
+      iconName: undefined, //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
+
+      hint: undefined, //compo de dica - do que o campo faz ou o que deve ser feito pelo usuario etc
+      hintMarginLeft: undefined, // enviar '1px', '1rem',......
+      hintFontSize: undefined, // enviar '1px', '1rem',......
+      hintColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      validations: undefined, //validacoes do formulario
+
+      //relacionado a grid e responsividade
+      size: 12, //tamanho da grid em desktop 'LG' na column e with que ocupa naos campos por exemplo
+      mobileSize: undefined, //tamanho da grid em celular 'XS' na colunn por exemplo
+
+      ionItemDetail: undefined, //true add aquela seta no fim do item
+      ionItemNoneLines: 'none', //"full" ｜ "inset" ｜ "none".....
+
+      //parte asteristico * de valor requerido no fim do input
+      asteristicRequiredLabelItem: true, //true or false
+      asteristicRequiredColorLabelItem: 'red', //default primary....enviar 'var()'... rgb ...rgba etc
+
+      //inputs data e text area
+      eInputModeField: undefined, //mode de entrada do input - text,password,email,number,search,tel,url
+      initialValue: '', //valor que o campo vai iniciar
+      placeholder: 'Fale sobre você...', //a escrita que fica no input porem some quando escreve algo em cima
+      fill: undefined, //"outline" ｜ "solid"
+      labelPlacement: 'stacked', //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
+      borderRadius: undefined, //enviar '1px', '1rem', .....
+      paddingStart: undefined, //enviar '1px', '1rem', .....
+      backgroundInput:
+        'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
+      boderColorInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      boderWidthInput: '1px', // default - 1px, sem borda enviar 0 - com borda - enviar '1px', '1rem', .....
+      colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
+      minLengthInput: undefined, //min caracteres que deve ter o input
+
+      inputLabel: undefined, //label que aparece na parte superior do input
+      autofocus: undefined, //true, false
+      mask: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
+
+      textAreaRows: undefined, //quantidade de linhas que vai aparecer em tela o input....
+
+      //parte asteristico * de valor requerido no fim do input
+      asteristicRequiredInput: undefined, //true or false
+      asteristicRequiredSlotInput: undefined, // 'start' | 'end' - default end; local onde vai ser posicionado
+      asteristicRequiredColorInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+
+      //sobre icones
+      showPasswordIcon: false, //controla o olho do password com risco ou sem risco mostrar ou não
+      onAddOnIconClick: undefined, //ver  que é
+      iconMarginLeft: undefined, //enviar '1px', '1rem', .....
+      iconFontSize: undefined, //enviar '1px', '1rem', .....
+      iconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+
+      //buttons downs input - botoes de url ou  que quiser abaixo do input tipo o esqueceu senha etc...na verdade o esqueceu senha vai ser um desses teremos 2 posiveis opcoes
+      //botao 1
+      showButtonOneDownInput: undefined, //boolean para exibir o botão essa propriedade é obrigatoria true,
+      sizeColumnButtonOneDownInput: undefined, // numero do grid que vai ocupar na coluna 3, 6 ou 12 permitido
+      paddingLeftButtonOneDownInput: undefined, //enviar '1px', '1rem', .....
+      justifyContentButtonOneDownInput: undefined, // 'flex-start' 'flex-end' 'center';
+      linkButtonOneDownInput: undefined, //url ou page que vai ser enviado quando clicar
+      fontSizebuttonOneDownInput: undefined, //enviar '1px', '1rem', .....
+      colorTextbuttonOneDownInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      textButtonOneDownInput: 'Esqueceu Senha?', //texto do que vai dizer o botao exemplo - esqueceu senha
+
+      //botao 2
+      showButtonTwoDownInput: undefined, //boolean para exibir o botão essa propriedade é obrigatoria true,
+      sizeColumnButtonTwoDownInput: undefined, // numero do grid que vai ocupar na coluna 12 é o max ocupa linha toda
+      paddingLeftButtonTwoDownInput: undefined, //enviar '1px', '1rem', .....
+      justifyContentButtonTwoDownInput: undefined, // 'flex-start' 'flex-end' 'center';
+      linkButtonTwoDownInput: undefined, //url ou page que vai ser enviado quando clicar
+      fontSizebuttonTwoDownInput: undefined, //enviar '1px', '1rem', .....
+      colorTextbuttonTwoDownInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      textButtonTwoDownInput: 'Criar conta?', //texto do que vai dizer o botao exemplo - esqueceu senha?
+    },
+
+    // === SWITCH/TOGGLE ===
+    {
+      toggleLabel: 'Receber Notificações', //texto do titulo do campo
+      name: 'receive_notifications',
+      typeFieldForm: EFieldDynamicForm.SWITCH,
+      initialValue: true,
+      toggleNote: 'Receba notificações por e-mail sobre novidades', //texto para indicar alguma dica sobre o campo
+      size: 12,
+      fill: 'outline',
+      labelPlacement: 'stacked',
+      borderRadius: undefined, //30px....1rem etc
+      marginTop: '12px', //30px....1rem etc
+
+      toggleLabelMarginLeft: undefined, //enviar '1px', '1rem', .....
+      toggleLabelFontSize: undefined, //enviar '1px', '1rem', .....
+      toggleLabelColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      toggleNoteColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      toggleNoteMarginLeft: undefined, //enviar '1px', '1rem', .....
+      toggleNoteFontSize: undefined, //enviar '1px', '1rem', .....
+    },
+
+    //=== SELECT ===
+    {
+      inputLabel: 'Gênero',
+      name: 'gender',
+      typeFieldForm: EFieldDynamicForm.SELECT,
+      initialValue: 'male',
+      placeholder: 'Selecione seu gênero',
+      select: {
+        options: [
+          { value: 'male', label: 'Masculino' },
+          { value: 'female', label: 'Feminino' },
+          { value: 'other', label: 'Outro' },
+        ],
+        mode: 'single',
+      },
+      size: 12,
+      fill: 'outline',
+      labelPlacement: 'stacked',
+      borderRadius: undefined,
+      selectColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      selectBorderColor: 'transparent', //default primary....enviar 'var()'... rgb ...rgba etc
+      selectOptionIconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      selectOptionIconFontSize: undefined, //enviar '1px', '1rem',
+      selectBackground: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+    },
   ];
 };

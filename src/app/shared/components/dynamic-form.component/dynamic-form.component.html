@@ -371,6 +371,106 @@
           ></ion-textarea>
           }
 
+          <!-- TOGGLE (substitui o SWITCH) -->
+          @if (field.typeFieldForm === eFieldDynamicForm.SWITCH) {
+          <div
+            class="toggle-container"
+            [style.border-radius]="field.borderRadius"
+            [style.margin-top]="field.marginTop"
+            [style.background]="
+              field.backgroundItem ||
+              'color-mix(in srgb, var(--ion-color-primary), white 96%)'
+            "
+          >
+            <div class="toggle-label">
+              <ion-label
+                [style.margin-bottom]="field.marginBottom || '0.5rem'"
+                [style.margin-left]="field.toggleLabelMarginLeft || '0.2rem'"
+                [style.font-size]="field.toggleLabelFontSize || '16px'"
+                [style.color]="
+                  field.toggleLabelColor || 'var(--ion-color-primary)'
+                "
+                >{{ field.toggleLabel }}</ion-label
+              >
+              @if (field.toggleNote) {
+              <ion-note
+                [style.margin-left]="field.toggleNoteMarginLeft || '0.3rem'"
+                [style.font-size]="field.toggleNoteFontSize || '12px'"
+                [style.color]="
+                  field.toggleNoteColor || 'var(--ion-color-primary)'
+                "
+                >{{ field.toggleNote }}</ion-note
+              >
+              }
+            </div>
+            <ion-toggle
+              slot="end"
+              [formControlName]="field.name"
+              (ionChange)="
+                field.onChange && field.onChange($event.detail.checked, form)
+              "
+            ></ion-toggle>
+          </div>
+          }
+
+          <!-- SELECT -->
+          @if (field.typeFieldForm === eFieldDynamicForm.SELECT) {
+          <ion-select
+            mode="md"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [multiple]="field.select?.mode === 'multiple'"
+            (ionChange)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            (ionFocus)="field.onOpenChange && field.onOpenChange(true, form)"
+            (ionBlur)="field.onOpenChange && field.onOpenChange(false, form)"
+            [fill]="field.fill"
+            [label]="field.inputLabel"
+            [attr.label-placement]="field.labelPlacement"
+            [autofocus]="field.autofocus"
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+            [style.color]="field.selectColor || 'var(--ion-color-primary)'"
+            [style.--border-color]="
+              field.selectBorderColor || 'var(--ion-color-primary)'
+            "
+            [style.--background]="
+              field.selectBackground ||
+              'color-mix(in srgb, var(--ion-color-primary), white 96%)'
+            "
+          >
+            @for (option of field.select?.options; track option.value) {
+            <ion-select-option
+              [value]="option.value"
+              [disabled]="option.disabled"
+            >
+              @if (option.icon) {
+              <ion-icon
+                [name]="option.icon"
+                slot="start"
+                [style.color]="
+                  field.selectOptionIconColor || 'var(--ion-color-primary)'
+                "
+                [style.font-size]="field.selectOptionIconFontSize || '1rem'"
+              ></ion-icon>
+              } {{ option.label }}
+            </ion-select-option>
+            } @for (option of field.select?.options$ | async; track
+            option.value) {
+            <ion-select-option [value]="option.value">
+              {{ option.label }}
+            </ion-select-option>
+            }
+          </ion-select>
+          }
+
           <!-- hint tag - dica para usuario o que faz o campo -->
           @if (field.hint) {
           <ion-note

@@ -11,6 +11,7 @@ import { BorderType, TextAlignType } from '../types/styles-field.type';
 import { EMaskType } from '../enums/mask-types.enum';
 import { EInputModeField } from '../enums/input-mode-field.enum';
 import { linesShowType } from '../types/ion-item.type';
+import { Select } from './select.input.interface';
 
 export interface IDynamicFormConfig {
   name: string; //nome do campo no formulario formname
@@ -46,6 +47,7 @@ export interface IDynamicFormConfig {
   border?: BorderType; //'full' | 'none' | 'bottom'
   borderRadius?: string; //30px....1rem etc
   borderColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  marginTop?: string; //30px....1rem etc
 
   //relacionado a cor e background color
   backgroundItem?: string; //default transparent....enviar 'var()'... rgb ...rgba etc
@@ -116,4 +118,23 @@ export interface IDynamicFormConfig {
   fontSizebuttonTwoDownInput?: string; //enviar '1px', '1rem', .....
   colorTextbuttonTwoDownInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   textButtonTwoDownInput?: string; //texto do que vai dizer o botao exemplo - esqueceu senha?
+
+  //---------- toggle
+  toggleLabelMarginLeft?: string; //enviar '1px', '1rem', .....
+  toggleLabelFontSize?: string; //enviar '1px', '1rem', .....
+  toggleLabelColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  toggleLabel?: string; //texto do titulo do campo
+  toggleNote?: string; //texto para indicar alguma dica sobre o campo
+  toggleNoteColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  toggleNoteMarginLeft?: string; //enviar '1px', '1rem', .....
+  toggleNoteFontSize?: string; //enviar '1px', '1rem', .....
+
+  //PARTE SELECT
+  onOpenChange?: (open: boolean, form: FormGroup) => void;
+  select?: Select;
+  selectColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  selectBorderColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  selectOptionIconColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  selectOptionIconFontSize?: string; //enviar '1px', '1rem',
+  selectBackground?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 }
