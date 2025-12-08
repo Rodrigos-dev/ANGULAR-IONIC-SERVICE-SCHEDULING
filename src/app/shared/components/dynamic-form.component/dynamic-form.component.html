@@ -334,11 +334,24 @@
           <!-- fim if eDynamicField.INPUT -->
           }
 
+          <!-- hint tag - dica para usuario o que faz o campo -->
+          @if (field.hint) {
+          <ion-note
+            [style.margin-left]="field.hintMarginLeft || '0.3rem'"
+            [style.font-size]="field.hintFontSize || '10px'"
+            [style.color]="field.hintColor || 'var(--ion-color-primary)'"
+            >{{ field.hint }}</ion-note
+          >
+          }
+
           <!-- error -->
           @if (form.controls[field.name]?.errors &&
           (form.controls[field.name]?.touched ||
           form.controls[field.name]?.dirty)) {
-          <ion-note color="danger">
+          <ion-note
+            color="danger"
+            [style.margin-left]="field.hintMarginLeft || '0.3rem'"
+          >
             {{ getErrorMessage(form.controls[field.name].errors) }}
           </ion-note>
           }

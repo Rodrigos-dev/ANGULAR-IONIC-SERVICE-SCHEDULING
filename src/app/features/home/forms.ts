@@ -57,10 +57,13 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       typeFieldForm: EFieldDynamicForm.INPUT, // tipo de campo input, number, select, textArea, checkbox, date, time, dateTime, switch, avatar, termsPolicy, selectUser, divider, radio, image, video, videoImageOrDocuments
 
       help: undefined, //balao de dica quando clica - input para nome completo por exemplo
-      labelItemTop: 'aa', //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
-      hint: 'asasas',
+      labelItemTop: undefined, //label que fica fora do input - label no dividir é o titulo no resto e o nome do campo que fica no superior
       iconName: undefined, //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
 
+      hint: undefined, //compo de dica - do que o campo faz ou o que deve ser feito pelo usuario etc
+      hintMarginLeft: undefined, // enviar '1px', '1rem',......
+      hintFontSize: undefined, // enviar '1px', '1rem',......
+      hintColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
       validations: [Validators.required, Validators.minLength(3)], //validacoes do formulario
 
       //relacionado a grid e responsividade

@@ -19,7 +19,10 @@ export interface IDynamicFormConfig {
   labelItemTop?: string; // label para usar no itm...ELE FICA sobre o input em si COM UM TITULO DO CAMPO POREM TEM O INPUT LABEL TB PARA ENVIAR QUE EH O LABEL DO INPUT
   help?: string; // DICA DO QUE FAZ OU WARNIG DO CAMPO
 
-  hint?: string;
+  hint?: string; //compo de dica - do que o campo faz ou o que deve ser feito pelo usuario etc
+  hintMarginLeft?: string; // enviar '1px', '1rem',......
+  hintFontSize?: string; // enviar '1px', '1rem',......
+  hintColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
   //cada icon temos o padrao porem se enviar vai usar o enviado
   iconName?: string; //caso envie deve adicionar no ts o icon caso de erro pela doc https://ionicframework.com/docs/api/icon no construtor ex: - addIcons({ logoIonic });
