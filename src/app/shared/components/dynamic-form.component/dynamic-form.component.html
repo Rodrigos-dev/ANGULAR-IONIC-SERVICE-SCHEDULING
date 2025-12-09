@@ -81,6 +81,7 @@
 
         <!-- item que envolve os campos -->
         <ion-item
+          class="itemMainForm"
           [style.width]="'100%'"
           [class.itemWithScroll]="
             field.typeFieldForm === eFieldDynamicForm.VIDEOIMAGEORDOCUMENTS
@@ -417,6 +418,7 @@
           @if (field.typeFieldForm === eFieldDynamicForm.SELECT) {
           <ion-select
             mode="md"
+            interface="popover"
             [formControlName]="field.name"
             [placeholder]="field.placeholder"
             [multiple]="field.select?.mode === 'multiple'"
@@ -475,7 +477,7 @@
           @if (field.typeFieldForm === eFieldDynamicForm.CHECKBOX) {
           <ion-item
             mode="md"
-            class="itemCheckbox"
+            class="itemCheckbox itemMainForm"
             [lines]="field.ionItemNoneLines"
             [class.itemCheckboxWithFill]="field.fill"
             [style.border-radius]="field.borderRadius"
@@ -503,10 +505,89 @@
               "
               [style.padding-top]="field.paddingTop || '12px'"
               [style.padding-bottom]="field.paddingBottom || '12px'"
+              [style.--border-radius]="field.chechBoxIconBorderRadius || '4px'"
             >
               {{ field.labelItemTop || field.inputLabel }}
             </ion-checkbox>
           </ion-item>
+          }
+
+          <!-- RADIO -->
+          @if (field.typeFieldForm === eFieldDynamicForm.RADIO) {
+
+          <ion-item
+            mode="md"
+            class="itemMainForm"
+            [style.margin-top]="field.radioItemMarginTop || '10px'"
+            [lines]="field.radioItemNoneLines"
+            [style.border-radius]="field.radioItemborderRadius"
+            [style.--background]="
+              field.backgroundRadioItem ||
+              'color-mix(in srgb, var(--ion-color-secondary), white 96%)'
+            "
+            [class.itemCheckboxWithFill]="field.fill"
+            [style.border-color]="'transparent'"
+            [style.width]="'100%'"
+          >
+            <p
+              [style.width]="'100%'"
+              [style.padding-left]="field.titleRadioMarginLeft || '20px'"
+              [style.padding-right]="field.titleRadioMarginRight || '20px'"
+              [style.margin-top]="field.titleRadioMarginTop || '30px'"
+              [style.color]="
+                field.textRadioTitleColor || 'var(--ion-color-primary)'
+              "
+              [style.text-align]="field.textRadioTitleTextAlign || 'start'"
+            >
+              {{ field.inputLabel }}
+            </p>
+
+            <ion-radio-group
+              value="end"
+              [formControlName]="field.name"
+              [style.width]="'100%'"
+              [style.padding-bottom]="'20px'"
+              [style.--radio-custom-border-color]="
+                field.borderColorRadioCheck || 'var(--ion-color-primary)'
+              "
+              [style.--radio-custom-background-color]="
+                field.backgroundColorRadioCheck || 'var(--ion-color-primary)'
+              "
+              [style.--borderRadiusCheckCustom]="
+                field.BorderRadiusradioCheck || '4px'
+              "
+            >
+              @for (option of field.select?.options; track option.value) {
+
+              <ion-item
+                mode="md"
+                lines="none"
+                [style.padding-right]="'20px'"
+                [style.padding-left]="'20px'"
+                [style.--background]="'transparent'"
+              >
+                <ion-label
+                  [style.color]="
+                    field.textOptionRadioColor || 'var(--ion-color-primary)'
+                  "
+                >
+                  {{ option.label }}
+                </ion-label>
+
+                <ion-radio
+                  justify="end"
+                  [value]="option.value"
+                  (ionChange)="
+                    field.onChange &&
+                      field.onChange($any($event).detail.value, form)
+                  "
+                ></ion-radio>
+              </ion-item>
+
+              }
+            </ion-radio-group>
+          </ion-item>
+
           }
 
           <!-- hint tag - dica para usuario o que faz o campo -->

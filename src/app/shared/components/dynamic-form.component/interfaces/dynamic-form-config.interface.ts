@@ -144,4 +144,19 @@ export interface IDynamicFormConfig {
   textCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   checkBorderCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   checkedCheckBoxColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  chechBoxIconBorderRadius?: string; ////enviar '1px', '1rem',
+  radioItemMarginTop?: string; //enviar '1px', '1rem', - margin top do itemdo radio pra o campo acima
+  radioItemNoneLines?: linesShowType; //"full" ｜ "inset" ｜ "none"..... - crado aki para nao confitar com o do item geral
+  radioItemborderRadius?: string; //enviar '1px', '1rem',
+  backgroundRadioItem?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+
+  titleRadioMarginLeft?: string; //enviar '1px', '1rem',
+  titleRadioMarginRight?: string; //enviar '1px', '1rem',
+  titleRadioMarginTop?: string; //enviar '1px', '1rem',
+  textRadioTitleColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  textRadioTitleTextAlign?: TextAlignType; // onde vai ficar o titulo na linha para o Radio
+  borderColorRadioCheck?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  backgroundColorRadioCheck?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  BorderRadiusradioCheck?: string; //enviar '1px', '1rem',
+  textOptionRadioColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 }

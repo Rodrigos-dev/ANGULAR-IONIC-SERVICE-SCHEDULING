@@ -280,6 +280,44 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       paddingLeft: undefined, // enviar '1px', '1rem',......
       paddingTop: undefined, //enviar '1px', '1rem', -> aki que controla junto com o padding bottom o height desse input
       paddingBottom: undefined, //enviar '1px', '1rem', -> aki que controla junto com o padding top o height desse input
+      chechBoxIconBorderRadius: undefined, ////enviar '1px', '1rem - arrendonda o icon de chheck ',
+    },
+
+    // === RADIO ===
+    {
+      inputLabel: 'Nível de Experiência',
+      name: 'experience_level',
+      typeFieldForm: EFieldDynamicForm.RADIO,
+      initialValue: 'intermediate',
+      select: {
+        options: [
+          { value: 'beginner', label: 'Iniciante' },
+          { value: 'intermediate', label: 'Intermediário' },
+          { value: 'advanced', label: 'Avançado2' },
+          { value: 'beginner2', label: 'Iniciante2' },
+          { value: 'intermediate2', label: 'Intermediário2' },
+          { value: 'advanced2', label: 'Avançado2' },
+        ],
+      },
+      size: 12,
+      fill: 'outline',
+      labelPlacement: 'start',
+      borderRadius: '10px',
+
+      radioItemMarginTop: undefined, //enviar '1px', '1rem', - margin top do itemdo radio pra o campo acima
+      radioItemNoneLines: undefined, //"full" ｜ "inset" ｜ "none"..... - crado aki para nao confitar com o do item geral
+      radioItemborderRadius: undefined, //enviar '1px', '1rem', - caso tenha bordas pelo fill
+      backgroundRadioItem: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+
+      titleRadioMarginLeft: undefined, //enviar '1px', '1rem',
+      titleRadioMarginRight: undefined, //enviar '1px', '1rem',
+      titleRadioMarginTop: undefined, //enviar '1px', '1rem',
+      textRadioTitleColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      textRadioTitleTextAlign: undefined, // onde vai ficar o titulo na linha para o Radio
+      borderColorRadioCheck: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      backgroundColorRadioCheck: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      BorderRadiusradioCheck: undefined, //enviar '1px', '1rem',
+      textOptionRadioColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
     },
   ];
 };

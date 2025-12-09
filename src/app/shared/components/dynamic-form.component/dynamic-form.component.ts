@@ -31,6 +31,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonCheckbox,
+  IonRadio,
 } from '@ionic/angular/standalone';
 import { EInputModeField } from './enums/input-mode-field.enum';
 import { EMaskType } from './enums/mask-types.enum';
@@ -64,6 +65,7 @@ const DYNAMIC_FORM_MODULES = [
   IonSelect,
   IonSelectOption,
   IonCheckbox,
+  IonRadio,
 ];
 
 @UntilDestroy()
