@@ -154,6 +154,67 @@ ion-radio.radio-checked::part(mark) {
 
 //fim da parte ion radio
 
+//parte date time, date e time
+ion-modal .datetime-modal ion-content {
+  /* Garante que o ion-content não tenha estilos que quebrem o Flexbox interno */
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* 2. Mira o elemento interno 'scroll' do ion-content (ou ion-modal) */
+/* Centralização Horizontal (justify-content: center) */
+ion-content::part(scroll) {
+  display: flex;
+  justify-content: center;
+  /* Se for necessário centralização Vertical (align-items: center) */
+  /* align-items: center; */
+}
+
+/* 3. Limita o tamanho do ion-datetime para que ele não ocupe 100% e possa ser centralizado */
+ion-datetime {
+  height: 450px;
+  max-width: 400px; /* Limite a largura para que o justify-content tenha efeito */
+  width: 100%; /* Garante que ele preencha o max-width */
+
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+/* 1. Mirar o calendário e a hora geral (contêiner principal) */
+ion-datetime.compact-datetime {
+  /* Reduz o padding interno do componente host */
+  --padding-start: 5px;
+  --padding-end: 5px;
+  --padding-bottom: 5px;
+}
+
+/* 2. Mirar a área que contém o cabeçalho (data selecionada, que fica acima do calendário) */
+ion-datetime.compact-datetime::part(calendar-header) {
+  padding-bottom: 0px;
+}
+
+/* 3. Mirar o contêiner principal do calendário */
+ion-datetime.compact-datetime::part(calendar-day) {
+  /* Reduz a margem interna dos dias do calendário */
+  margin: 1px;
+}
+
+/* 4. Mirar o contêiner do relógio/tempo (time) */
+/* Isso geralmente é o que adiciona mais espaço entre o calendário e o clock */
+ion-datetime.compact-datetime::part(time-button) {
+  /* Reduz a margem superior da seção de tempo */
+  margin-top: 5px;
+}
+
+/* Seletor mais genérico (pode ser útil) */
+ion-datetime.compact-datetime .datetime-grid {
+  gap: 5px; /* Reduz o espaço entre colunas/linhas, se o display for grid */
+}
+
+////---------------------------------------------------------------------------------------------------------
+
 /////////////antes    ---- ////////////////////////////////////////////////////////////////////////
 .a {
   .my-grid {

@@ -4,9 +4,9 @@ export enum EFieldDynamicForm {
   SELECT = 'select',
   TEXTAREA = 'textArea',
   CHECKBOX = 'checkbox',
-  DATE = 'date',
-  TIME = 'time',
-  DATE_TIME = 'dateTime',
+  DATE = 'date', //nao pode ser outro para o date time tag usar esse dado de amostra
+  TIME = 'time', //nao pode ser outro para o date time tag usar esse dado de amostra
+  DATE_TIME = 'date-time', //nao pode ser outro para o date time tag usar esse dado de amostra
   SWITCH = 'switch',
   AVATAR = 'avatar',
   TERMS_POLICY = 'termsPolicy',

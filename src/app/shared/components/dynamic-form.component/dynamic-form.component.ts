@@ -5,9 +5,11 @@ import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
 
 //angular
 import {
+  ControlValueAccessor,
   FormControl,
   FormGroup,
   FormsModule,
+  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
@@ -15,10 +17,12 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   EventEmitter,
+  forwardRef,
   Inject,
   Input,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { EFieldDynamicForm } from './enums/field-dynamic-form.enum';
 import {
@@ -31,9 +35,15 @@ import {
   IonSelect,
   IonSelectOption,
   IonCheckbox,
+  IonRadioGroup,
   IonRadio,
+  IonDatetime,
+  IonModal,
 } from '@ionic/angular/standalone';
-import { EInputModeField } from './enums/input-mode-field.enum';
+import {
+  EFormatDateValueInInput,
+  EInputModeField,
+} from './enums/input-mode-field.enum';
 import { EMaskType } from './enums/mask-types.enum';
 import { InputMaskDirective } from '../../directives/input-maks/input-mask.directive';
 import {
@@ -44,6 +54,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ERROR_MESSAGES, ErrorMessages } from './form-errors';
 import { FormValidatorsRequiredPipe } from '../../pipes/form-validators-required.pipe';
+
+import { format, parseISO, isValid, parse } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
@@ -65,7 +78,10 @@ const DYNAMIC_FORM_MODULES = [
   IonSelect,
   IonSelectOption,
   IonCheckbox,
+  IonRadioGroup,
   IonRadio,
+  IonDatetime,
+  IonModal,
 ];
 
 @UntilDestroy()
@@ -83,8 +99,11 @@ export class DynamicFormComponent implements OnInit {
 
   form: FormGroup = new FormGroup({});
 
+  @ViewChild('dateModal') dateModal?: IonModal;
+
   protected eFieldDynamicForm = EFieldDynamicForm;
   protected eInputModeField = EInputModeField;
+  protected eFormatDateValueInInput = EFormatDateValueInInput;
   public readonly eMaskType = EMaskType;
 
   constructor(@Inject(ERROR_MESSAGES) private readonly errors: ErrorMessages) {
@@ -102,16 +121,38 @@ export class DynamicFormComponent implements OnInit {
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log('formConfigFields undefined');
+      return console.log(
+        'formConfigFields undefined - dynamic-form.component.ts:124'
+      );
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
+        let cleanInitialValue;
+        let dateOrInputFileds = false;
+
+        //
+        if (
+          control.typeFieldForm === this.eFieldDynamicForm.INPUT ||
+          control.typeFieldForm === this.eFieldDynamicForm.DATE ||
+          control.typeFieldForm === this.eFieldDynamicForm.TIME ||
+          control.typeFieldForm === this.eFieldDynamicForm.DATE_TIME
+        ) {
+          dateOrInputFileds = true;
+
+          cleanInitialValue = this.getFormattedInitialValue(
+            control.initialValue,
+            control.typeFieldForm // Assumindo que você passa o tipo do campo
+          );
+        }
+
         this.form.addControl(
           control.name,
           new FormControl(
             {
-              value: control.initialValue ?? null,
-              disabled: control.disabled,
+              value: dateOrInputFileds
+                ? cleanInitialValue
+                : control.initialValue ?? null,
+              disabled: control.disabled ?? false,
             },
             control.validations
           )
@@ -146,6 +187,86 @@ export class DynamicFormComponent implements OnInit {
     );
     return text;
   }
+
+  //#### Parte do input tipo DATA TIME ou DATE-TIME
+  // Mapeia o tipo de campo para a apresentação do modal
+  getPresentationDateType(typeField: EFieldDynamicForm): string {
+    switch (typeField) {
+      case EFieldDynamicForm.DATE:
+        return 'date'; // ou EFieldDynamicForm.DATE se o valor for 'date'
+      case EFieldDynamicForm.TIME:
+        return 'time'; // ou EFieldDynamicForm.TIME se o valor for 'time'
+      case EFieldDynamicForm.DATE_TIME:
+        return 'date-time'; // ou EFieldDynamicForm.DATE_TIME se o valor for 'date-time'
+      default:
+        return 'date-time';
+    }
+  }
+
+  // 1. Função que mapeia o tipo de campo para o formato (Reutilizando a lógica anterior)
+  getFormatDateValue(
+    typeField: EFieldDynamicForm
+  ): EFormatDateValueInInput | undefined {
+    switch (typeField) {
+      case EFieldDynamicForm.DATE:
+        return EFormatDateValueInInput.DATE;
+      case EFieldDynamicForm.TIME:
+        return EFormatDateValueInInput.TIME;
+      case EFieldDynamicForm.DATE_TIME:
+        return EFormatDateValueInInput.DATE_TIME;
+      default:
+        return undefined;
+    }
+  }
+
+  /**
+   * Verifica se um valor é uma data válida e o formata para exibição no Input.
+   *
+   * @param initialValue O valor inicial do FormControl.
+   * @param typeField O tipo do campo (DATE, TIME, DATE_TIME).
+   * @returns A string formatada da data/hora, ou undefined se o valor for inválido.
+   */
+  getFormattedInitialValue(
+    initialValue: any,
+    typeField: EFieldDynamicForm
+  ): string | undefined {
+    if (!initialValue) {
+      return undefined;
+    }
+
+    let dateObject: Date;
+    const formatString = this.getFormatDateValue(typeField); // Obtém o formato 'HH:mm'
+
+    if (!formatString) {
+      return undefined;
+    }
+
+    // Lógica de Análise: Usa parse para TIME e parseISO para DATE/DATE_TIME
+    if (typeField === EFieldDynamicForm.TIME) {
+      // 1. Para TIME, tentamos analisar a string 'HH:mm' usando o formato 'HH:mm'
+      // Devemos fornecer uma data de referência (new Date()) para criar um objeto Date válido.
+      // Se initialValue for uma string ISO completa, o 'parse' ainda deve funcionar.
+      dateObject = parse(initialValue, formatString, new Date());
+    } else {
+      // 2. Para DATE e DATE_TIME, parseISO é o padrão, pois espera um formato ISO
+      dateObject =
+        initialValue instanceof Date ? initialValue : parseISO(initialValue);
+    }
+
+    // 3. Verifica se o objeto Date resultante é válido
+    if (!isValid(dateObject)) {
+      return undefined;
+    }
+
+    try {
+      // 4. Formata a data válida para a string de exibição
+      return format(dateObject, formatString, { locale: ptBR });
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return undefined;
+    }
+  }
+  //#### Parte do input tipo DATA TIME ou DATE-TIME
 }
 
 /*

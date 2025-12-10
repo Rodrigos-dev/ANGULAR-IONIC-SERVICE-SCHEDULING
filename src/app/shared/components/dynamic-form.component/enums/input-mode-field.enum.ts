@@ -7,3 +7,9 @@ export enum EInputModeField {
   TEL = 'tel',
   URL = 'url',
 }
+
+export enum EFormatDateValueInInput {
+  DATE = 'dd/MM/yyyy',
+  TIME = 'HH:mm',
+  DATE_TIME = 'dd/MM/yyyy HH:mm',
+}

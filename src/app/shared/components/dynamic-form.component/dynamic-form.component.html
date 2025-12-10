@@ -20,7 +20,7 @@
         <ion-item-divider
           [ngStyle]="{
             width: '100%',
-            'margin-bottom': '1rem'
+            'margin-bottom': field.marginBottom || '1px'
           }"
           [style.--padding-start]="
             field.paddingStart ? field.paddingStart : '1.2rem'
@@ -142,7 +142,22 @@
           }
 
           <!-- INPUT https://ionicframework.com/docs/api/input-->
-          @if (field.typeFieldForm === eFieldDynamicForm.INPUT) {
+          @if ((field.typeFieldForm === eFieldDynamicForm.INPUT)||
+          field.typeFieldForm === eFieldDynamicForm.DATE || field.typeFieldForm
+          === eFieldDynamicForm.TIME || field.typeFieldForm ===
+          eFieldDynamicForm.DATE_TIME) {
+
+          <!-- VERIFICA SE O INPUT VAI SER TIPO DATE -->
+          @let isDateOrTimeInput = field.typeFieldForm !==
+          eFieldDynamicForm.INPUT;
+
+          <!-- AQUI PARA VER O TIPO DE DADOS QUE O MODAL VAI APRESENTAR DATA , HORA, HRA E DATA -->
+          @let typeDataShowModalDate = isDateOrTimeInput ?
+          getPresentationDateType(field.typeFieldForm) : undefined;
+
+          <!-- AKI O FORMATO QUE VAI SER EXIBIDO NO INPUT DEPOIS DE SELECIONADO -->
+          @let formatValueWhenDate = isDateOrTimeInput ?
+          getFormatDateValue(field.typeFieldForm) : undefined;
 
           <!-- variaveis usada na logica dos if -->
           @let isPasswordField = field.eInputModeField ===
@@ -184,7 +199,8 @@
               [formControlName]="field.name"
               [appInputMask]="field.mask"
               [type]="typeInput"
-              [inputmode]="field.eInputModeField"
+              [inputmode]="isDateOrTimeInput ? 'text' : field.eInputModeField"
+              [readonly]="isDateOrTimeInput ? true : field.readonlyInput"
               [placeholder]="field.placeholder"
               [maxlength]="field.maxLengthInput || 1000"
               [minlength]="field.minLengthInput || 0"
@@ -196,10 +212,17 @@
               [style.--background]="field.backgroundInput"
               [style.--border-color]="boderColorInput"
               [style.--border-width]="boderWidthInput"
+              [style.margin-top]="field.marginTop || '15px'"
               (ionInput)="
                 field.onChange && field.onChange($event.detail.value, form)
               "
               [style.--color]="colorLabelPlaceholderAndTextInput"
+              [value]="
+                isDateOrTimeInput
+                  ? (form.controls[field.name]?.value
+                    | date : formatValueWhenDate)
+                  : undefined
+              "
             >
               @if (!(form.controls[field.name] | formValidatorRequired | async)
               && field.asteristicRequiredInput) {
@@ -213,8 +236,79 @@
                 >*</span
               >
               }
+
+              <!-- caso seja date ou time o botao no final para chamar o modas com o calendario -->
+              @if(isDateOrTimeInput){
+              <ion-button
+                fill="clear"
+                slot="end"
+                [id]="'modal-trigger-' + field.name"
+                (click)="dateModal.present()"
+              >
+                <ion-icon
+                  [name]="
+                    field.typeFieldForm === eFieldDynamicForm.TIME
+                      ? 'timer-outline'
+                      : 'calendar-outline'
+                  "
+                ></ion-icon>
+              </ion-button>
+
+              <!--  DATE TIME MODAL -->
+              <ion-modal
+                #dateModal
+                [keepContentsMounted]="true"
+                [breakpoints]="[0, 0.7, 1.0]"
+                [initialBreakpoint]="0.9"
+              >
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-title
+                        [style.color]="
+                          field.titleColorModalDate ||
+                          'var(--ion-color-primary)'
+                        "
+                        [style.font-size]="
+                          field.titleFontSizeModalDate || '16px'
+                        "
+                        >{{ field.inputLabel }}</ion-title
+                      >
+                      <ion-buttons slot="end">
+                        <ion-button
+                          (click)="dateModal.dismiss('cancel')"
+                          [style.color]="
+                            field.buttonColorModalDate ||
+                            'var(--ion-color-primary)'
+                          "
+                          [style.font-size]="
+                            field.buttonFontSizeModalDate || '12px'
+                          "
+                          >Selecionar</ion-button
+                        >
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-content
+                    class="ion-padding ion-padding ion-justify-content-center"
+                    [style.display]="'flex'"
+                  >
+                    <ion-datetime
+                      [formControlName]="field.name"
+                      [presentation]="typeDataShowModalDate"
+                      [locale]="'pt-BR'"
+                      (ionChange)="
+                        field.onChange &&
+                          field.onChange($event.detail.value, form)
+                      "
+                    ></ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+              }
+
               <!-- logica olho para mostrar ou nao senha e caso nao seja password mostrar o icone desejado-->
-              @if (dynamicIconName) {
+              @else if (dynamicIconName) {
               <ion-button
                 fill="clear"
                 slot="end"
@@ -369,6 +463,7 @@
             [style.--color]="colorLabelPlaceholderAndTextInput"
             [style.--padding-top]="'20px'"
             [style.--padding-bottom]="'20px'"
+            [style.margin-top]="field.marginTop || '15px'"
           ></ion-textarea>
           }
 

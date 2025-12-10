@@ -15,3 +15,5 @@ export type JustifyContentButtonDownInputType =
   | 'center';
 
 export type AsteristicRequiredType = 'start' | 'end';
+
+export type DateFieldInitialValue = string | Date | boolean;

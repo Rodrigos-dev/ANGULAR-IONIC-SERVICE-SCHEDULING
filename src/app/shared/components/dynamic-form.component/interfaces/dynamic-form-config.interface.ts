@@ -2,6 +2,7 @@ import { FormGroup, ValidatorFn } from '@angular/forms';
 import { EFieldDynamicForm } from '../enums/field-dynamic-form.enum';
 import {
   AsteristicRequiredType,
+  DateFieldInitialValue,
   FillInputType,
   JustifyContentButtonDownInputType,
   LabelPlacementType,
@@ -85,12 +86,13 @@ export interface IDynamicFormConfig {
   colorLabelPlaceholderAndTextInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   maxLengthInput?: number; //max quantidade de caracteres que o input suporta
   minLengthInput?: number; //min caracteres que deve ter o input
+  readonlyInput?: boolean; // true ou false
   onChange?: (
     data: unknown | null | object | boolean | string | number,
     form: FormGroup
   ) => void; //funcao que retorna os valores do input
   onAddOnIconClick?: (form: FormGroup) => void;
-  initialValue?: unknown; //valor inicial do input - para updates etc
+  initialValue?: DateFieldInitialValue; //valor inicial do input - para updates etc - caso seja data ou time o input YYYY-MM-DDTHH:mm, YYYY-MM-DD, HH:mm
   validations?: ValidatorFn | ValidatorFn[]; //erros configurados no validations do input
 
   //parte asteristico * de valor requerido no fim do input
@@ -99,6 +101,12 @@ export interface IDynamicFormConfig {
   asteristicRequiredColorInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
   textAreaRows?: number; //quantidade de linhas disponiveis paratar no text area
+
+  //input tipo date time ou date time
+  titleColorModalDate?: string; //titulo do modal de selecionar a data //default primary....enviar 'var()'... rgb ...rgba etc
+  titleFontSizeModalDate?: string; //enviar '1px', '1rem', .....
+  buttonColorModalDate?: string; //botao que estamos usando selecionar pode ser voltar etc no modal de selecionar data //default primary....enviar 'var()'... rgb ...rgba etc
+  buttonFontSizeModalDate?: string; //enviar '1px', '1rem', .....
 
   //botoes de url abaixo do input tipo o esqueceu senha etc...na verdade o esqueceu senha vai ser um desses teremos 2 posiveis opcoes
   //botao 1
