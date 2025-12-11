@@ -44,6 +44,30 @@ ion-item {
   --border-style: none;
 }
 
+//--------------------- parte avatar
+
+.avatar-img-video-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .avatar-img-video-uploader {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: baseline;
+
+    button {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+    }
+  }
+}
+
+//-----------------------
+
 //---------------------- parte input
 
 .buttonDownInput::part(native) {

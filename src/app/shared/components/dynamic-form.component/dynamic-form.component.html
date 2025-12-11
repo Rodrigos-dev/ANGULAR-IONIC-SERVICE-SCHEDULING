@@ -141,6 +141,32 @@
           </ion-label>
           }
 
+          <!-- AVATAR -->
+          @if (field.typeFieldForm === eFieldDynamicForm.AVATAR) {
+          <div class="avatar-img-video-container">
+            <div class="avatar-img-video-uploader">
+              <ion-avatar
+                (click)="previewImage(field.name)"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.margin-bottom]="'30px'"
+              >
+                <ion-img
+                  [src]="
+                    localPreviewUrls[field.name] ||
+                    form.controls[field.name].value ||
+                    'assets/images/avatar.png'
+                  "
+                  alt="Avatar"
+                />
+              </ion-avatar>
+              <ion-button fill="clear" (click)="uploadImage(field)">
+                <ion-icon name="add" slot="end"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          }
+
           <!-- INPUT https://ionicframework.com/docs/api/input-->
           @if ((field.typeFieldForm === eFieldDynamicForm.INPUT)||
           field.typeFieldForm === eFieldDynamicForm.DATE || field.typeFieldForm

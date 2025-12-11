@@ -13,6 +13,7 @@ import { EMaskType } from '../enums/mask-types.enum';
 import { EInputModeField } from '../enums/input-mode-field.enum';
 import { linesShowType } from '../types/ion-item.type';
 import { Select } from './select.input.interface';
+import { eFileAccept } from '../enums/image-video-document.enum';
 
 export interface IDynamicFormConfig {
   name: string; //nome do campo no formulario formname
@@ -167,4 +168,9 @@ export interface IDynamicFormConfig {
   backgroundColorRadioCheck?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   BorderRadiusradioCheck?: string; //enviar '1px', '1rem',
   textOptionRadioColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+
+  //PARTE AVATAR E IMAGES
+  fileAccept?: eFileAccept; //mime types das midias
+  avatarOrImageHeight?: string; //enviar '1px', '1rem',
+  avatarOrImageWidth?: string; //enviar '1px', '1rem',
 }

@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
+import { ModalController } from '@ionic/angular';
 
 //enums interfaces types
 import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
 
 //angular
 import {
-  ControlValueAccessor,
   FormControl,
   FormGroup,
   FormsModule,
-  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
@@ -17,7 +16,7 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   EventEmitter,
-  forwardRef,
+  inject,
   Inject,
   Input,
   OnInit,
@@ -39,6 +38,7 @@ import {
   IonRadio,
   IonDatetime,
   IonModal,
+  IonAvatar,
 } from '@ionic/angular/standalone';
 import {
   EFormatDateValueInInput,
@@ -57,6 +57,7 @@ import { FormValidatorsRequiredPipe } from '../../pipes/form-validators-required
 
 import { format, parseISO, isValid, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
@@ -82,6 +83,10 @@ const DYNAMIC_FORM_MODULES = [
   IonRadio,
   IonDatetime,
   IonModal,
+  IonAvatar,
+
+  //COMPONENTS
+  ImagePreviewComponent,
 ];
 
 @UntilDestroy()
@@ -106,6 +111,9 @@ export class DynamicFormComponent implements OnInit {
   protected eFormatDateValueInInput = EFormatDateValueInInput;
   public readonly eMaskType = EMaskType;
 
+  public localPreviewUrls: { [fieldName: string]: string | null } = {};
+  private readonly modalCtrl = inject(ModalController);
+
   constructor(@Inject(ERROR_MESSAGES) private readonly errors: ErrorMessages) {
     // addIcons({ eye, eyeOff });
   }
@@ -122,7 +130,7 @@ export class DynamicFormComponent implements OnInit {
   private createForm() {
     if (!this.formConfigFields)
       return console.log(
-        'formConfigFields undefined - dynamic-form.component.ts:124'
+        'formConfigFields undefined - dynamic-form.component.ts:132'
       );
 
     for (const control of this.formConfigFields) {
@@ -266,7 +274,86 @@ export class DynamicFormComponent implements OnInit {
       return undefined;
     }
   }
-  //#### Parte do input tipo DATA TIME ou DATE-TIME
+  //#### Fim da Parte do input tipo DATA TIME ou DATE-TIME
+
+  // PARTE IMAGES
+  // ATUALIZADO: Upload para Ionic
+  uploadImage(field: IDynamicFormConfig) {
+    // 1. Cria o input de arquivo
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = field.fileAccept || 'image/*';
+
+    input.onchange = (event: any) => {
+      const file: File = event.target.files[0];
+
+      if (file && field.name) {
+        const reader = new FileReader();
+        // 2. SALVA O OBJETO FILE NO FORM CONTROL (Para o futuro upload)
+
+        reader.onload = () => {
+          const base64String = reader.result as string;
+
+          this.localPreviewUrls[field.name] = base64String;
+          this.form.get(field.name)?.setValue(base64String);
+        };
+
+        reader.readAsDataURL(file);
+      } else if (field.name) {
+        // Se o usuário cancelar a seleção, limpa o form e a preview
+        this.form.get(field.name)?.setValue(null);
+        this.localPreviewUrls[field.name] = null;
+      }
+    };
+
+    // 4. Dispara o input
+    input.click();
+  }
+
+  // ATUALIZADO: Preview para Ionic (usando modal nativo ou action sheet)
+  async previewImage(controlName: string) {
+    const base64: string = this.form.get(controlName)?.value;
+
+    if (!base64 || typeof base64 !== 'string' || !base64.startsWith('data:')) {
+      console.warn(
+        'Não há imagem válida em Base64 para visualização. - dynamic-form.component.ts:319'
+      );
+      return;
+    }
+
+    try {
+      const modal = await this.modalCtrl.create({
+        // 1. Componente que será exibido
+        component: ImagePreviewComponent,
+
+        cssClass: 'custom-modal',
+
+        // 2. Parâmetros que serão passados para o componente (o Base64)
+        componentProps: {
+          imageUrl: base64,
+          controlName: controlName,
+        },
+      });
+
+      await modal.present();
+
+      const { data } = await modal.onWillDismiss();
+
+      if (data?.removed === true) {
+        this.handleImageRemoval(data.controlName);
+      }
+    } catch (error) {
+      console.error(
+        'Erro ao abrir o modal de preview: - dynamic-form.component.ts:345',
+        error
+      );
+    }
+  }
+
+  handleImageRemoval(controlName: string) {
+    this.form.get(controlName)?.setValue(null);
+    this.localPreviewUrls[controlName] = null;
+  }
 }
 
 /*
