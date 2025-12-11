@@ -169,8 +169,11 @@ export interface IDynamicFormConfig {
   BorderRadiusradioCheck?: string; //enviar '1px', '1rem',
   textOptionRadioColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
-  //PARTE AVATAR E IMAGES
+  //PARTE AVATAR E MEDIAS
   fileAccept?: eFileAccept; //mime types das midias
   avatarOrImageHeight?: string; //enviar '1px', '1rem',
   avatarOrImageWidth?: string; //enviar '1px', '1rem',
+  maxVideos?: number; //quantidade maxima de videos para adcionar
+  maxTotalMedia?: number; ////quantidade maxima de medias - doc+video+image para adcionar
+  mediasCustomColorAndBorderColor?: string; ////default primary....enviar 'var()'... rgb ...rgba etc
 }

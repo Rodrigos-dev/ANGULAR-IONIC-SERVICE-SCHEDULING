@@ -63,6 +63,21 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       size: 12,
       fileAccept: eFileAccept.IMAGE,
 
+      //relacionado a bordas do item
+      //relacionados aos estilos *********************
+
+      border: undefined, //'full' | 'none' | 'bottom'
+      borderRadius: '8px', //30px....1rem etc
+      borderColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+      backgroundItem: 'color-mix(in srgb, var(--ion-color-primary), white 96%)', //undefined, //default transparent....enviar 'var()'... rgb ...rgba etc
+
+      disabled: undefined, //disabelita o campo
+      hidden: undefined, //esconde o campo
+      paddingStart: undefined, //pode ser uma string como '8px', '0.5rem', etc
+      paddingLeft: '10px', // enviar '1px', '1rem',......                                                       -- ion-label
+      marginBottom: undefined, //// enviar '1px', '1rem',......
+      marginTop: '14px',
+
       //ion item - ion-item-divider
       itemDividerStick: undefined, //true ou false
 
@@ -75,6 +90,8 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       iconMarginLeft: undefined, // enviar '1px', '1rem', .....                                                   -- ion-icon
       iconFontSize: undefined, //enviar '1px', '1rem', .....                                                      -- ion-icon
       iconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc                                -- ion-icon
+
+      color: undefined, //default var(--ion-color-primary)....enviar 'var()'... rgb ...rgba etc
     },
 
     //
@@ -609,6 +626,52 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormConfig[] => {
       fontSizebuttonTwoDownInput: undefined, //enviar '1px', '1rem', .....
       colorTextbuttonTwoDownInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
       textButtonTwoDownInput: 'Criar conta?', //texto do que vai dizer o botao exemplo - esqueceu senha?
+    },
+
+    //   IMAGE === VIDEO === DOCUMENTOS
+    {
+      name: 'videoImageOrDocuments',
+      typeFieldForm: EFieldDynamicForm.VIDEOIMAGEORDOCUMENTS, // tipo de campo
+      labelItemTop: 'IMAGE VIDEO OU DOCUMENTOS',
+
+      initialValue: '',
+      avatarOrImageHeight: '130px',
+      avatarOrImageWidth: '130px',
+      ionItemNoneLines: 'none',
+      size: 12,
+      fileAccept: eFileAccept.ALL,
+      maxTotalMedia: 5,
+      maxVideos: 1,
+
+      //relacionado a bordas do item
+      //relacionados aos estilos *********************
+      disabled: undefined, //disabelita o campo
+      hidden: undefined, //esconde o campo
+      paddingStart: undefined, //pode ser uma string como '8px', '0.5rem', etc
+      paddingLeft: '10px', // enviar '1px', '1rem',......                                                       -- ion-label
+      marginBottom: undefined, //// enviar '1px', '1rem',......
+      marginTop: '14px',
+
+      border: undefined, //'full' | 'none' | 'bottom'
+      borderRadius: '8px', //30px....1rem etc
+      borderColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
+
+      //relacionado a cor e background color
+      backgroundItem: 'color-mix(in srgb, var(--ion-color-primary), white 96%)', //undefined, //default transparent....enviar 'var()'... rgb ...rgba etc
+      color: undefined, //default var(--ion-color-primary)....enviar 'var()'... rgb ...rgba etc
+
+      //relacionados a font
+      fontWeight: undefined, // enviar '600' '700' ....                                                           -- ion-item-divider
+      fontSize: undefined, // enviar '1px', '1rem', .....
+      textAlign: undefined, // enviar 'left' | 'center' | 'right'//alinhamento do texto label...input etc
+
+      //relacionado a icon - caso envie o help pode configurar o icon
+      iconMarginLeft: undefined, // enviar '1px', '1rem', .....                                                   -- ion-icon
+      iconFontSize: undefined, //enviar '1px', '1rem', .....                                                      -- ion-icon
+      iconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc                                -- ion-icon
+
+      //para medias
+      mediasCustomColorAndBorderColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
     },
   ];
 };

@@ -93,6 +93,22 @@
           "
           [detail]="field.ionItemDetail"
           [lines]="field.ionItemNoneLines"
+          [style.border]="
+            field.border === 'full'
+              ? '1px solid var(--ion-color-primary)'
+              : null
+          "
+          [style.border-color]="
+            field.border === 'none'
+              ? 'transparent'
+              : field.borderColor
+              ? field.borderColor
+              : 'var(--ion-color-primary)'
+          "
+          [styck]="field.itemDividerStick"
+          [style.borderRadius]="field.borderRadius"
+          [style.--background]="field.backgroundItem"
+          [style.margin-top]="field.marginTop"
         >
           <!-- LABEL (exceto para alguns tipos) aparece sobre os inputs, não é o interno do input e sim um proprio ou lado etc-->
           @if (field.labelItemTop && field.typeFieldForm !==
@@ -130,7 +146,7 @@
             @if (!(form.controls[field.name] | formValidatorRequired | async) &&
             field.asteristicRequiredLabelItem) {
             <span
-              [style.margin-left]="'3px'"
+              [style.margin-left]="'5px'"
               [style.color]="
                 field.asteristicRequiredColorLabelItem ||
                 'var(--ion-color-primary)'
@@ -146,7 +162,7 @@
           <div class="avatar-img-video-container">
             <div class="avatar-img-video-uploader">
               <ion-avatar
-                (click)="previewImage(field.name)"
+                (click)="previewMedia(field.name)"
                 [style.height]="field.avatarOrImageHeight || '130px'"
                 [style.width]="field.avatarOrImageWidth || '130px'"
                 [style.margin-bottom]="'30px'"
@@ -709,6 +725,132 @@
             </ion-radio-group>
           </ion-item>
 
+          }
+
+          <!-- Varias Imagens ou videos -->
+          @if (field.typeFieldForm === eFieldDynamicForm.VIDEOIMAGEORDOCUMENTS
+          && field.fileAccept) {
+          <div
+            class="media-gallery-container"
+            [style.--medias-custom-and-border-color]="
+              field.mediasCustomColorAndBorderColor ||
+              'var(--ion-color-primary)'
+            "
+          >
+            <div class="media-list-wrapper">
+              <!-- incio das medias -->
+              @if (!isMaxMediaReached(field)) {
+              <div
+                class="add-media-card"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+              >
+                <ion-button
+                  fill="clear"
+                  color="primary"
+                  class="add-media-button"
+                  (click)="uploadMedia(field)"
+                >
+                  <ion-icon name="add" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              }
+
+              <!-- for pra exibir as medias selecionadas na tela -->
+              @for (mediaUrl of form.controls[field.name].value; track
+              mediaUrl.fileName; let i = $index) {
+              <ion-item
+                class="media-item-card"
+                lines="none"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+              >
+                <div
+                  class="media-item-content"
+                  [style.height]="field.avatarOrImageHeight || '130px'"
+                  [style.width]="field.avatarOrImageWidth || '130px'"
+                >
+                  <!-- caso seja imagem -->
+                  @if (mediaUrl | isMediaType: 'image' : field.fileAccept) {
+                  <ion-img
+                    [src]="mediaUrl.base64"
+                    alt="Imagem"
+                    class="imgInGalleryForm"
+                    (click)="previewMedia(field.name, i)"
+                  />
+                  }
+
+                  <!-- caso seja video -->
+                  @else if (mediaUrl | isMediaType: 'video' : field.fileAccept)
+                  {
+                  <div
+                    class="video-thumbnail-wrapper"
+                    (click)="previewMedia(field.name, i)"
+                    [attr.aria-label]="'Visualizar Vídeo'"
+                    [style.height]="field.avatarOrImageHeight || '130px'"
+                    [style.width]="field.avatarOrImageWidth || '130px'"
+                  >
+                    <!-- O elemento video não tem controls, atua como thumbnail/preview -->
+                    <video
+                      [src]="mediaUrl.base64"
+                      preload="metadata"
+                      class="videoInGalleryForm"
+                    >
+                      Seu navegador não suporta a visualização.
+                    </video>
+
+                    <!-- Ícone de Play para indicar que o vídeo é clicável (o overlay) -->
+                    <ion-icon
+                      name="play-circle"
+                      class="video-play-overlay"
+                      size="large"
+                    ></ion-icon>
+                  </div>
+                  }
+
+                  <!-- caso seja documento -->
+                  @else if (mediaUrl | isMediaType: 'document' :
+                  field.fileAccept) {
+                  <div
+                    class="document-placeholder"
+                    (click)="previewMedia(field.name, i)"
+                  >
+                    <ion-icon
+                      name="document-text-outline"
+                      class="document-icon"
+                    ></ion-icon>
+                    <p class="document-label">{{ mediaUrl.fileName }}</p>
+                  </div>
+                  }
+
+                  <!-- caso nao seja umarquivo suportado -->
+                  @else {
+                  <div
+                    class="document-placeholder fallback-unknown"
+                    (click)="previewMedia(field.name, i)"
+                  >
+                    <ion-icon
+                      name="alert-circle-outline"
+                      class="document-icon"
+                    ></ion-icon>
+                    <p class="document-label">Arquivo Não Suportado</p>
+                  </div>
+                  }
+
+                  <ion-button
+                    fill="solid"
+                    color="danger"
+                    size="small"
+                    class="remove-media-button"
+                    (click)="handleMediaRemoval(field.name, i)"
+                  >
+                    <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-item>
+              }
+            </div>
+          </div>
           }
 
           <!-- hint tag - dica para usuario o que faz o campo -->

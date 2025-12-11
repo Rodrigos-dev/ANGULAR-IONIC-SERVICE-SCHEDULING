@@ -22,6 +22,8 @@ export class DocumentPreviewComponent implements OnInit {
   // O nome do controle de formulário
   @Input() controlName: string | undefined;
 
+  @Input() itemIndex: number | undefined; // Recebe o index!
+
   @Input() mimetype!: string;
 
   // URL segura para ser usada no iframe
@@ -55,6 +57,7 @@ export class DocumentPreviewComponent implements OnInit {
     this.modalCtrl.dismiss({
       removed: true,
       controlName: this.controlName,
+      itemIndex: this.itemIndex,
     });
   }
 }
