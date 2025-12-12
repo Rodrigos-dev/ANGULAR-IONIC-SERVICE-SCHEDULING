@@ -14,6 +14,27 @@ import {
 } from '../components/dynamic-form.component/interfaces/medias.interface';
 import { dataURLtoBlob } from '../utils/medias.util';
 
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
+/*
+
+https://github.com/ionic-team/capacitor-filesystem
+
+para instalar - npm install @capacitor/filesystem --legacy-peer-deps
+
+//permissoes plugin file system
+//<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+//<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+ios
+
+<key>NSDownloadsFolderUsageDescription</key>
+<string>Para salvar os documentos e mídias de pré-visualização no seu dispositivo.</string>
+
+<key>NSFileProviderDomainUsageDescription</key>
+<string>Para que você possa compartilhar e visualizar documentos salvos no aplicativo.</string>
+*/
+
 @Injectable({
   providedIn: 'root',
 })
@@ -55,16 +76,12 @@ export class MediaService {
       return null;
     } catch (error) {
       console.error(
-        'Erro ao abrir o modal de preview: - medias.service.ts:57',
+        'Erro ao abrir o modal de preview: - medias.service.ts:78',
         error
       );
       return null;
     }
   }
-
-  // =================================================================
-  // FUNÇÕES PÚBLICAS REQUISITADAS
-  // =================================================================
 
   // Função para Preview de Imagens
   public async previewImage(
@@ -121,7 +138,7 @@ export class MediaService {
       const finalUrlToOpen = URL.createObjectURL(mediaBlob);
 
       console.log(
-        `Abrindo ${mimeType} usando Object URL. - medias.service.ts:120`
+        `Abrindo ${mimeType} usando Object URL. - medias.service.ts:137`
       );
 
       const newWindow = window.open(finalUrlToOpen, '_blank');
@@ -130,7 +147,7 @@ export class MediaService {
         newWindow.onbeforeunload = () => URL.revokeObjectURL(finalUrlToOpen);
       } else {
         console.warn(
-          'Popup bloqueado. Tentando abrir na aba atual. - medias.service.ts:127'
+          'Popup bloqueado. Tentando abrir na aba atual. - medias.service.ts:144'
         );
         window.location.href = finalUrlToOpen;
       }
@@ -197,7 +214,7 @@ export class MediaService {
   /**
    * Função auxiliar para extrair o mimeType de uma string Data URL.
    */
-  private extractMimeType(base64DataUrl: string): string | undefined {
+  extractMimeType(base64DataUrl: string): string | undefined {
     if (base64DataUrl?.startsWith('data:')) {
       const mime = base64DataUrl.substring(5, base64DataUrl.indexOf(';'));
       return mime || undefined;
@@ -228,7 +245,7 @@ export class MediaService {
       // --- 1. Caso Galeria (Array de IMediaItemForm) ---
       if (itemIndex === undefined) {
         console.warn(
-          'Índice do item é necessário para galeria. - medias.service.ts:223'
+          'Índice do item é necessário para galeria. - medias.service.ts:240'
         );
         return null;
       }
@@ -260,7 +277,7 @@ export class MediaService {
     // Validação Final (Garantindo que a Base64 exista e seja uma string)
     if (!mediaBase64 || typeof mediaBase64 !== 'string') {
       console.warn(
-        'Não há mídia válida para visualização. - medias.service.ts:253'
+        'Não há mídia válida para visualização. - medias.service.ts:270'
       );
       return null;
     }
@@ -271,5 +288,49 @@ export class MediaService {
       mimeType: mimeType || null,
       isGallery,
     };
+  }
+
+  async downloadDocument(documentUrl: string, mimetype: string) {
+    if (!documentUrl) {
+      console.warn(
+        'URL do documento não está disponível para download.  documentpreview.component.ts:99'
+      );
+      return;
+    }
+
+    // 1. OBTÉM O MIME TYPE (Prioriza o Input, senão extrai da URL)
+    const finalMimeType = mimetype || this.extractMimeType(documentUrl);
+
+    if (!finalMimeType) {
+      console.error(
+        'Não foi possível determinar o MIME Type para download.  documentpreview.component.ts:108'
+      );
+      return;
+    }
+
+    try {
+      // Extrai a string Base64 pura
+      const base64Data = documentUrl.split(',')[1];
+
+      // Determina o nome do arquivo usando o MIME Type garantido
+      const extension = finalMimeType.split('/').pop() || 'dat';
+      const fileName = `documento_download_${Date.now()}.${extension}`;
+
+      // 2. Chama a lógica do Capacitor Filesystem (que funciona em Mobile e Web)
+      const result = await Filesystem.writeFile({
+        path: fileName,
+        data: base64Data,
+        directory: Directory.Documents,
+      });
+
+      console.log(result, 'aaa  documentpreview.component.ts:127');
+
+      // ... (Feedback ao usuário) ...
+    } catch (error) {
+      console.error(
+        'Erro ao salvar o arquivo no sistema de arquivos nativo:',
+        error
+      );
+    }
   }
 }

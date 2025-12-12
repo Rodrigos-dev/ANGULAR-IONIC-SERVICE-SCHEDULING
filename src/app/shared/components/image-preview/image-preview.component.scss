@@ -1,41 +1,41 @@
-/* -------------------- 1. AJUSTE DO HEADER (Altura Reduzida) -------------------- */
+/* -------------------- 1. AJUSTE DO HEADER -------------------- */
 .transparent-header {
-  /* Define a cor de fundo (ainda transparente) e posicionamento absoluto */
   --background: transparent;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 1000;
 
-  /* Reduz a altura do header forçando um padding menor */
-  height: 44px; /* Altura padrão mobile é 44px; podemos tentar 40px ou menos */
-  min-height: 40px;
+  /* CRÍTICO: Remove a linha de borda inferior padrão do Ionic */
+  --border-color: transparent;
 
-  /* Reduz o padding interno para compactar */
-  --padding-top: 0;
-  --padding-bottom: 0;
+  /* Mantemos a altura do header como referência */
+  height: 60px;
+  min-height: 44px;
 }
 .transparent-toolbar {
   --background: transparent;
   --border-color: transparent;
-  /* Define a altura mínima da toolbar */
-  --min-height: 40px;
+  --min-height: 44px;
   padding: 0;
 }
 
-/* -------------------- 2. AJUSTE DO CONTEÚDO (Imagem 100%) -------------------- */
+/* -------------------- 2. AJUSTE DO CONTEÚDO (CRÍTICO!) -------------------- */
 .image-modal-content {
-  /* Fundo da tela do modal (ao redor da imagem) */
+  /* Fundo da tela do modal */
   --background: rgba(0, 0, 0, 0.9);
+
+  /* CRÍTICO: Usa flex para o layout */
   display: flex;
   justify-content: center;
-  align-items: center;
 
-  /* Ocupa a área total do modal (excluindo margens/padding) */
+  /* MUDANÇA CRÍTICA: Alinha ao topo. 
+     Isso garante que o conteúdo comece imediatamente abaixo do header. */
+  align-items: flex-start;
+
+  /* Ocupa 100% da área do modal (que já está definida como 90% via ::part(content)) */
   width: 100%;
-  height: 90%;
-
-  /* Garante que o conteúdo seja o ponto de referência para a imagem */
+  height: 100%;
   position: relative;
 
   /* Remova o padding padrão do ion-content */
@@ -47,19 +47,22 @@
 
 /* -------------------- 3. AJUSTE DA IMAGEM -------------------- */
 .image-container {
-  /* O contêiner de imagem deve ocupar toda a área flexível */
-  max-width: 100%;
-  max-height: 90%;
+  /* CRÍTICO: O contêiner precisa começar onde o header termina e ir até o fim */
+  /* Removemos 44px (altura do header) do topo */
+  height: calc(100% - 44px);
+  width: 100%;
+
+  /* Move o container para baixo, evitando que ele fique atrás do header */
+  margin-top: 44px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .preview-image {
-  /* PASSO CRÍTICO: Garante que a imagem se ajuste completamente sem cortar */
-  max-width: 100vw; /* 100% da largura da viewport */
-  max-height: 100vh; /* 100% da altura da viewport */
-
-  /* Garante que a imagem inteira seja visível, mesmo que sobrar espaço (bordas pretas) */
-  object-fit: contain;
+  /* Garante que a imagem se ajuste completamente sem cortar */
+  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%; /* Garante que ela se ajuste ao image-container */
 }

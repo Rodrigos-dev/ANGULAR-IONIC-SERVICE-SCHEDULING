@@ -1,4 +1,4 @@
-<ion-header class="transparent-header">
+<ion-header class="ion-no-border transparent-header">
   <ion-toolbar class="transparent-toolbar">
     <ion-buttons slot="end">
       <ion-button (click)="removeImage()" color="danger">
@@ -12,4 +12,8 @@
   </ion-toolbar>
 </ion-header>
 
-<img [src]="imageUrl" alt="Preview" class="preview-image" />
+<ion-content class="image-modal-content">
+  <div class="image-container">
+    <img [src]="imageUrl" alt="Preview" class="preview-image" />
+  </div>
+</ion-content>

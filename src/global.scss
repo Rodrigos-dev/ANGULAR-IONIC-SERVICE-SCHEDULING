@@ -170,33 +170,46 @@ ion-select-popover {
 }
 // fim dos estilos globais do ion-select
 
-.custom-modal {  
-  --height: auto;
-  --width: auto 
+// //SOLUÇÃO REAL E GARANTIDA (funciona no Ionic 6 e 7)
 
-  /* --max-width: 100%; */  
-  --max-height: 100%;
-
-  /* Opcional: Remove bordas/sombras típicas de modais de desktop */
-  --border-radius: 0;
-  --box-shadow: none;
+//parte modal video e imagem
+ion-modal.custom-modal {
+  margin-top: 5px;
+  border-radius: 30px;
 }
 
-
-// //SOLUÇÃO REAL E GARANTIDA (funciona no Ionic 6 e 7)
-ion-modal.custom-modal-documents::part(content) {
+ion-modal.custom-modal ::part(content) {
   width: 100% !important;
-  height: 100% !important;
+  height: 90% !important;
 
   margin-top: 20%;
   border-top-left-radius: 20px !important;
   border-top-right-radius: 20px !important;
   border-bottom-left-radius: 0 !important; /* Garantir que a base seja reta */
   border-bottom-right-radius: 0 !important; /* Garantir que a base seja reta */
-  
+
   box-shadow: none !important;
   overflow: visible !important;
 
-  --offset-y: 0 !important; 
+  --offset-y: 0 !important;
 }
+////////////////////////////////////////////////////////////////////
+///
+///
+//////////// parte modal documents
+// //SOLUÇÃO REAL E GARANTIDA (funciona no Ionic 6 e 7)
+ion-modal.custom-modal-documents::part(content) {
+  width: 100% !important;
+  height: 100% !important;
 
+  margin-top: 40px;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+  border-bottom-left-radius: 0 !important; /* Garantir que a base seja reta */
+  border-bottom-right-radius: 0 !important; /* Garantir que a base seja reta */
+
+  box-shadow: none !important;
+  overflow: visible !important;
+
+  --offset-y: 0 !important;
+}
