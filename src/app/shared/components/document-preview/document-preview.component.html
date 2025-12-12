@@ -1,6 +1,9 @@
 <ion-header class="transparent-header">
   <ion-toolbar class="transparent-toolbar">
     <ion-buttons slot="end">
+      <ion-button (click)="downloadDocument()" title="Baixar Documento">
+        <ion-icon name="download"></ion-icon>
+      </ion-button>
       <!-- Botão para remover o documento -->
       <ion-button (click)="removeDocument()" color="danger">
         <ion-icon name="trash" slot="icon-only"></ion-icon>
@@ -14,25 +17,22 @@
   </ion-toolbar>
 </ion-header>
 
-<div class="document-container">
-  @if (safeDocumentUrl) {
-  <!-- O iframe carrega o documento (PDF, DOCX). PDF funciona nativamente na maioria dos browsers. -->
-  <iframe
-    [src]="safeDocumentUrl"
-    title="Pré-visualização do Documento"
-    class="preview-document"
-    type="application/pdf"
-    aria-label="Pré-visualização do Documento"
-  >
-    Seu navegador não pode exibir este documento diretamente.
-  </iframe>
-  } @else {
-  <div class="error-message ion-padding">
-    <ion-icon name="alert-circle-outline" size="large"></ion-icon>
-    <p>
-      Não foi possível carregar a pré-visualização do documento. Tente abrir o
-      arquivo em outro aplicativo.
-    </p>
-  </div>
-  }
+@if (documentUrl) {
+<pdf-viewer
+  [src]="documentUrl"
+  [render-text]="true"
+  [original-size]="originalSize"
+  [zoom]="zoom"
+  [autoresize]="true"
+  class="pdf-viewer-container"
+>
+</pdf-viewer>
+} @else {
+<div class="error-message ion-padding">
+  <ion-icon name="alert-circle-outline" size="large"></ion-icon>
+  <p>
+    Não foi possível carregar a pré-visualização do documento. Tente abrir o
+    arquivo em outro aplicativo.
+  </p>
 </div>
+}

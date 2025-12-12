@@ -1,20 +1,19 @@
-import {
-  Component,
-  inject,
-  Input,
-  OnInit,
-  SecurityContext,
-} from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MediaService } from '../../services/medias.service';
+/*
+doc pdf viewer
+https://www.npmjs.com/package/ng2-pdf-viewer
+*/
 
 @Component({
   selector: 'app-document-preview',
   templateUrl: './document-preview.component.html',
   styleUrls: [`./document-preview.component.scss`],
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, PdfViewerModule],
 })
 export class DocumentPreviewComponent implements OnInit {
   // A URL/Base64 do documento
@@ -26,19 +25,19 @@ export class DocumentPreviewComponent implements OnInit {
 
   @Input() mimetype!: string;
 
-  // URL segura para ser usada no iframe
-  public safeDocumentUrl: SafeResourceUrl | undefined;
-
   private readonly modalCtrl = inject(ModalController);
-  private readonly sanitizer = inject(DomSanitizer);
+  private readonly mediaService = inject(MediaService);
+
+  // Variáveis para controle do visualizador
+  public zoom: number = 1; // Zoom inicial (1.0 = 100%)
+  public originalSize: boolean = false; // Ajustar o PDF ao container
+  public page: number = 1; // Pode ser útil para definir a página inicial
 
   ngOnInit(): void {
     if (this.documentUrl) {
-      // O DomSanitizer é crucial para permitir que a URL/Base64 seja usada
-      // como src em um iframe, prevenindo vulnerabilidades XSS.
-      this.safeDocumentUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.documentUrl + '#zoom=60'
-      );
+      // 1. Configura o zoom inicial
+      // Se originalSize for 'false', o PDF tentará se ajustar ao container (fit).
+      this.originalSize = false;
     }
   }
 
@@ -59,5 +58,11 @@ export class DocumentPreviewComponent implements OnInit {
       controlName: this.controlName,
       itemIndex: this.itemIndex,
     });
+  }
+
+  async downloadDocument() {
+    if (this.documentUrl) {
+      await this.mediaService.downloadDocument(this.documentUrl, this.mimetype);
+    }
   }
 }

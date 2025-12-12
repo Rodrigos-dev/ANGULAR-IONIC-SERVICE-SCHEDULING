@@ -39,7 +39,7 @@
 ion-toast.custom-toast {
   --background: #f4f4fa;
   --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
-  --color: var(--cor-verde-medio);
+  --color: var(--ion-color-secondary);
 }
 
 ion-toast.custom-toast::part(message) {
@@ -48,7 +48,7 @@ ion-toast.custom-toast::part(message) {
 
 ion-toast.custom-toast::part(button) {
   border-left: 1px solid var(--cor-cinza-claro);
-  color: var(--cor-verde-medio);
+  color: var(--ion-color-secondary);
   font-size: 15px;
 }
 
@@ -75,14 +75,14 @@ ion-alert .alert-wrapper {
 
   .alert-button-1-full {
     width: 100%;
-    background-color: var(--cor-verde-medio);
+    background-color: var(--ion-color-secondary);
     color: var(--cor-branco);
     display: grid;
   }
 
   .alert-button-1 {
     width: 48%;
-    background-color: var(--cor-verde-medio);
+    background-color: var(--ion-color-secondary);
     color: var(--cor-branco);
     display: grid;
   }
@@ -90,14 +90,14 @@ ion-alert .alert-wrapper {
   .alert-button-2 {
     width: 48%;
     background-color: var(--cor-branco);
-    color: var(--cor-verde-medio);
+    color: var(--ion-color-secondary);
     display: grid;
-    border: 1px solid var(--cor-verde-medio);
+    border: 1px solid var(--ion-color-secondary);
   }
 
   .alert-head {
     h2 {
-      color: var(--cor-verde-medio);
+      color: var(--ion-color-secondary);
       font-weight: 700;
     }
 
@@ -110,3 +110,93 @@ ion-alert .alert-wrapper {
     padding: 10px;
   }
 }
+
+/* ====== Estilos personalizados para o ion-alert do ion-select ====== */
+.select-alert {
+  .alert-button,
+  .alert-radio-button[aria-checked="true"] .alert-radio-inner,
+  .alert-radio-button[aria-checked="true"] .alert-radio-icon,
+  .alert-radio-label.sc-ion-alert-md,
+  .alert-radio-label.sc-ion-alert-ios,
+  .alert-title.sc-ion-alert-md,
+  .alert-checkbox-icon.sc-ion-alert-md,
+  .alert-checkbox-label.sc-ion-alert-md {
+    color: var(--ion-color-secondary) !important;
+    border-color: var(--ion-color-secondary) !important;
+  }
+
+  /* Botão Cancelar (fica vermelho) */
+  .alert-button-role-cancel {
+    color: color-mix(in srgb, var(--ion-color-danger), white 20%) !important;
+  }
+}
+
+//para o popver do ion select
+ion-select-popover {
+  ion-list {
+    --background: var(--ion-background-color, #fff);
+  }
+
+  /* Cor do texto das opções */
+  ion-radio,
+  ion-item {
+    color: var(--ion-color-secondary) !important;
+  }
+
+  /* Cor da borda e preenchimento do check (radio) */
+  ion-radio {
+    --color: var(--ion-color-secondary) !important;
+    --color-checked: var(--ion-color-secondary) !important;
+    --border-color: var(--ion-color-secondary) !important;
+  }
+
+  /* Quando selecionado */
+  ion-radio[aria-checked="true"] {
+    --color: var(--ion-color-secondary) !important;
+    --color-checked: var(--ion-color-secondary) !important;
+  }
+
+  ion-checkbox {
+    --checkmark-color: var(--cor-branco) !important;
+    --background-checked: var(--ion-color-secondary) !important;
+    --border-color: var(--ion-color-secondary) !important;
+    --border-color-checked: var(--ion-color-secondary) !important;
+  }
+
+  /* Hover / ativo */
+  ion-item:hover {
+    background-color: rgba(0, 128, 0, 0.08); /* leve tom verde */
+  }
+}
+// fim dos estilos globais do ion-select
+
+.custom-modal {  
+  --height: auto;
+  --width: auto 
+
+  /* --max-width: 100%; */  
+  --max-height: 100%;
+
+  /* Opcional: Remove bordas/sombras típicas de modais de desktop */
+  --border-radius: 0;
+  --box-shadow: none;
+}
+
+
+// //SOLUÇÃO REAL E GARANTIDA (funciona no Ionic 6 e 7)
+ion-modal.custom-modal-documents::part(content) {
+  width: 100% !important;
+  height: 100% !important;
+
+  margin-top: 20%;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+  border-bottom-left-radius: 0 !important; /* Garantir que a base seja reta */
+  border-bottom-right-radius: 0 !important; /* Garantir que a base seja reta */
+  
+  box-shadow: none !important;
+  overflow: visible !important;
+
+  --offset-y: 0 !important; 
+}
+

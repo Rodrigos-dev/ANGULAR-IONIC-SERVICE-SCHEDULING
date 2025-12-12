@@ -19,49 +19,24 @@
   padding: 0;
 }
 
-/* -------------------- 2. AJUSTE DO CONTEÚDO (Fundo Escuro e Sem Rolagem) -------------------- */
-
-.document-container {
-  overflow-y: auto;
-  height: 100%;
-}
-
-.document-modal-content {
-  /* Fundo da tela do modal (ao redor do documento) */
-  --background: rgba(0, 0, 0, 0.9);
-
-  /* Remove a rolagem padrão do ion-content */
-  --overflow: hidden !important;
-
-  /* Centraliza o contêiner do documento */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* Garante que o conteúdo ocupe a área total */
-  width: 100%;
-  height: 100%;
-  position: relative;
-
-  /* Remova o padding padrão do ion-content */
-  --padding-start: 0;
-  --padding-end: 0;
-  --padding-top: 0;
-  --padding-bottom: 0;
-}
-
-/* -------------------- 3. AJUSTE DO ELEMENTO IFRAME -------------------- */
-.preview-document {
-  border: none;
-  background-color: white; /* O fundo do documento deve ser claro */
-  border-radius: 8px;
-  height: 100vh;
-  width: 100%;
-}
-
 /* -------------------- 4. Mensagem de Erro/Fallback -------------------- */
 .error-message {
   color: white;
   text-align: center;
   max-width: 80%;
+}
+
+/* O container do pdf-viewer deve ter altura para que o componente funcione */
+.pdf-viewer-container {
+  width: 100%;
+  height: 100%; /* Ajuste para preencher o content */
+  /* Adicione overflow se necessário para scroll nativo */
+  overflow: auto;
+}
+
+/* O componente em si deve ocupar o container */
+pdf-viewer {
+  display: block; /* Garante que o elemento ocupe o espaço corretamente */
+  width: 100%;
+  height: 100%;
 }
