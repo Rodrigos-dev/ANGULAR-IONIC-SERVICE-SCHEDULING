@@ -62,6 +62,7 @@ import {
 import { MediaService } from '../../services/medias.service';
 import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
 import { IsMediaTypePipe } from '../../pipes/is-media-type.pipe';
+import { FormStorageDirective } from '../../directives/form-storage/form-storage.directive';
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
@@ -73,6 +74,7 @@ const DYNAMIC_FORM_MODULES = [
   InputMaskDirective,
   FormValidatorsRequiredPipe,
   IsMediaTypePipe,
+  FormStorageDirective,
 
   //inputs usados
   IonInput,
@@ -109,6 +111,7 @@ const DYNAMIC_FORM_MODULES = [
 })
 export class DynamicFormComponent implements OnInit {
   @Input() formConfigFields?: IDynamicFormConfig[];
+  @Input() mbFormStorageName?: string; //enviar apenas se for salvar no storage e manter salvo para usuario continuar a preencher//deve limpar o storage depois do submit
   @Output() formValueChange = new EventEmitter();
 
   form: FormGroup = new FormGroup({});
@@ -139,7 +142,9 @@ export class DynamicFormComponent implements OnInit {
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log('formConfigFields undefined');
+      return console.log(
+        'formConfigFields undefined - dynamic-form.component.ts:145'
+      );
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
@@ -278,10 +283,7 @@ export class DynamicFormComponent implements OnInit {
       // 4. Formata a data válida para a string de exibição
       return format(dateObject, formatString, { locale: ptBR });
     } catch (error) {
-      console.error(
-        'Erro ao formatar data: - dynamic-form.component.ts:283',
-        error
-      );
+      console.error('Erro ao formatar data:', error);
       return undefined;
     }
   }
