@@ -1,4 +1,4 @@
-<ion-header class="transparent-header">
+<ion-header class="ion-no-border transparent-header">
   <ion-toolbar class="transparent-toolbar">
     <ion-buttons slot="end">
       <!-- Botão para remover o vídeo -->
@@ -14,14 +14,18 @@
   </ion-toolbar>
 </ion-header>
 
-<video
-  [src]="videoUrl"
-  preload="metadata"
-  alt="Video Preview"
-  class="preview-video"
-  controls
-  autoplay
-  muted="true"
-  loop="true"
-  aria-label="Pré-visualização do Vídeo"
-></video>
+<ion-content class="video-modal-content">
+  <div class="video-container">
+    <video
+      [src]="videoUrl"
+      preload="metadata"
+      alt="Video Preview"
+      class="preview-video"
+      controls
+      autoplay
+      muted="true"
+      loop="true"
+      aria-label="Pré-visualização do Vídeo"
+    ></video>
+  </div>
+</ion-content>

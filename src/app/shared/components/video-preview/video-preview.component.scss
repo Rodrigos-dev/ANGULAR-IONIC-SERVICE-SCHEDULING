@@ -1,15 +1,17 @@
 /* -------------------- 1. AJUSTE DO HEADER (Botões Transparentes) -------------------- */
 .transparent-header {
-  /* Define a cor de fundo (ainda transparente) e posicionamento absoluto */
+  /* ... Mantido (Header flutuante) ... */
   --background: transparent;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 1000;
 
-  /* Ajustes de altura e padding */
-  height: 44px;
-  min-height: 40px;
+  /* Use uma altura fixa (ex: 50px) para cálculo no container */
+  height: 70px;
+  min-height: 50px;
+
+  box-shadow: none !important; /* Remove a sombra/borda */
   --padding-top: 0;
   --padding-bottom: 0;
 }
@@ -17,52 +19,56 @@
 .transparent-toolbar {
   --background: transparent;
   --border-color: transparent;
-  --min-height: 40px;
+  --min-height: 50px;
   padding: 0;
 }
 
 /* -------------------- 2. AJUSTE DO CONTEÚDO (Fundo Escuro e Sem Rolagem) -------------------- */
 .video-modal-content {
-  /* Fundo da tela do modal (ao redor do vídeo) */
   --background: rgba(0, 0, 0, 0.9);
-
-  /* Remove a rolagem padrão do ion-content */
   --overflow: hidden;
 
-  /* Centraliza o contêiner do vídeo */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* CRÍTICO: Remova o alinhamento aqui. */
+  display: block; /* Mude para display: block */
 
   /* Garante que o conteúdo ocupe a área total */
   width: 100%;
   height: 100%;
   position: relative;
 
-  /* Remova o padding padrão do ion-content */
   --padding-start: 0;
   --padding-end: 0;
   --padding-top: 0;
   --padding-bottom: 0;
 }
 
-/* -------------------- 3. AJUSTE DO CONTÊINER DO VÍDEO -------------------- */
+/* -------------------- 3. AJUSTE DO CONTÊINER DO VÍDEO (CRÍTICO!) -------------------- */
 .video-container {
-  /* O contêiner de vídeo deve ocupar toda a área flexível disponível */
+  /* 1. DEFINE O ESPAÇO EXATO: 100% da tela menos a altura do header */
+  height: calc(
+    100% - 50px
+  ); /* 50px da altura definida no .transparent-header */
+  width: 100%;
+
+  /* 2. POSICIONAMENTO: Move o contêiner para o espaço livre abaixo do header */
+  margin-top: 70px; /* Desloca o contêiner para baixo da altura do header */
+
+  /* 3. CENTRALIZAÇÃO: Aplica a centralização aqui */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente (para vídeos pequenos) */
+
+  /* Garante que o contêiner seja o ponto de referência para max-height/width */
   max-width: 100%;
   max-height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* -------------------- 4. AJUSTE DO ELEMENTO <VIDEO> -------------------- */
 .preview-video {
-  /* Garante que o vídeo se ajuste completamente sem cortar */
-  max-width: 100vw;
-  max-height: 100vh;
+  /* Garante que o vídeo se ajuste ao container */
+  max-width: 100%;
+  max-height: 100%;
 
-  /* CRÍTICO: Garante que o vídeo inteiro seja visível dentro da área, adicionando barras pretas
-     se a proporção do vídeo for diferente da proporção da tela. */
+  /* Garante que o vídeo inteiro seja visível, adicionando barras pretas */
   object-fit: contain;
 }
