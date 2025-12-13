@@ -1,0 +1,724 @@
+@if (form) {
+<form [formGroup]="form">
+  <ion-grid class="my-grid">
+    <ion-col size-lg="12" size-lg="6"></ion-col>
+    <ion-row>
+      @for (field of config; track field.name) {
+      <ion-col
+        [attr.size-lg]="field.size ?? autoSizeColumns"
+        [attr.size-xs]="field.mobileSize ?? 12"
+        [style.padding-left]="'0'"
+        [style.padding-right]="'0'"
+        [hidden]="
+          field.hidden ||
+          (form.controls[field.name] &&
+            form.controls[field.name].disabled &&
+            field.hideIfDisabled)
+        "
+      >
+        <!-- DIVIDER -->
+        @if (field.type.field === eDynamicField.DIVIDER) {
+        <ion-item-divider
+          [style.--padding-start]="
+            field.paddingStart ? field.paddingStart : '1.2rem'
+          "
+          [style.margin-bottom]="'2rem'"
+        >
+          <ion-label>{{ field.label }}</ion-label>
+        </ion-item-divider>
+        }
+
+        <!-- CAMPOS DE FORMULÁRIO -->
+        @if (field.type.field !== eDynamicField.DIVIDER) {
+        <ion-item
+          [class.itemWithScroll]="
+            field.type.field === eDynamicField.VIDEOIMAGEORDOCUMENTS
+          "
+          [class.itemWithBorder]="
+            field.labelPlacement ||
+            field.borderRadius ||
+            field.type.field === eDynamicField.DATE
+          "
+          [lines]="field.ionItemNoneLines"
+        >
+          <!-- LABEL (exceto para alguns tipos) -->
+          @if (field.label && field.type.field !== eDynamicField.CHECKBOX &&
+          field.type.field !== eDynamicField.SWITCH && field.type.field) {
+          <ion-label position="stacked" class="labelInput">
+            {{ field.label }} @if (field.help) {
+            <ion-icon
+              name="information-circle"
+              [attr.title]="field.help"
+            ></ion-icon>
+            }
+          </ion-label>
+          }
+
+          <!-- AVATAR -->
+          @if (field.type.field === eDynamicField.AVATAR) {
+          <div class="avatar-img-video-container">
+            <div class="avatar-img-video-uploader">
+              <ion-avatar
+                (click)="previewImage(field.name)"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.margin-bottom]="'30px'"
+              >
+                <ion-img
+                  [src]="
+                    localPreviewUrls[field.name] ||
+                    form.controls[field.name].value ||
+                    'https://placehold.co/1080x1080'
+                  "
+                  alt="Avatar"
+                />
+              </ion-avatar>
+              <ion-button fill="clear" (click)="uploadImage(field)">
+                <ion-icon name="add" slot="end"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          }
+
+          <!-- Varias Imagens ou videos -->
+          @if (field.type.field === eDynamicField.VIDEOIMAGEORDOCUMENTS &&
+          field.fileAccept) {
+          <div class="media-gallery-container">
+            <div class="media-list-wrapper">
+              @if (!isMaxMediaReached(field)) {
+              <div
+                class="add-media-card"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+              >
+                <ion-button
+                  fill="clear"
+                  color="primary"
+                  class="add-media-button"
+                  (click)="uploadMedia(field)"
+                >
+                  <ion-icon name="add" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              } @for (mediaUrl of form.controls[field.name].value; track
+              mediaUrl.fileName; let i = $index) {
+              <ion-item
+                class="media-item-card"
+                lines="none"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+              >
+                <div
+                  class="media-item-content"
+                  [style.height]="field.avatarOrImageHeight || '130px'"
+                  [style.width]="field.avatarOrImageWidth || '130px'"
+                >
+                  @if (isImage(mediaUrl, field.fileAccept)) {
+                  <ion-img
+                    [src]="mediaUrl.base64"
+                    alt="Imagem"
+                    class="imgInGalleryForm"
+                    (click)="previewMedia(field.name, i)"
+                  />
+                  } @else if (isVideo(mediaUrl, field.fileAccept)) {
+                  <div
+                    class="video-thumbnail-wrapper"
+                    (click)="previewMedia(field.name, i)"
+                    [attr.aria-label]="'Visualizar Vídeo'"
+                    [style.height]="field.avatarOrImageHeight || '130px'"
+                    [style.width]="field.avatarOrImageWidth || '130px'"
+                  >
+                    <!-- O elemento video não tem controls, atua como thumbnail/preview -->
+                    <video
+                      [src]="mediaUrl.base64"
+                      preload="metadata"
+                      class="videoInGalleryForm"
+                    >
+                      Seu navegador não suporta a visualização.
+                    </video>
+
+                    <!-- Ícone de Play para indicar que o vídeo é clicável (o overlay) -->
+                    <ion-icon
+                      name="play-circle"
+                      class="video-play-overlay"
+                      size="large"
+                    ></ion-icon>
+                  </div>
+                  } @else if (isDocument(mediaUrl, field.fileAccept)) {
+                  <div
+                    class="document-placeholder"
+                    (click)="previewMedia(field.name, i)"
+                  >
+                    <ion-icon
+                      name="document-text-outline"
+                      class="document-icon"
+                    ></ion-icon>
+                    <p class="document-label">{{ mediaUrl.fileName }}</p>
+                  </div>
+                  } @else {
+                  <div
+                    class="document-placeholder fallback-unknown"
+                    (click)="previewMedia(field.name, i)"
+                  >
+                    <ion-icon
+                      name="alert-circle-outline"
+                      class="document-icon"
+                    ></ion-icon>
+                    <p class="document-label">Arquivo Não Suportado</p>
+                  </div>
+                  }
+
+                  <ion-button
+                    fill="solid"
+                    color="danger"
+                    size="small"
+                    class="remove-media-button"
+                    (click)="removeItem(field.name, i)"
+                  >
+                    <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-item>
+              }
+            </div>
+          </div>
+          }
+
+          <!-- IMAGE -->
+          @if (field.type.field === eDynamicField.IMAGE) {
+          <div class="avatar-img-video-container">
+            <div class="avatar-img-video-uploader">
+              <ion-img
+                class="imgVideoInImageOrVidedoForm"
+                [src]="
+                  localPreviewUrls[field.name] ||
+                  form.controls[field.name].value ||
+                  'https://placehold.co/1080x1080'
+                "
+                alt="Avatar"
+                (click)="previewImage(field.name)"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.margin-bottom]="'30px'"
+              />
+              <ion-button fill="clear" (click)="uploadImage(field)">
+                <ion-icon name="add" slot="end"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          }
+
+          <!-- VIDEO -->
+          @if (field.type.field === eDynamicField.VIDEO) {
+          <div class="avatar-img-video-container">
+            <div class="avatar-img-video-uploader">
+              <video
+                class="imgVideoInImageOrVidedoForm"
+                [src]="
+                  localPreviewUrls[field.name] ||
+                  form.controls[field.name].value ||
+                  'https://placehold.co/1080x1080'
+                "
+                alt="Video Preview"
+                controls
+                preload="metadata"
+                (click)="previewImage(field.name)"
+                [style.height]="field.avatarOrImageHeight || '130px'"
+                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.margin-bottom]="'30px'"
+              >
+                Seu navegador não suporta a visualização deste vídeo.
+              </video>
+              <ion-button fill="clear" (click)="uploadImage(field)">
+                <ion-icon name="add" slot="end"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          }
+
+          <!-- INPUT -->
+          @if (!field.type || field.type.field === (eDynamicField.INPUT)) {
+          <ion-input
+            mode="md"
+            [formControlName]="field.name"
+            [appInputMask]="field.mask"
+            [type]="field.showPasswordIcon ? 'text' : field.type.typeField"
+            [inputmode]="field.type.inputMode"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [label]="field.inputLabel"
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            (ionInput)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            [autofocus]="field.autofocus"
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+          >
+            @if (field.type.typeField === 'password') {
+            <ion-button
+              fill="clear"
+              slot="end"
+              (click)="togglePasswordIconVisibility(field)"
+            >
+              <ion-icon
+                slot="icon-only"
+                [name]="field.showPasswordIcon ? 'eye-off' : 'eye'"
+              ></ion-icon>
+            </ion-button>
+            } @if (field.addOnAfterIcon) {
+            <ion-button
+              fill="clear"
+              slot="end"
+              (click)="field.onAddOnAfterClick && field.onAddOnAfterClick(form)"
+            >
+              <ion-icon [name]="field.addOnAfterIcon"></ion-icon>
+            </ion-button>
+            }
+          </ion-input>
+
+          @if (field.showForgotPassword && field.type.typeField === 'password')
+          {
+          <ion-button
+            fill="clear"
+            size="small"
+            [routerLink]="field.forgotPasswordLink"
+          >
+            Esqueceu sua senha?
+          </ion-button>
+          }
+          <!-- fim if eDynamicField.INPUT -->
+          }
+
+          <!-- TEXTAREA -->
+          @if (field.type.field === eDynamicField.TEXTAREA) {
+          <ion-textarea
+            mode="md"
+            [formControlName]="field.name"
+            [rows]="field.rows || 4"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [label]="field.inputLabel"
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+            [style.padding-top]="'6px'"
+          ></ion-textarea>
+          }
+
+          <!-- TOGGLE (substitui o SWITCH) -->
+          @if (field.type.field === eDynamicField.SWITCH) {
+          <div class="toggle-container">
+            <div class="toggle-label">
+              <ion-label class="labelTextArea">{{ field.label }}</ion-label>
+              @if (field.help) {
+              <ion-note>{{ field.help }}</ion-note>
+              }
+            </div>
+            <ion-toggle
+              slot="end"
+              [formControlName]="field.name"
+              (ionChange)="
+                field.onChange && field.onChange($event.detail.checked, form)
+              "
+            ></ion-toggle>
+          </div>
+          }
+
+          <!-- SELECT -->
+          @if (field.type.field === eDynamicField.SELECT) {
+          <ion-select
+            mode="md"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [multiple]="field.select?.mode === 'multiple'"
+            (ionChange)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            (ionFocus)="field.onOpenChange && field.onOpenChange(true, form)"
+            (ionBlur)="field.onOpenChange && field.onOpenChange(false, form)"
+            [fill]="field.fill"
+            [label]="field.inputLabel"
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            [autofocus]="field.autofocus"
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+          >
+            @for (option of field.select?.options; track option.value) {
+            <ion-select-option
+              [value]="option.value"
+              [disabled]="option.disabled"
+            >
+              @if (option.icon) {
+              <ion-icon [name]="option.icon" slot="start"></ion-icon>
+              } {{ option.label }}
+            </ion-select-option>
+            } @for (option of field.select?.options$ | async; track
+            option.value) {
+            <ion-select-option [value]="option.value">
+              {{ option.label }}
+            </ion-select-option>
+            }
+          </ion-select>
+          }
+
+          <!-- CHECKBOX -->
+          @if (field.type.field === eDynamicField.CHECKBOX) {
+          <ion-item
+            mode="md"
+            class="itemCheckbox"
+            [class.itemCheckboxWithFill]="field.fill"
+            [fill]="field.fill"
+            [style.--border-radius]="field.borderRadius"
+          >
+            <ion-checkbox
+              [formControlName]="field.name"
+              (ionChange)="
+                field.onChange && field.onChange($event.detail.checked, form)
+              "
+            >
+              {{ field.label || field.inputLabel }}
+            </ion-checkbox>
+          </ion-item>
+          }
+
+          <!-- RADIO -->
+          @if (field.type.field === eDynamicField.RADIO) {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>{{ field.inputLabel }}</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-radio-group
+                [formControlName]="field.name"
+                [style.padding-top]="'20px'"
+                [style.padding-bottom]="'20px'"
+                [style.width]="'100%'"
+                errorText="This field is required"
+              >
+                <ion-row>
+                  @for (option of field.select?.options; track option.value) {
+
+                  <ion-col size="6">
+                    <ion-item
+                      lines="none"
+                      [style.padding-right]="'20px'"
+                      [style.padding-left]="'20px'"
+                    >
+                      <ion-label class="labelInRadio">
+                        {{ option.label }}
+                      </ion-label>
+
+                      <ion-radio
+                        slot="end"
+                        [value]="option.value"
+                        (ionChange)="
+                          field.onChange &&
+                            field.onChange($any($event).detail.value, form)
+                        "
+                      ></ion-radio>
+                    </ion-item>
+                  </ion-col>
+                  }
+                </ion-row>
+              </ion-radio-group>
+            </ion-card-content>
+          </ion-card>
+          }
+
+          <!-- DATE -->
+          @if (field.type.field === eDynamicField.DATE) {
+          <ion-input
+            mode="md"
+            type="text"
+            readonly="true"
+            [label]="field.inputLabel"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [value]="form.controls[field.name]?.value | date : 'dd/MM/yyyy'"
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            (ionInput)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+          >
+            <ion-button
+              fill="clear"
+              slot="end"
+              [id]="'modal-trigger-' + field.name"
+              (click)="field.onAddOnAfterClick && field.onAddOnAfterClick(form)"
+            >
+              <ion-icon name="calendar-outline"></ion-icon>
+            </ion-button>
+          </ion-input>
+
+          <ion-modal
+            [trigger]="'modal-trigger-' + field.name"
+            [keepContentsMounted]="true"
+            #dateModalDate
+            [breakpoints]="[0, 0.7, 1.0]"
+            [initialBreakpoint]="0.9"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title class="titleModal"
+                    >{{ field.inputLabel }}</ion-title
+                  >
+                  <ion-buttons slot="end">
+                    <ion-button
+                      (click)="dateModalDate.dismiss('cancel')"
+                      class="buttonVoltarModal"
+                      >Selecionar</ion-button
+                    >
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content
+                class="ion-padding ion-padding ion-justify-content-center"
+                [style.display]="'flex'"
+              >
+                <ion-datetime
+                  [formControlName]="field.name"
+                  presentation="date"
+                  [locale]="'pt-BR'"
+                  (ionChange)="
+                    field.onChange && field.onChange($event.detail.value, form)
+                  "
+                ></ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+          }
+
+          <!-- DATE TIME -->
+          @if (field.type.field === eDynamicField.DATE_TIME) {
+          <ion-input
+            mode="md"
+            type="text"
+            readonly="true"
+            [label]="field.inputLabel"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [value]="
+              form.controls[field.name]?.value | date : 'dd/MM/yyyy HH:mm'
+            "
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            (ionInput)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+          >
+            <ion-button
+              fill="clear"
+              slot="end"
+              [id]="'modal-trigger-' + field.name"
+              (click)="field.onAddOnAfterClick && field.onAddOnAfterClick(form)"
+            >
+              <ion-icon name="calendar-outline"></ion-icon>
+            </ion-button>
+          </ion-input>
+
+          <ion-modal
+            [trigger]="'modal-trigger-' + field.name"
+            [keepContentsMounted]="true"
+            #dateModalDateTime
+            [breakpoints]="[0, 0.7, 1.0]"
+            [initialBreakpoint]="0.9"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title class="titleModal"
+                    >{{ field.inputLabel }}</ion-title
+                  >
+                  <ion-buttons slot="end">
+                    <ion-button
+                      (click)="dateModalDateTime.dismiss('cancel')"
+                      class="buttonVoltarModal"
+                      >Selecionar</ion-button
+                    >
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content
+                class="ion-padding ion-padding ion-justify-content-center"
+                [style.display]="'flex'"
+              >
+                <ion-datetime
+                  [formControlName]="field.name"
+                  hourCycle="h23"
+                  presentation="date-time"
+                  [locale]="'pt-BR'"
+                  (ionChange)="
+                    field.onChange && field.onChange($event.detail.value, form)
+                  "
+                ></ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+          }
+
+          <!-- TIME -->
+          @if (field.type.field === eDynamicField.TIME) {
+          <ion-input
+            mode="md"
+            type="text"
+            readonly="true"
+            [label]="field.inputLabel"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+            [fill]="field.fill"
+            [value]="form.controls[field.name]?.value"
+            attr.label-placement="{{
+              field.fill &&
+              (field.type.typeField === 'password' || field.addOnAfterIcon)
+                ? 'stacked'
+                : field.labelPlacement
+            }}"
+            (ionInput)="
+              field.onChange && field.onChange($event.detail.value, form)
+            "
+            [style.--border-radius]="field.borderRadius"
+            [style.--padding-start]="
+              field.paddingStart
+                ? field.paddingStart
+                : field.borderRadius
+                ? field.borderRadius
+                : '0.9rem'
+            "
+          >
+            <ion-button
+              fill="clear"
+              slot="end"
+              [id]="'modal-trigger-' + field.name"
+              (click)="field.onAddOnAfterClick && field.onAddOnAfterClick(form)"
+            >
+              <ion-icon name="time-outline"></ion-icon>
+            </ion-button>
+          </ion-input>
+
+          <ion-modal
+            [trigger]="'modal-trigger-' + field.name"
+            [keepContentsMounted]="true"
+            #dateModalTime
+            [breakpoints]="[0, 0.7, 1.0]"
+            [initialBreakpoint]="0.9"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title class="titleModal"
+                    >{{ field.inputLabel }}</ion-title
+                  >
+                  <ion-buttons slot="end">
+                    <ion-button
+                      (click)="dateModalTime.dismiss('confirm')"
+                      class="buttonVoltarModal"
+                    >
+                      Selecionar
+                    </ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content
+                class="ion-padding ion-padding ion-justify-content-center"
+                [style.display]="'flex'"
+              >
+                <ion-datetime
+                  [formControlName]="field.name"
+                  presentation="time"
+                  [locale]="'pt-BR'"
+                  hourCycle="h23"
+                  (ionChange)="
+                    field.onChange && field.onChange($event.detail.value, form)
+                  "
+                ></ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+          }
+        </ion-item>
+
+        <!-- HINT/ERROR -->
+        @if (field.hint) {
+        <ion-note slot="helper">{{ field.hint }}</ion-note>
+        } @if (form.controls[field.name].errors &&
+        form.controls[field.name].touched) {
+        <ion-note color="danger">
+          {{ getErrorMessage(form.controls[field.name].errors) }}
+        </ion-note>
+        } }
+      </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+</form>
+
+<!-- esse if apenas para tirar os warings para o import da diretiva auto focus e do image preview que so usa no arquivo ts -->
+@if(false){
+<app-image-preview [mbAutoFocus]="false"></app-image-preview>
+}
+
+<!-- fim if form -->
+}

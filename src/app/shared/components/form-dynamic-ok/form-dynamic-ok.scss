@@ -1,0 +1,515 @@
+@use "../../../../theme/medias" as *;
+
+.my-grid {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  max-width: 1800px;
+}
+
+/* Grid responsivo */
+ion-grid {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 8px;
+}
+
+ion-col {
+  padding: var(--ion-grid-column-padding);
+}
+
+/* Switch/Toggle Container - equivalente ao .mb-switch */
+.toggle-container {
+  background: color-mix(in srgb, var(--ion-color-secondary), white 96%);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.3rem 1rem;
+  gap: 0.5rem;
+  width: 100%;
+
+  .toggle-label {
+    display: flex;
+    flex-direction: column;
+
+    ion-note {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.avatar-img-video-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .avatar-img-video-uploader {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: baseline;
+
+    button {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+    }
+  }
+}
+
+.imgVideoInImageOrVidedoForm {
+  border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.9);
+  object-fit: cover;
+}
+
+/* Radio Group - equivalente ao .ant-radio-wrapper */
+ion-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  ion-radio {
+    margin: 0.25rem 0;
+
+    &::part(container) {
+      width: 20px;
+      height: 20px;
+    }
+
+    &::part(label) {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+/* Estilos globais para ícones e selects */
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  /* Ícones dentro dos selects */
+  ion-select::part(icon) {
+    color: var(--ion-color-medium);
+  }
+
+  /* Ícones nos labels */
+  ion-icon[name="information-circle"] {
+    font-size: 1rem;
+    margin-left: 0.25rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.itemWithBorder {
+  //para resolver quando come meio nome do campo
+  --min-height: 70px;
+  --border-width: 0;
+  --border-style: none;
+}
+
+.itemWithScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  /*(Opcional) Ajuste para o scroll ser mais suave (em alguns navegadores) */
+  -webkit-overflow-scrolling: touch;
+}
+
+ion-select {
+  color: var(--ion-color-secondary);
+  --border-color: var(--ion-color-secondary);
+}
+
+/* Estilo para itens de select com ícones */
+ion-select-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-icon {
+    font-size: 1rem;
+    color: var(--ion-color-secondary);
+  }
+}
+
+/* Input com ícone de password */
+ion-input {
+  color: var(--ion-color-secondary);
+  margin-left: 0.3rem;
+
+  &[type="password"] {
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+
+      ion-icon {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+//borda do input
+.input-fill-outline.sc-ion-input-md-h {
+  /* AQUI! Aplica a cor na borda do input */
+  --border-color: var(--ion-color-primary);
+
+  /* Opcional: Se você estiver no modo "outline", você também pode querer customizar a cor no Foco */
+  --border-color-focused: var(--ion-color-primary);
+}
+
+ion-note {
+  font-size: 0.6rem;
+  margin-left: 1.3rem;
+}
+
+.labelInput {
+  color: var(--ion-color-secondary);
+  padding-left: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+ion-textarea {
+  color: var(--ion-color-secondary);
+}
+
+.labelTextArea {
+  color: var(--ion-color-secondary);
+  padding-left: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.textarea-fill-outline.sc-ion-textarea-md-h {
+  --border-color: var(--ion-color-secondary);
+}
+
+:host ::ng-deep ion-input.input-fill-solid.sc-ion-input-md-h {
+  //criando funcionho do input na cor secundaria clarinha
+  --background: color-mix(in srgb, var(--ion-color-secondary), white 96%);
+}
+
+:host ::ng-deep ion-input.input-fill-outline .input-outline-container {
+  //quando tem label o canto direito das bordas some por iso esse css add
+  /* Ajuste este valor, por exemplo, 4px para testar */
+  padding-left: 2px;
+  padding-right: 6px;
+}
+
+/* Material Icons (se ainda estiver usando) */
+.material-icons-outlined {
+  font-size: 1rem;
+  display: block;
+}
+
+/* Divider customizado */
+ion-item-divider {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  color: var(--ion-color-secondary);
+
+  ion-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+}
+
+ion-button {
+  z-index: 999 !important;
+  pointer-events: auto !important;
+}
+
+//parte checkbox
+.itemCheckbox {
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+
+  color: var(--ion-color-secondary);
+
+  ::ng-deep ion-checkbox::part(container) {
+    border-color: var(--ion-color-secondary);
+  }
+}
+//mesma coisa que ::ng-deep ion-checkbox::part so que fora
+// :host ::ng-deep ion-checkbox::part(container) {
+//   border-color: var(--ion-color-secondary);
+// }
+
+/* APLICA BORDA COMPLETA QUANDO O ATRIBUTO 'fill' ESTÁ PRESENTE */
+.itemCheckboxWithFill {
+  /* 2. Aplica a borda CSS tradicional ao redor do componente */
+  border: 1px solid var(--ion-color-secondary, #cccccc);
+
+  /* 3. Aplica o raio de borda padronizado dos seus inputs */
+  border-radius: var(--border-radius, 0.5rem);
+
+  /* 4. Garante que o fundo seja sólido */
+  --background: var(--ion-background-color, #ffffff);
+
+  /* 5. Zera a linha divisória interna padrão do Ionic para evitar duplicidade */
+  --inner-border-width: 0 !important;
+  --border-width: 0 !important;
+}
+
+ion-checkbox {
+  padding: 2px;
+}
+//fim parte checkbox
+
+//parte radio
+ion-card {
+  width: 100%;
+  min-height: 450px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.9);
+  box-shadow: 0 4px 8px 0 rgba(var(--ion-color-secondary-rgb), 0.3);
+
+  ion-card-subtitle {
+    text-align: center;
+    color: var(--ion-color-secondary);
+  }
+
+  ion-card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+ion-radio::part(container) {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 1px;
+  border: 2px solid rgba(var(--ion-color-secondary-rgb), 0.5);
+  margin-left: 5px;
+}
+
+ion-radio::part(mark) {
+  background: none;
+  transition: none;
+  transform: none;
+  border-radius: 0;
+}
+
+ion-radio.radio-checked::part(container) {
+  background: var(--ion-color-secondary);
+  border-color: transparent;
+}
+
+ion-radio.radio-checked::part(mark) {
+  width: 6px;
+  height: 10px;
+
+  border-width: 0px 2px 2px 0px;
+  border-style: solid;
+  border-color: #fff;
+
+  transform: rotate(45deg);
+}
+
+.labelInRadio {
+  color: var(--ion-color-secondary);
+  margin-right: 30px;
+  font-size: 14px;
+}
+//fim da parte ion radio
+
+//--------------------------------------------------------------------------
+
+//parte date time, date e time
+ion-modal .datetime-modal ion-content {
+  /* Garante que o ion-content não tenha estilos que quebrem o Flexbox interno */
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* 2. Mira o elemento interno 'scroll' do ion-content (ou ion-modal) */
+/* Centralização Horizontal (justify-content: center) */
+ion-content::part(scroll) {
+  display: flex;
+  justify-content: center;
+  /* Se for necessário centralização Vertical (align-items: center) */
+  /* align-items: center; */
+}
+
+/* 3. Limita o tamanho do ion-datetime para que ele não ocupe 100% e possa ser centralizado */
+ion-datetime {
+  height: 450px;
+  max-width: 400px; /* Limite a largura para que o justify-content tenha efeito */
+  width: 100%; /* Garante que ele preencha o max-width */
+
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.buttonVoltarModal {
+  color: var(--ion-color-secondary);
+}
+
+.titleModal {
+  color: var(--ion-color-secondary);
+}
+
+/* 1. Mirar o calendário e a hora geral (contêiner principal) */
+ion-datetime.compact-datetime {
+  /* Reduz o padding interno do componente host */
+  --padding-start: 5px;
+  --padding-end: 5px;
+  --padding-bottom: 5px;
+}
+
+/* 2. Mirar a área que contém o cabeçalho (data selecionada, que fica acima do calendário) */
+ion-datetime.compact-datetime::part(calendar-header) {
+  padding-bottom: 0px;
+}
+
+/* 3. Mirar o contêiner principal do calendário */
+ion-datetime.compact-datetime::part(calendar-day) {
+  /* Reduz a margem interna dos dias do calendário */
+  margin: 1px;
+}
+
+/* 4. Mirar o contêiner do relógio/tempo (time) */
+/* Isso geralmente é o que adiciona mais espaço entre o calendário e o clock */
+ion-datetime.compact-datetime::part(time-button) {
+  /* Reduz a margem superior da seção de tempo */
+  margin-top: 5px;
+}
+
+/* Seletor mais genérico (pode ser útil) */
+ion-datetime.compact-datetime .datetime-grid {
+  gap: 5px; /* Reduz o espaço entre colunas/linhas, se o display for grid */
+}
+
+////---------------------------------------------------------------------------------------------------------
+
+//parte de subir muitas fotos e videos
+.media-gallery-container {
+  padding: 10px;
+}
+
+.media-list-wrapper {
+  display: flex;
+  gap: 15px; /* Espaço entre os itens */
+}
+
+.media-item-card {
+  padding: 0;
+  margin: 0;
+  --inner-padding-end: 0; /* Remove padding interno do ion-item */
+}
+
+.media-item-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px; /* Cantos arredondados */
+  border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.9);
+}
+
+.videoInGalleryForm {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  display: block;
+}
+
+.imgInGalleryForm {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  display: block;
+}
+
+.remove-media-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 10;
+  /* Faz o ícone de lixeira/fechar aparecer pequeno no canto */
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --box-shadow: none;
+}
+
+/* Estilo para o cartão de adição (o botão '+') */
+.add-media-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--ion-color-medium);
+  border-radius: 8px;
+}
+
+.add-media-button {
+  font-size: 30px;
+  --ripple-color: transparent;
+}
+
+.document-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(
+    --ion-color-light,
+    #f4f5f8
+  ); /* Fundo claro para o documento */
+  text-align: center;
+  cursor: pointer;
+}
+
+.document-icon {
+  font-size: 40px;
+  color: var(--ion-color-primary, #3880ff);
+  margin-bottom: 5px;
+}
+
+.document-label {
+  font-size: 10px;
+  color: var(--ion-color-medium);
+  margin: 0;
+  max-width: 90%;
+}
+
+/* Container da miniatura do vídeo */
+.video-thumbnail-wrapper {
+  position: relative; /* Define o ponto de referência para o ícone de overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  overflow: hidden;
+  border-radius: 8px; /* Para melhor estética */
+}
+
+/* O elemento video em si (thumbnail) */
+.videoInGalleryForm {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Faz o vídeo preencher o espaço (diferente do "contain" do modal) */
+}
+
+/* O ícone de Play que captura o clique */
+.video-play-overlay {
+  position: absolute;
+  z-index: 10; /* Garante que o ícone fique sobre o vídeo */
+  color: white;
+  /* Uma sombra para que o ícone seja visível em vídeos claros */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  opacity: 0.9;
+  font-size: 3em; /* Tamanho do ícone */
+
+  /* Remove a interação para que o clique passe para o wrapper */
+  pointer-events: none;
+}
