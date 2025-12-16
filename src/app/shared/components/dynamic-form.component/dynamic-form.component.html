@@ -1,5 +1,9 @@
 @if (form) {
-<form [formGroup]="form" [mbFormStorageName]="mbFormStorageName">
+<form
+  [formGroup]="form"
+  [mbFormStorageName]="mbFormStorageName"
+  [mbFormStorageFieldTypes]="formFieldTypes"
+>
   <ion-grid class="my-grid">
     <ion-col size-lg="12" size-lg="6"></ion-col>
     <ion-row>
@@ -11,38 +15,49 @@
           '--padding-start': '0px',
           '--padding-end': '0px'
         }"
-        [attr.size-lg]="field.size ?? 12"
-        [attr.size-xs]="field.mobileSize ?? 12"
-        [hidden]="field.hidden || form.controls[field.name]?.disabled"
+        [attr.size-lg]="field.defaultAllFieldsConfigs?.sizeGridMainColumn ?? 12"
+        [attr.size-xs]="
+          field.defaultAllFieldsConfigs?.mobileSizeGridMainColumn ?? 12
+        "
+        [hidden]="
+          field.defaultAllFieldsConfigs?.hiddenMainColumn ||
+          form.controls[field.name]?.disabled
+        "
       >
         <!-- DIVIDER -->
         @if (field.typeFieldForm === eFieldDynamicForm.DIVIDER) {
+        <!--  -->
+        @let dividerMarginBottom =
+        field.itemDividerConfigs?.marginBottomItemDivider || '1px';
+        <!--  -->
+        @let dividerPaddingStart=
+        field.itemDividerConfigs?.paddingStartItemDivider ?
+        field.itemDividerConfigs?.paddingStartItemDivider : '1.2rem';
+        <!--  -->
+        @let dividerBorder = field.itemDividerConfigs?.borderItemDivider ===
+        'full' ? '1px solid var(--ion-color-primary)' : null;
+        <!--  -->
+        @let dividerBorderColor = field.itemDividerConfigs?.borderItemDivider
+        === 'full' ? '1px solid var(--ion-color-primary)' : null;
+
         <ion-item-divider
           [ngStyle]="{
             width: '100%',
-            'margin-bottom': field.marginBottom || '1px'
+            'margin-bottom': dividerMarginBottom
           }"
-          [style.--padding-start]="
-            field.paddingStart ? field.paddingStart : '1.2rem'
+          [style.--padding-start]="dividerPaddingStart"
+          [style.border]="dividerBorder"
+          [style.border-color]="dividerBorderColor"
+          [sticky]="field.itemDividerConfigs?.stickItemDivider"
+          [style.borderRadius]="
+            field.itemDividerConfigs?.borderRadiusItemDivider
           "
-          [style.border]="
-            field.border === 'full'
-              ? '1px solid var(--ion-color-primary)'
-              : null
+          [style.background]="
+            field.itemDividerConfigs?.backgroundItemItemDivider
           "
-          [style.border-color]="
-            field.border === 'none'
-              ? 'transparent'
-              : field.borderColor
-              ? field.borderColor
-              : 'var(--ion-color-primary)'
-          "
-          [styck]="field.itemDividerStick"
-          [style.borderRadius]="field.borderRadius"
-          [style.background]="field.backgroundItem"
         >
           <!-- caso queira exibir o titulo se nao enviar fica uma linha apenas ou um quadrado dependendo da config do item divider -->
-          @if(field.labelItemTop){
+          @if(field.itemDividerConfigs?.textLabelItemDivider){
           <!-- label do item-divider -->
           <ion-label
             [ngStyle]="{
@@ -51,11 +66,20 @@
               'padding-top': '10px',
               'padding-bottom': '10px'
             }"
-            [style.text-align]="field.textAlign ?? 'left'"
-            [style.color]="field.color ?? 'var(--ion-color-primary)'"
-            [style.font-weight]="field.fontWeight ?? '600'"
-            [style.font-size]="field.fontSize ?? '1.1rem'"
-            >{{ field.labelItemTop }}</ion-label
+            [style.text-align]="
+              field.itemDividerConfigs?.textAlignLabelItemDivider ?? 'left'
+            "
+            [style.color]="
+              field.itemDividerConfigs?.colorLabelItemDivider ??
+              'var(--ion-color-primary)'
+            "
+            [style.font-weight]="
+              field.itemDividerConfigs?.fontWeightLabelItemDivider ?? '600'
+            "
+            [style.font-size]="
+              field.itemDividerConfigs?.fontSizeLabelItemDivider ?? '1.1rem'
+            "
+            >{{ field.itemDividerConfigs?.textLabelItemDivider }}</ion-label
           >
           }
           <!-- fim do label -->
@@ -64,14 +88,16 @@
         <!-- FIM if divider -->
 
         <!-- popover para exibir mensagem quando clicas no icone de ajuda se for enviado o help -->
-        @if (field.help) {
+        @if (field.itemContainerFieldsConfigs?.iconHelpConfigs?.helpText) {
         <ion-popover
           [trigger]="'help-icon-' + field.name"
           trigger-action="click"
           size="auto"
         >
           <ion-content class="ion-padding">
-            <p style="white-space: pre-line">{{ field.help }}</p>
+            <p style="white-space: pre-line">
+              {{ field.itemContainerFieldsConfigs?.iconHelpConfigs?.helpText }}
+            </p>
           </ion-content>
         </ion-popover>
         }
@@ -87,34 +113,41 @@
             field.typeFieldForm === eFieldDynamicForm.VIDEOIMAGEORDOCUMENTS
           "
           [class.itemWithBorder]="
-            field.labelPlacement ||
-            field.borderRadius ||
+            field.defaultAllFieldsConfigs?.labelPlacement ||
+            field.defaultAllFieldsConfigs?.borderRadius ||
             field.typeFieldForm === eFieldDynamicForm.DATE
           "
-          [detail]="field.ionItemDetail"
-          [lines]="field.ionItemNoneLines"
+          [detail]="field.itemContainerFieldsConfigs?.detailItemFieldsMain"
+          [lines]="field.itemContainerFieldsConfigs?.noneLinesItemFieldsMain"
           [style.border]="
-            field.border === 'full'
+            field.defaultAllFieldsConfigs?.border === 'full'
               ? '1px solid var(--ion-color-primary)'
               : null
           "
           [style.border-color]="
-            field.border === 'none'
+            field.defaultAllFieldsConfigs?.border === 'none'
               ? 'transparent'
-              : field.borderColor
-              ? field.borderColor
+              : field.defaultAllFieldsConfigs?.borderColor
+              ? field.defaultAllFieldsConfigs?.borderColor
               : 'var(--ion-color-primary)'
           "
-          [styck]="field.itemDividerStick"
-          [style.borderRadius]="field.borderRadius"
-          [style.--background]="field.backgroundItem"
-          [style.margin-top]="field.marginTop"
+          [style.borderRadius]="field.defaultAllFieldsConfigs?.borderRadius"
+          [style.--background]="
+            field.itemContainerFieldsConfigs?.backgroundItemFieldsMain
+          "
+          [style.margin-top]="
+            field.itemContainerFieldsConfigs?.marginTopItemFieldsMain
+          "
+          [style.--padding-bottom]="
+            field.itemContainerFieldsConfigs?.paddingBottom
+          "
+          [style.--padding-top]="field.itemContainerFieldsConfigs?.paddingTop"
         >
           <!-- LABEL (exceto para alguns tipos) aparece sobre os inputs, não é o interno do input e sim um proprio ou lado etc-->
-          @if (field.labelItemTop && field.typeFieldForm !==
-          eFieldDynamicForm.CHECKBOX && field.typeFieldForm !==
-          eFieldDynamicForm.SWITCH && field.typeFieldForm !==
-          eFieldDynamicForm.SELECT) {
+          @if (field.itemContainerFieldsConfigs?.labelConfigs?.textLabelItemMain
+          && field.typeFieldForm !== eFieldDynamicForm.CHECKBOX &&
+          field.typeFieldForm !== eFieldDynamicForm.SWITCH &&
+          field.typeFieldForm !== eFieldDynamicForm.SELECT) {
           <!--  -->
           <ion-label
             position="stacked"
@@ -123,32 +156,67 @@
               display: 'block',
               'padding-right': '0'
             }"
-            [class]="'ion-text-' + (field.textAlign ?? 'left')"
-            [style.color]="field.color ?? 'var(--ion-color-primary)'"
-            [style.padding-left]="field.paddingLeft || '20px'"
-            [style.margin-bottom]="field.marginBottom ?? '0.5rem'"
-            [style.font-size]="field.fontSize || '16px'"
+            [class]="
+              'ion-text-' +
+              (field.itemContainerFieldsConfigs?.labelConfigs
+                ?.textAlignLabelItemMain ??
+                'left')
+            "
+            [style.color]="
+              field.itemContainerFieldsConfigs?.labelConfigs
+                ?.colorLabelItemMain ?? 'var(--ion-color-primary)'
+            "
+            [style.padding-left]="
+              field.itemContainerFieldsConfigs?.labelConfigs
+                ?.paddingLeftLabelItemMain || '20px'
+            "
+            [style.margin-bottom]="
+              field.itemContainerFieldsConfigs?.labelConfigs
+                ?.marginBottomLabelItemMain ?? '0.5rem'
+            "
+            [style.font-size]="
+              field.itemContainerFieldsConfigs?.labelConfigs
+                ?.fontSizeLabelItemMain || '16px'
+            "
           >
-            {{ field.labelItemTop }}
+            {{
+              field.itemContainerFieldsConfigs?.labelConfigs?.textLabelItemMain
+            }}
             <!-- campo help -->
-            @if (field.help) {
+            @if (field.itemContainerFieldsConfigs?.iconHelpConfigs?.helpText) {
             <ion-icon
               id="help-icon-{{ field.name }}"
-              [name]="field.iconName || 'information-circle'"
-              [attr.title]="field.help"
-              [style.margin-left]="field.iconMarginLeft || '0.25rem'"
-              [style.font-size]="field.iconFontSize || '13px'"
-              [style.color]="field.iconColor || 'var(--ion-color-primary)'"
+              [name]="
+                field.itemContainerFieldsConfigs?.iconHelpConfigs
+                  ?.helpIconName || 'information-circle'
+              "
+              [attr.title]="
+                field.itemContainerFieldsConfigs?.iconHelpConfigs?.helpText
+              "
+              [style.margin-left]="
+                field.itemContainerFieldsConfigs?.iconHelpConfigs
+                  ?.helpIconMarginLeft || '0.25rem'
+              "
+              [style.font-size]="
+                field.itemContainerFieldsConfigs?.iconHelpConfigs
+                  ?.helpIconFontSize || '13px'
+              "
+              [style.color]="
+                field.itemContainerFieldsConfigs?.iconHelpConfigs
+                  ?.helpIconColor || 'var(--ion-color-primary)'
+              "
             ></ion-icon>
             }
 
             <!-- * para indicar campo necessário -->
             @if (!(form.controls[field.name] | formValidatorRequired | async) &&
-            field.asteristicRequiredLabelItem) {
+            field.itemContainerFieldsConfigs?.asteristicRequiredColorLabelItem)
+            {
             <span
               [style.margin-left]="'5px'"
               [style.color]="
-                field.asteristicRequiredColorLabelItem ||
+                field.itemContainerFieldsConfigs
+                  ?.asteristicRequiredColorLabelItem ||
                 'var(--ion-color-primary)'
               "
               >*</span
@@ -163,9 +231,16 @@
             <div class="avatar-img-video-uploader">
               <ion-avatar
                 (click)="previewMedia(field.name)"
-                [style.height]="field.avatarOrImageHeight || '130px'"
-                [style.width]="field.avatarOrImageWidth || '130px'"
-                [style.margin-bottom]="'30px'"
+                [style.height]="
+                  field.fieldsConfigs?.avatarConfigs?.avatarOrImageHeight ||
+                  '130px'
+                "
+                [style.width]="
+                  field.fieldsConfigs?.avatarConfigs?.avatarOrImageWidth ||
+                  '130px'
+                "
+                [style.margin-bottom]="'20px'"
+                [style.margin-top]="'20px'"
               >
                 <ion-img
                   [src]="
@@ -202,61 +277,96 @@
           getFormatDateValue(field.typeFieldForm) : undefined;
 
           <!-- variaveis usada na logica dos if -->
-          @let isPasswordField = field.eInputModeField ===
+          @let isPasswordField =
+          field.fieldsConfigs?.inputConfigs?.eInputModeField ===
           eInputModeField.PASSWORD ? true : false;
 
           <!--  -->
-          @let typeInput = field.showPasswordIcon ? eInputModeField.TEXT :
-          field.eInputModeField;
+          @let typeInput = field.fieldsConfigs?.inputConfigs?.showPasswordIcon ?
+          eInputModeField.TEXT :
+          field.fieldsConfigs?.inputConfigs?.eInputModeField;
 
           <!--  -->
-          @let labelPlacementLogic = (field.fill && isPasswordField) ? 'stacked'
-          : field.labelPlacement;
+          @let labelPlacementLogic = (field.defaultAllFieldsConfigs?.fill &&
+          isPasswordField) ? 'stacked' :
+          field.defaultAllFieldsConfigs?.labelPlacement;
 
           <!--  -->
-          @let paddingStart = field.paddingStart ? field.paddingStart :
-          field.borderRadius ? field.borderRadius : '0.9rem';
+          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ?
+          field.itemContainerFieldsConfigs?.paddingStart :
+          field.defaultAllFieldsConfigs?.borderRadius ?
+          field.defaultAllFieldsConfigs?.borderRadius : '20px';
 
           <!--  -->
-          @let dynamicIconName = (isPasswordField || field.iconName) &&
-          ((!isPasswordField && field.iconName) ? field.iconName :
-          (isPasswordField && field.showPasswordIcon) ? 'eye-off' : 'eye');
+          @let iconNameInput = (isPasswordField ||
+          field.fieldsConfigs?.inputConfigs?.iconNameInput) &&
+          ((!isPasswordField &&
+          field.fieldsConfigs?.inputConfigs?.iconNameInput) ?
+          field.fieldsConfigs?.inputConfigs?.iconNameInput : (isPasswordField &&
+          field.fieldsConfigs?.inputConfigs?.showPasswordIcon) ? 'eye-off' :
+          'eye');
 
           <!--  -->
-          @let boderColorInput = field.boderColorInput ||
+          @let boderColorInput = field.defaultAllFieldsConfigs?.borderColor ||
           'var(--ion-color-primary)';
 
           <!--  -->
-          @let boderWidthInput = field.boderWidthInput || '1px';
+          @let boderWidthInput = field.defaultAllFieldsConfigs?.borderWidthInput
+          || '1px';
 
           <!--  -->
           @let colorLabelPlaceholderAndTextInput =
-          field.colorLabelPlaceholderAndTextInput || 'var(--ion-color-primary)';
+          field.fieldsConfigs?.inputConfigs?.colorLabelPlaceholderAndTextInput
+          || 'var(--ion-color-primary)';
 
           <!-- tags -->
           <ion-row [style.width]="'100%'">
             <ion-input
               mode="md"
-              [autofocus]="field.autofocus"
+              [autofocus]="field.fieldsConfigs?.inputConfigs?.autofocusInput"
               [formControlName]="field.name"
-              [appInputMask]="field.mask"
+              [appInputMask]="field.fieldsConfigs?.inputConfigs?.maskInput"
               [type]="typeInput"
-              [inputmode]="isDateOrTimeInput ? 'text' : field.eInputModeField"
-              [readonly]="isDateOrTimeInput ? true : field.readonlyInput"
-              [placeholder]="field.placeholder"
-              [maxlength]="field.maxLengthInput || 1000"
-              [minlength]="field.minLengthInput || 0"
-              [fill]="field.fill"
-              [label]="field.inputLabel"
+              [inputmode]="
+                isDateOrTimeInput
+                  ? 'text'
+                  : field.fieldsConfigs?.inputConfigs?.eInputModeField
+              "
+              [readonly]="
+                isDateOrTimeInput
+                  ? true
+                  : field.fieldsConfigs?.inputConfigs?.readonlyInput
+              "
+              [placeholder]="
+                field.fieldsConfigs?.inputConfigs?.placeholderInput
+              "
+              [maxlength]="
+                field.fieldsConfigs?.inputConfigs?.maxLengthInput || 1000
+              "
+              [minlength]="
+                field.fieldsConfigs?.inputConfigs?.minLengthInput || 0
+              "
+              [fill]="field.defaultAllFieldsConfigs?.fill"
+              [label]="field.fieldsConfigs?.inputConfigs?.labelInput"
               [attr.label-placement]="labelPlacementLogic"
-              [style.--border-radius]="field.borderRadius"
+              [style.--border-radius]="
+                field.defaultAllFieldsConfigs?.borderRadius
+              "
               [style.--padding-start]="paddingStart"
-              [style.--background]="field.backgroundInput"
+              [style.--background]="
+                field.fieldsConfigs?.inputConfigs?.backgroundInput
+              "
               [style.--border-color]="boderColorInput"
               [style.--border-width]="boderWidthInput"
-              [style.margin-top]="field.marginTop || '15px'"
+              [style.margin-top]="
+                field.fieldsConfigs?.inputConfigs?.marginTopInput || '1px'
+              "
               (ionInput)="
-                field.onChange && field.onChange($event.detail.value, form)
+                field.defaultAllFieldsConfigs?.onChange &&
+                  field.defaultAllFieldsConfigs?.onChange(
+                    $event.detail.value,
+                    form
+                  )
               "
               [style.--color]="colorLabelPlaceholderAndTextInput"
               [value]="
@@ -267,13 +377,16 @@
               "
             >
               @if (!(form.controls[field.name] | formValidatorRequired | async)
-              && field.asteristicRequiredInput) {
+              && field.fieldsConfigs?.inputConfigs?.asteristicRequiredInput) {
               <span
-                [slot]="field.asteristicRequiredSlotInput || 'end'"
+                [slot]="
+                  field.fieldsConfigs?.inputConfigs
+                    ?.asteristicRequiredSlotInput || 'end'
+                "
                 [style.margin-right]="'10px'"
                 [style.color]="
-                  field.asteristicRequiredColorInput ||
-                  'var(--ion-color-primary)'
+                  field.fieldsConfigs?.inputConfigs
+                    ?.asteristicRequiredColorInput || 'var(--ion-color-primary)'
                 "
                 >*</span
               >
@@ -308,23 +421,32 @@
                     <ion-toolbar>
                       <ion-title
                         [style.color]="
-                          field.titleColorModalDate ||
+                          field.fieldsConfigs?.inputConfigs
+                            ?.dateTimeOrTimeInputType?.titleColorModalDate ||
                           'var(--ion-color-primary)'
                         "
                         [style.font-size]="
-                          field.titleFontSizeModalDate || '16px'
+                          field.fieldsConfigs?.inputConfigs
+                            ?.dateTimeOrTimeInputType?.titleFontSizeModalDate ||
+                          '16px'
                         "
-                        >{{ field.inputLabel }}</ion-title
+                        >{{
+                          field.fieldsConfigs?.inputConfigs
+                            ?.dateTimeOrTimeInputType?.titleModalDate
+                        }}</ion-title
                       >
                       <ion-buttons slot="end">
                         <ion-button
                           (click)="dateModal.dismiss('cancel')"
                           [style.color]="
-                            field.buttonColorModalDate ||
+                            field.fieldsConfigs?.inputConfigs
+                              ?.dateTimeOrTimeInputType?.buttonColorModalDate ||
                             'var(--ion-color-primary)'
                           "
                           [style.font-size]="
-                            field.buttonFontSizeModalDate || '12px'
+                            field.fieldsConfigs?.inputConfigs
+                              ?.dateTimeOrTimeInputType
+                              ?.buttonFontSizeModalDate || '12px'
                           "
                           >Selecionar</ion-button
                         >
@@ -340,8 +462,11 @@
                       [presentation]="typeDataShowModalDate"
                       [locale]="'pt-BR'"
                       (ionChange)="
-                        field.onChange &&
-                          field.onChange($event.detail.value, form)
+                        field.defaultAllFieldsConfigs?.onChange &&
+                          field.defaultAllFieldsConfigs?.onChange(
+                            $event.detail.value,
+                            form
+                          )
                       "
                     ></ion-datetime>
                   </ion-content>
@@ -350,53 +475,80 @@
               }
 
               <!-- logica olho para mostrar ou nao senha e caso nao seja password mostrar o icone desejado-->
-              @else if (dynamicIconName) {
+              @else if (iconNameInput) {
               <ion-button
                 fill="clear"
                 slot="end"
                 (click)="
                   isPasswordField
                     ? togglePasswordIconVisibility(field)
-                    : field.onAddOnIconClick && field.onAddOnIconClick(form)
+                    : field.defaultAllFieldsConfigs?.onAddOnIconClick &&
+                      field.defaultAllFieldsConfigs?.onAddOnIconClick(form)
                 "
               >
                 <ion-icon
                   slot="icon-only"
-                  [name]="dynamicIconName"
-                  [style.margin-left]="field.iconMarginLeft || '0.25rem'"
-                  [style.font-size]="field.iconFontSize || '13px'"
-                  [style.color]="field.iconColor || 'var(--ion-color-primary)'"
+                  [name]="iconNameInput"
+                  [style.margin-left]="
+                    field.fieldsConfigs?.inputConfigs?.iconMarginLeftInput ||
+                    '0.25rem'
+                  "
+                  [style.font-size]="
+                    field.fieldsConfigs?.inputConfigs?.iconFontSizeInput ||
+                    '13px'
+                  "
+                  [style.color]="
+                    field.fieldsConfigs?.inputConfigs?.iconColorInput ||
+                    'var(--ion-color-primary)'
+                  "
                 ></ion-icon>
               </ion-button>
               }
             </ion-input>
           </ion-row>
 
-          @if (field.showButtonOneDownInput || field.showButtonTwoDownInput) {
+          @if
+          (field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+          ||
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+          {
 
           <!--  -->
-          @let sizeColumnDefault = (!field.sizeColumnButtonOneDownInput &&
-          !field.sizeColumnButtonTwoDownInput) && (!field.showButtonOneDownInput
-          || !field.showButtonTwoDownInput) ? 12 : null;
+          @let sizeColumnDefault =
+          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+          &&
+          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput)
+          &&
+          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+          ||
+          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+          ? 12 : null;
 
           <ion-row [style.width]="'100%'">
             <!-- vars button one -->
-            @if(field.showButtonOneDownInput){
+            @if(field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput){
             <!--  -->
-            @let sizeColumnButtonOne = field.sizeColumnButtonOneDownInput || 6;
+            @let sizeColumnButtonOne =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+            || 6;
             <!--  -->
-            @let paddingLeftButtonOne = field.paddingLeftButtonOneDownInput ||
-            '5px';
+            @let paddingLeftButtonOne =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.paddingLeftButtonOneDownInput
+            || '5px';
             <!--  -->
             @let justifyContentButtonOne =
-            field.justifyContentButtonOneDownInput || 'flex-start';
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.justifyContentButtonOneDownInput
+            || 'flex-start';
             <!--  -->
-            @let linkButtonOneDownInput = field.linkButtonOneDownInput;
+            @let linkButtonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.linkButtonOneDownInput;
             <!--  -->
-            @let fontSizebuttonOneDownInput = field.fontSizebuttonOneDownInput
+            @let fontSizebuttonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontSizebuttonOneDownInput
             || '10px';
             <!--  -->
-            @let colorTextbuttonOneDownInput = field.colorTextbuttonOneDownInput
+            @let colorTextbuttonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.colorTextbuttonOneDownInput
             || 'var(--ion-color-primary)';
             <!--  -->
 
@@ -416,7 +568,8 @@
                 [style.color]="colorTextbuttonOneDownInput"
               >
                 {{
-                  field.textButtonOneDownInput ||
+                  field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
+                    ?.textButtonOneDownInput ||
                     "enviar texto do botão 1 abaixo do input"
                 }}
               </ion-button>
@@ -424,22 +577,29 @@
             }
 
             <!-- vars button 2 -->
-            @if(field.showButtonTwoDownInput){
+            @if(field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput){
             <!--  -->
-            @let sizeColumnButtonTwo = field.sizeColumnButtonTwoDownInput || 6;
+            @let sizeColumnButtonTwo =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput
+            || 6;
             <!--  -->
-            @let paddingRightButtonTwo = field.paddingLeftButtonTwoDownInput ||
-            '5px';
+            @let paddingRightButtonTwo =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.paddingLeftButtonTwoDownInput
+            || '5px';
             <!--  -->
             @let justifyContentButtonTwo =
-            field.justifyContentButtonTwoDownInput || 'flex-end';
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.justifyContentButtonTwoDownInput
+            || 'flex-end';
             <!--  -->
-            @let linkButtonTwoDownInput = field.linkButtonTwoDownInput;
+            @let linkButtonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.linkButtonTwoDownInput;
             <!--  -->
-            @let fontSizebuttonTwoDownInput = field.fontSizebuttonTwoDownInput
+            @let fontSizebuttonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontSizebuttonTwoDownInput
             || '10px';
             <!--  -->
-            @let colorTextbuttonTwoDownInput = field.colorTextbuttonTwoDownInput
+            @let colorTextbuttonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.colorTextbuttonTwoDownInput
             || 'var(--ion-color-primary)';
             <!--  -->
 
@@ -459,7 +619,8 @@
                 [style.color]="colorTextbuttonTwoDownInput"
               >
                 {{
-                  field.textButtonTwoDownInput ||
+                  field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput
+                    ?.textButtonTwoDownInput ||
                     "enviar texto do botão 2 abaixo do input"
                 }}
               </ion-button>
@@ -475,37 +636,49 @@
           @if (field.typeFieldForm === eFieldDynamicForm.TEXTAREA) {
 
           <!--  -->
-          @let paddingStart = field.paddingStart ? field.paddingStart :
-          field.borderRadius ? field.borderRadius : '20px';
+          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ?
+          field.itemContainerFieldsConfigs?.paddingStart :
+          field.defaultAllFieldsConfigs?.borderRadius ?
+          field.defaultAllFieldsConfigs?.borderRadius : '20px';
 
           <!--  -->
-          @let boderColorInput = field.boderColorInput ||
+          @let boderColorInput = field.defaultAllFieldsConfigs?.borderColor ||
           'var(--ion-color-primary)';
 
           <!--  -->
-          @let boderWidthInput = field.boderWidthInput || '1px';
+          @let boderWidthInput = field.defaultAllFieldsConfigs?.borderWidthInput
+          || '1px';
 
           <!--  -->
           @let colorLabelPlaceholderAndTextInput =
-          field.colorLabelPlaceholderAndTextInput || 'var(--ion-color-primary)';
+          field.fieldsConfigs?.inputConfigs?.colorLabelPlaceholderAndTextInput
+          || 'var(--ion-color-primary)';
 
           <ion-textarea
             mode="md"
             [formControlName]="field.name"
-            [rows]="field.textAreaRows || 4"
-            [placeholder]="field.placeholder"
-            [fill]="field.fill"
-            [label]="field.inputLabel"
-            [attr.label-placement]="field.labelPlacement"
-            [style.--border-radius]="field.borderRadius"
+            [rows]="field.fieldsConfigs?.inputConfigs?.textAreaRows || 4"
+            [placeholder]="field.fieldsConfigs?.inputConfigs?.placeholderInput"
+            [fill]="field.defaultAllFieldsConfigs?.fill"
+            [label]="field.fieldsConfigs?.inputConfigs?.labelInput"
+            [attr.label-placement]="
+              field.defaultAllFieldsConfigs?.labelPlacement
+            "
+            [style.--border-radius]="
+              field.defaultAllFieldsConfigs?.borderRadius
+            "
             [style.--padding-start]="paddingStart"
-            [style.--background]="field.backgroundInput"
+            [style.--background]="
+              field.fieldsConfigs?.inputConfigs?.backgroundInput
+            "
             [style.--border-color]="boderColorInput"
             [style.--border-width]="boderWidthInput"
             [style.--color]="colorLabelPlaceholderAndTextInput"
             [style.--padding-top]="'20px'"
             [style.--padding-bottom]="'20px'"
-            [style.margin-top]="field.marginTop || '15px'"
+            [style.margin-top]="
+              field.fieldsConfigs?.inputConfigs?.marginTopInput || '1px'
+            "
           ></ion-textarea>
           }
 
@@ -513,31 +686,52 @@
           @if (field.typeFieldForm === eFieldDynamicForm.SWITCH) {
           <div
             class="toggle-container"
-            [style.border-radius]="field.borderRadius"
-            [style.margin-top]="field.marginTop"
+            [style.border-radius]="field.defaultAllFieldsConfigs?.borderRadius"
+            [style.margin-top]="
+              field.fieldsConfigs?.toggleConfigs?.toggleMarginTop
+            "
             [style.background]="
-              field.backgroundItem ||
+              field.itemContainerFieldsConfigs?.backgroundItemFieldsMain ||
               'color-mix(in srgb, var(--ion-color-primary), white 96%)'
             "
           >
             <div class="toggle-label">
               <ion-label
-                [style.margin-bottom]="field.marginBottom || '0.5rem'"
-                [style.margin-left]="field.toggleLabelMarginLeft || '0.2rem'"
-                [style.font-size]="field.toggleLabelFontSize || '16px'"
-                [style.color]="
-                  field.toggleLabelColor || 'var(--ion-color-primary)'
+                [style.margin-bottom]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleMarginBottom ||
+                  '0.5rem'
                 "
-                >{{ field.toggleLabel }}</ion-label
+                [style.margin-left]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleLabelMarginLeft ||
+                  '0.2rem'
+                "
+                [style.font-size]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleLabelFontSize ||
+                  '16px'
+                "
+                [style.color]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleLabelColor ||
+                  'var(--ion-color-primary)'
+                "
+                >{{
+                  field.fieldsConfigs?.toggleConfigs?.toggleLabel
+                }}</ion-label
               >
-              @if (field.toggleNote) {
+              @if (field.fieldsConfigs?.toggleConfigs?.toggleNote) {
               <ion-note
-                [style.margin-left]="field.toggleNoteMarginLeft || '0.3rem'"
-                [style.font-size]="field.toggleNoteFontSize || '12px'"
-                [style.color]="
-                  field.toggleNoteColor || 'var(--ion-color-primary)'
+                [style.margin-left]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleNoteMarginLeft ||
+                  '0.3rem'
                 "
-                >{{ field.toggleNote }}</ion-note
+                [style.font-size]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleNoteFontSize ||
+                  '12px'
+                "
+                [style.color]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleNoteColor ||
+                  'var(--ion-color-primary)'
+                "
+                >{{ field.fieldsConfigs?.toggleConfigs?.toggleNote }}</ion-note
               >
               }
             </div>
@@ -545,7 +739,11 @@
               slot="end"
               [formControlName]="field.name"
               (ionChange)="
-                field.onChange && field.onChange($event.detail.checked, form)
+                field.defaultAllFieldsConfigs?.onChange &&
+                  field.defaultAllFieldsConfigs?.onChange(
+                    $event.detail.checked,
+                    form
+                  )
               "
             ></ion-toggle>
           </div>
@@ -557,35 +755,57 @@
             mode="md"
             interface="popover"
             [formControlName]="field.name"
-            [placeholder]="field.placeholder"
-            [multiple]="field.select?.mode === 'multiple'"
+            [placeholder]="
+              field.fieldsConfigs?.selectConfigs?.selectPlaceholder
+            "
+            [multiple]="
+              field.fieldsConfigs?.selectConfigs?.selectModeType === 'multiple'
+            "
             (ionChange)="
-              field.onChange && field.onChange($event.detail.value, form)
+              field.defaultAllFieldsConfigs?.onChange &&
+                field.defaultAllFieldsConfigs?.onChange(
+                  $event.detail.value,
+                  form
+                )
             "
-            (ionFocus)="field.onOpenChange && field.onOpenChange(true, form)"
-            (ionBlur)="field.onOpenChange && field.onOpenChange(false, form)"
-            [fill]="field.fill"
-            [label]="field.inputLabel"
-            [attr.label-placement]="field.labelPlacement"
-            [autofocus]="field.autofocus"
-            [style.--border-radius]="field.borderRadius"
+            (ionFocus)="
+              field.fieldsConfigs?.selectConfigs?.onOpenChange &&
+                field.fieldsConfigs?.selectConfigs?.onOpenChange(true, form)
+            "
+            (ionBlur)="
+              field.fieldsConfigs?.selectConfigs?.onOpenChange &&
+                field.fieldsConfigs?.selectConfigs?.onOpenChange(false, form)
+            "
+            [fill]="field.defaultAllFieldsConfigs?.fill"
+            [label]="field.fieldsConfigs?.selectConfigs?.selectLabel"
+            [attr.label-placement]="
+              field.defaultAllFieldsConfigs?.labelPlacement
+            "
+            [style.--border-radius]="
+              field.defaultAllFieldsConfigs?.borderRadius
+            "
             [style.--padding-start]="
-              field.paddingStart
-                ? field.paddingStart
-                : field.borderRadius
-                ? field.borderRadius
-                : '0.9rem'
+              field.itemContainerFieldsConfigs?.paddingStart
+                ? field.itemContainerFieldsConfigs?.paddingStart
+                : field.defaultAllFieldsConfigs?.borderRadius
+                ? field.defaultAllFieldsConfigs?.borderRadius
+                : '20px'
             "
-            [style.color]="field.selectColor || 'var(--ion-color-primary)'"
+            [style.color]="
+              field.fieldsConfigs?.selectConfigs?.selectColor ||
+              'var(--ion-color-primary)'
+            "
             [style.--border-color]="
-              field.selectBorderColor || 'var(--ion-color-primary)'
+              field.fieldsConfigs?.selectConfigs?.selectBorderColor ||
+              'var(--ion-color-primary)'
             "
             [style.--background]="
-              field.selectBackground ||
+              field.fieldsConfigs?.selectConfigs?.selectBackground ||
               'color-mix(in srgb, var(--ion-color-primary), white 96%)'
             "
           >
-            @for (option of field.select?.options; track option.value) {
+            @for (option of field.fieldsConfigs?.selectConfigs?.selectOptions;
+            track option.value) {
             <ion-select-option
               [value]="option.value"
               [disabled]="option.disabled"
@@ -595,14 +815,18 @@
                 [name]="option.icon"
                 slot="start"
                 [style.color]="
-                  field.selectOptionIconColor || 'var(--ion-color-primary)'
+                  field.fieldsConfigs?.selectConfigs?.selectOptionIconColor ||
+                  'var(--ion-color-primary)'
                 "
-                [style.font-size]="field.selectOptionIconFontSize || '1rem'"
+                [style.font-size]="
+                  field.fieldsConfigs?.selectConfigs
+                    ?.selectOptionIconFontSize || '1rem'
+                "
               ></ion-icon>
               } {{ option.label }}
             </ion-select-option>
-            } @for (option of field.select?.options$ | async; track
-            option.value) {
+            } @for (option of field.fieldsConfigs?.selectConfigs?.options$ |
+            async; track option.value) {
             <ion-select-option [value]="option.value">
               {{ option.label }}
             </ion-select-option>
@@ -615,36 +839,64 @@
           <ion-item
             mode="md"
             class="itemCheckbox itemMainForm"
-            [lines]="field.ionItemNoneLines"
-            [class.itemCheckboxWithFill]="field.fill"
-            [style.border-radius]="field.borderRadius"
+            [class.itemCheckboxWithFill]="field.defaultAllFieldsConfigs?.fill"
+            [style.border-radius]="field.defaultAllFieldsConfigs?.borderRadius"
             [style.width]="'100%'"
-            [style.margin-top]="field.marginTop || '10px'"
+            [lines]="field.fieldsConfigs?.checkBoxConfigs?.checkBoxItemLinesDow"
+            [style.margin-top]="
+              field.fieldsConfigs?.checkBoxConfigs?.checkBoxMarginTop || '0'
+            "
           >
             <ion-checkbox
               [formControlName]="field.name"
               (ionChange)="
-                field.onChange && field.onChange($event.detail.checked, form)
+                field.defaultAllFieldsConfigs?.onChange &&
+                  field.defaultAllFieldsConfigs?.onChange(
+                    $event.detail.checked,
+                    form
+                  )
               "
               [style.background]="
                 'color-mix(in srgb, var(--ion-color-primary), white 96%)'
               "
-              [style.padding-left]="field.paddingLeft || '20px'"
-              [style.padding-right]="field.paddingStart || '20px'"
+              [style.padding-left]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingLeft ||
+                '20px'
+              "
+              [style.padding-right]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingStart ||
+                '20px'
+              "
               [style.color]="
-                field.textCheckBoxColor || 'var(--ion-color-primary)'
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxLabelColor ||
+                'var(--ion-color-primary)'
               "
               [style.--border-color]="
-                field.checkBorderCheckBoxColor || 'var(--ion-color-primary)'
+                field.fieldsConfigs?.checkBoxConfigs
+                  ?.checkBorderCheckBoxColor || 'var(--ion-color-primary)'
               "
               [style.--checkbox-background-checked]="
-                field.checkedCheckBoxColor || 'var(--ion-color-primary)'
+                field.fieldsConfigs?.checkBoxConfigs?.checkedCheckBoxColor ||
+                'var(--ion-color-primary)'
               "
-              [style.padding-top]="field.paddingTop || '12px'"
-              [style.padding-bottom]="field.paddingBottom || '12px'"
-              [style.--border-radius]="field.chechBoxIconBorderRadius || '4px'"
+              [style.padding-top]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingTop ||
+                '12px'
+              "
+              [style.padding-bottom]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingBottom ||
+                '12px'
+              "
+              [style.--border-radius]="
+                field.fieldsConfigs?.checkBoxConfigs
+                  ?.chechBoxIconBorderRadius || '4px'
+              "
             >
-              {{ field.labelItemTop || field.inputLabel }}
+              {{
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxLabel ||
+                  field.itemContainerFieldsConfigs?.labelConfigs
+                    ?.textLabelItemMain
+              }}
             </ion-checkbox>
           </ion-item>
           }
@@ -655,28 +907,44 @@
           <ion-item
             mode="md"
             class="itemMainForm"
-            [style.margin-top]="field.radioItemMarginTop || '10px'"
-            [lines]="field.radioItemNoneLines"
-            [style.border-radius]="field.radioItemborderRadius"
+            [style.margin-top]="
+              field.fieldsConfigs?.radioConfigs?.radioItemMarginTop || '10px'
+            "
+            [lines]="field.fieldsConfigs?.radioConfigs?.radioItemNoneLines"
+            [style.border-radius]="
+              field.fieldsConfigs?.radioConfigs?.radioItemborderRadius
+            "
             [style.--background]="
-              field.backgroundRadioItem ||
+              field.fieldsConfigs?.radioConfigs?.backgroundRadioItem ||
               'color-mix(in srgb, var(--ion-color-secondary), white 96%)'
             "
-            [class.itemCheckboxWithFill]="field.fill"
+            [class.itemCheckboxWithFill]="field.defaultAllFieldsConfigs?.fill"
             [style.border-color]="'transparent'"
             [style.width]="'100%'"
           >
             <p
               [style.width]="'100%'"
-              [style.padding-left]="field.titleRadioMarginLeft || '20px'"
-              [style.padding-right]="field.titleRadioMarginRight || '20px'"
-              [style.margin-top]="field.titleRadioMarginTop || '30px'"
-              [style.color]="
-                field.textRadioTitleColor || 'var(--ion-color-primary)'
+              [style.padding-left]="
+                field.fieldsConfigs?.radioConfigs?.titleRadioPaddingLeft ||
+                '20px'
               "
-              [style.text-align]="field.textRadioTitleTextAlign || 'start'"
+              [style.padding-right]="
+                field.fieldsConfigs?.radioConfigs?.titleRadioMarginRight ||
+                '20px'
+              "
+              [style.margin-top]="
+                field.fieldsConfigs?.radioConfigs?.titleRadioMarginTop
+              "
+              [style.color]="
+                field.fieldsConfigs?.radioConfigs?.textRadioTitleColor ||
+                'var(--ion-color-primary)'
+              "
+              [style.text-align]="
+                field.fieldsConfigs?.radioConfigs?.textRadioTitleTextAlign ||
+                'start'
+              "
             >
-              {{ field.inputLabel }}
+              {{ field.fieldsConfigs?.radioConfigs?.radioLabel }}
             </p>
 
             <ion-radio-group
@@ -685,16 +953,20 @@
               [style.width]="'100%'"
               [style.padding-bottom]="'20px'"
               [style.--radio-custom-border-color]="
-                field.borderColorRadioCheck || 'var(--ion-color-primary)'
+                field.fieldsConfigs?.radioConfigs?.borderColorRadioCheck ||
+                'var(--ion-color-primary)'
               "
               [style.--radio-custom-background-color]="
-                field.backgroundColorRadioCheck || 'var(--ion-color-primary)'
+                field.fieldsConfigs?.radioConfigs?.backgroundColorRadioCheck ||
+                'var(--ion-color-primary)'
               "
               [style.--borderRadiusCheckCustom]="
-                field.BorderRadiusradioCheck || '4px'
+                field.fieldsConfigs?.radioConfigs?.BorderRadiusradioCheck ||
+                '4px'
               "
             >
-              @for (option of field.select?.options; track option.value) {
+              @for (option of field.fieldsConfigs?.radioConfigs?.selectOptions;
+              track option.value) {
 
               <ion-item
                 mode="md"
@@ -705,7 +977,8 @@
               >
                 <ion-label
                   [style.color]="
-                    field.textOptionRadioColor || 'var(--ion-color-primary)'
+                    field.fieldsConfigs?.radioConfigs?.textOptionRadioColor ||
+                    'var(--ion-color-primary)'
                   "
                 >
                   {{ option.label }}
@@ -715,8 +988,11 @@
                   justify="end"
                   [value]="option.value"
                   (ionChange)="
-                    field.onChange &&
-                      field.onChange($any($event).detail.value, form)
+                    field.defaultAllFieldsConfigs?.onChange &&
+                      field.defaultAllFieldsConfigs?.onChange(
+                        $any($event).detail.value,
+                        form
+                      )
                   "
                 ></ion-radio>
               </ion-item>
@@ -729,12 +1005,12 @@
 
           <!-- Varias Imagens ou videos -->
           @if (field.typeFieldForm === eFieldDynamicForm.VIDEOIMAGEORDOCUMENTS
-          && field.fileAccept) {
+          && field.fieldsConfigs?.mediasConfigs?.fileAccept) {
           <div
             class="media-gallery-container"
             [style.--medias-custom-and-border-color]="
-              field.mediasCustomColorAndBorderColor ||
-              'var(--ion-color-primary)'
+              field.fieldsConfigs?.mediasConfigs
+                ?.mediasCustomColorAndBorderColor || 'var(--ion-color-primary)'
             "
           >
             <div class="media-list-wrapper">
@@ -742,8 +1018,14 @@
               @if (!isMaxMediaReached(field)) {
               <div
                 class="add-media-card"
-                [style.height]="field.avatarOrImageHeight || '130px'"
-                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.height]="
+                  field.fieldsConfigs?.mediasConfigs?.avatarOrImageHeight ||
+                  '130px'
+                "
+                [style.width]="
+                  field.fieldsConfigs?.mediasConfigs?.avatarOrImageWidth ||
+                  '130px'
+                "
               >
                 <ion-button
                   fill="clear"
@@ -762,16 +1044,29 @@
               <ion-item
                 class="media-item-card"
                 lines="none"
-                [style.height]="field.avatarOrImageHeight || '130px'"
-                [style.width]="field.avatarOrImageWidth || '130px'"
+                [style.height]="
+                  field.fieldsConfigs?.mediasConfigs?.avatarOrImageHeight ||
+                  '130px'
+                "
+                [style.width]="
+                  field.fieldsConfigs?.mediasConfigs?.avatarOrImageWidth ||
+                  '130px'
+                "
               >
                 <div
                   class="media-item-content"
-                  [style.height]="field.avatarOrImageHeight || '130px'"
-                  [style.width]="field.avatarOrImageWidth || '130px'"
+                  [style.height]="
+                    field.fieldsConfigs?.mediasConfigs?.avatarOrImageHeight ||
+                    '130px'
+                  "
+                  [style.width]="
+                    field.fieldsConfigs?.mediasConfigs?.avatarOrImageWidth ||
+                    '130px'
+                  "
                 >
                   <!-- caso seja imagem -->
-                  @if (mediaUrl | isMediaType: 'image' : field.fileAccept) {
+                  @if (mediaUrl | isMediaType: 'image' :
+                  field.fieldsConfigs?.mediasConfigs?.fileAccept!) {
                   <ion-img
                     [src]="mediaUrl.base64"
                     alt="Imagem"
@@ -781,14 +1076,20 @@
                   }
 
                   <!-- caso seja video -->
-                  @else if (mediaUrl | isMediaType: 'video' : field.fileAccept)
-                  {
+                  @else if (mediaUrl | isMediaType: 'video' :
+                  field.fieldsConfigs?.mediasConfigs?.fileAccept!) {
                   <div
                     class="video-thumbnail-wrapper"
                     (click)="previewMedia(field.name, i)"
                     [attr.aria-label]="'Visualizar Vídeo'"
-                    [style.height]="field.avatarOrImageHeight || '130px'"
-                    [style.width]="field.avatarOrImageWidth || '130px'"
+                    [style.height]="
+                      field.fieldsConfigs?.mediasConfigs?.avatarOrImageHeight ||
+                      '130px'
+                    "
+                    [style.width]="
+                      field.fieldsConfigs?.mediasConfigs?.avatarOrImageWidth ||
+                      '130px'
+                    "
                   >
                     <!-- O elemento video não tem controls, atua como thumbnail/preview -->
                     <video
@@ -810,7 +1111,7 @@
 
                   <!-- caso seja documento -->
                   @else if (mediaUrl | isMediaType: 'document' :
-                  field.fileAccept) {
+                  field.fieldsConfigs?.mediasConfigs?.fileAccept!) {
                   <div
                     class="document-placeholder"
                     (click)="previewMedia(field.name, i)"
@@ -854,12 +1155,23 @@
           }
 
           <!-- hint tag - dica para usuario o que faz o campo -->
-          @if (field.hint) {
+          @if (field.itemContainerFieldsConfigs?.hintConfigs?.hintText) {
           <ion-note
-            [style.margin-left]="field.hintMarginLeft || '0.3rem'"
-            [style.font-size]="field.hintFontSize || '10px'"
-            [style.color]="field.hintColor || 'var(--ion-color-primary)'"
-            >{{ field.hint }}</ion-note
+            [style.margin-left]="
+              field.itemContainerFieldsConfigs?.hintConfigs?.hintMarginLeft ||
+              '0.3rem'
+            "
+            [style.font-size]="
+              field.itemContainerFieldsConfigs?.hintConfigs?.hintFontSize ||
+              '10px'
+            "
+            [style.color]="
+              field.itemContainerFieldsConfigs?.hintConfigs?.hintColor ||
+              'var(--ion-color-primary)'
+            "
+            >{{
+              field.itemContainerFieldsConfigs?.hintConfigs?.hintText
+            }}</ion-note
           >
           }
 
@@ -869,7 +1181,10 @@
           form.controls[field.name]?.dirty)) {
           <ion-note
             color="danger"
-            [style.margin-left]="field.hintMarginLeft || '0.3rem'"
+            [style.margin-left]="
+              field.itemContainerFieldsConfigs?.hintConfigs?.hintMarginLeft ||
+              '0.3rem'
+            "
           >
             {{ getErrorMessage(form.controls[field.name].errors) }}
           </ion-note>

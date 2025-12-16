@@ -1,6 +1,5 @@
 export enum eDynamicField {
   INPUT = 'input',
-  INPUT_NUMBER = 'number',
   SELECT = 'select',
   TEXTAREA = 'textarea',
   CHECKBOX = 'checkbox',
@@ -9,11 +8,7 @@ export enum eDynamicField {
   DATE_TIME = 'date_time',
   SWITCH = 'switch',
   AVATAR = 'avatar',
-  TERMS_POLICY = 'terms_policy',
-  SELECT_USER = 'select_user',
   DIVIDER = 'divider',
   RADIO = 'radio',
-  IMAGE = 'image',
-  VIDEO = 'video',
   VIDEOIMAGEORDOCUMENTS = 'videoimageordocuments',
 }

@@ -1,4 +1,4 @@
-export type FillInputType = 'solid' | 'outline';
+export type FillType = 'solid' | 'outline';
 
 export type LabelPlacementType =
   | 'end'

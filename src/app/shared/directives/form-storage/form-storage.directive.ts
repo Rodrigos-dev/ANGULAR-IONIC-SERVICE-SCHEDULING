@@ -1,7 +1,8 @@
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { EFieldDynamicForm } from '../../components/dynamic-form.component/enums/field-dynamic-form.enum';
+import { formatDateFieldInputs } from '../../utils/date.util';
 
 @Directive({
   selector: 'form[formGroup][mbFormStorageName]',
@@ -12,11 +13,10 @@ export class FormStorageDirective implements OnInit, OnDestroy {
 
   @Input() formGroup!: FormGroup;
   @Input() mbFormStorageName?: string;
+  @Input() mbFormStorageFieldTypes?: Record<string, EFieldDynamicForm>;
 
   ngOnInit(): void {
-    if (!this.mbFormStorageName) {
-      return;
-    }
+    if (!this.mbFormStorageName) return;
 
     this.updateFormValue();
     this.listenUpdateValue();
@@ -31,6 +31,7 @@ export class FormStorageDirective implements OnInit, OnDestroy {
     const storageValue = JSON.parse(
       localStorage.getItem(this.mbFormStorageName!) || '{}'
     );
+
     if (storageValue) {
       this.formGroup.patchValue(storageValue);
     }
@@ -39,8 +40,36 @@ export class FormStorageDirective implements OnInit, OnDestroy {
   private listenUpdateValue(): void {
     this.formGroup.valueChanges
       .pipe(debounceTime(300), takeUntil(this.destroy$))
-      .subscribe((value) =>
-        localStorage.setItem(this.mbFormStorageName!, JSON.stringify(value))
-      );
+      .subscribe((value) => {
+        const formattedValue = this.formatValuesForStorage(value);
+        console.log('SALVANDO NO STORAGE:', value);
+        localStorage.setItem(
+          this.mbFormStorageName!,
+          JSON.stringify(formattedValue)
+        );
+      });
+  }
+
+  private formatValuesForStorage(values: any): any {
+    // Se não veio o mapa de tipos, salva do jeito que está
+    if (!this.mbFormStorageFieldTypes) {
+      return values;
+    }
+
+    const formatted = { ...values };
+
+    Object.entries(this.mbFormStorageFieldTypes).forEach(
+      ([field, fieldType]) => {
+        const fieldValue = formatted[field];
+
+        // Campo não existe ou está vazio
+        if (!fieldValue) return;
+
+        // Só formata se for campo de data / hora
+        formatted[field] = formatDateFieldInputs(fieldValue, fieldType);
+      }
+    );
+
+    return formatted;
   }
 }

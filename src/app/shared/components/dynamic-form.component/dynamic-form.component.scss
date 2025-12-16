@@ -39,7 +39,7 @@ ion-item {
 
 .itemWithBorder {
   //para resolver quando come meio nome do campo
-  --min-height: 70px;
+  --min-height: 40px;
   --border-width: 0;
   --border-style: none;
 }
@@ -117,8 +117,7 @@ ion-note {
 //-------------parte select
 
 ion-select {
-  padding-top: 8px;
-  margin-top: 5px;
+  padding-right: 10px;
 }
 
 /* Estilo para itens de select com ícones */

@@ -63,6 +63,32 @@ import { MediaService } from '../../services/medias.service';
 import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
 import { IsMediaTypePipe } from '../../pipes/is-media-type.pipe';
 import { FormStorageDirective } from '../../directives/form-storage/form-storage.directive';
+import {
+  eye,
+  eyeOff,
+  lockClosed,
+  lockOpen,
+  mail,
+  person,
+  call,
+  calendar,
+  location,
+  home,
+  checkmarkCircle,
+  closeCircle,
+  warning,
+  helpCircle,
+  informationCircle,
+  search,
+  add,
+  trash,
+  chevronDown,
+} from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+import {
+  formatDateFieldInputs,
+  getFormatDateValue,
+} from '../../utils/date.util';
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
@@ -112,6 +138,7 @@ const DYNAMIC_FORM_MODULES = [
 export class DynamicFormComponent implements OnInit {
   @Input() formConfigFields?: IDynamicFormConfig[];
   @Input() mbFormStorageName?: string; //enviar apenas se for salvar no storage e manter salvo para usuario continuar a preencher//deve limpar o storage depois do submit
+  @Input() mbFormStorageFieldTypes?: Record<string, EFieldDynamicForm>;
   @Output() formValueChange = new EventEmitter();
 
   form: FormGroup = new FormGroup({});
@@ -122,29 +149,92 @@ export class DynamicFormComponent implements OnInit {
   protected eInputModeField = EInputModeField;
   protected eFormatDateValueInInput = EFormatDateValueInInput;
   public readonly eMaskType = EMaskType;
+  formFieldTypes!: Record<string, EFieldDynamicForm>;
 
   public localPreviewUrls: { [fieldName: string]: string | null } = {};
 
   private readonly mediaService = inject(MediaService);
 
   constructor(@Inject(ERROR_MESSAGES) private readonly errors: ErrorMessages) {
-    // addIcons({ eye, eyeOff });
+    addIcons({
+      eye,
+      eyeOff,
+      lockClosed,
+      lockOpen,
+      mail,
+      person,
+      call,
+      calendar,
+      location,
+      home,
+      checkmarkCircle,
+      closeCircle,
+      warning,
+      helpCircle,
+      informationCircle,
+      search,
+      add,
+      trash,
+      chevronDown,
+    });
   }
 
   ngOnInit() {
     this.createForm();
+    // 1. O valueChanges emite o valor bruto (ISO 8601)
     this.form.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged(), untilDestroyed(this))
-      .subscribe((value) => {
-        this.formValueChange.emit(value);
+      // 2. Antes de emitir, chame a transformação
+      .subscribe((rawValue) => {
+        // Chama o novo método auxiliar para transformar o valor
+        const transformedValue = this.transformRawValueForChange(rawValue); //aki para refatorar valores e enviar certo para backend ...tipo o time que esta data completa e tem que envciar so hh:mm
+
+        // 3. Emite o valor já formatado para o Backend
+        this.formValueChange.emit(transformedValue);
       });
+
+    if (this.formConfigFields) {
+      this.formFieldTypes = this.formConfigFields?.reduce((acc, field) => {
+        acc[field.name] = field.typeFieldForm;
+        return acc;
+      }, {} as Record<string, EFieldDynamicForm>);
+    }
+  }
+
+  private transformRawValueForChange(rawValue: any): { [key: string]: any } {
+    const transformedData: { [key: string]: any } = { ...rawValue };
+
+    if (!this.formConfigFields) {
+      return transformedData;
+    }
+
+    for (const field of this.formConfigFields) {
+      const fieldType = field.typeFieldForm;
+      const fieldValue = rawValue[field.name];
+
+      const isDateOrTimeField =
+        field.typeFieldForm === this.eFieldDynamicForm.DATE ||
+        field.typeFieldForm === this.eFieldDynamicForm.TIME ||
+        field.typeFieldForm === this.eFieldDynamicForm.DATE_TIME;
+      // Aplica a transformação APENAS se for data/hora e tiver valor
+
+      if (fieldValue && isDateOrTimeField) {
+        // *** AQUI ESTÁ A SUBSTITUIÇÃO DO DATEPIPE ***
+        const formattedValue = this.transformValueForBackend(
+          fieldValue,
+          fieldType
+        );
+
+        transformedData[field.name] = formattedValue;
+      }
+    }
+
+    return transformedData;
   }
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log(
-        'formConfigFields undefined - dynamic-form.component.ts:145'
-      );
+      return console.log('formConfigFields undefined');
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
@@ -186,7 +276,22 @@ export class DynamicFormComponent implements OnInit {
     const control = this.formConfigFields?.find((c) => c.name === field.name);
     if (!control) return;
 
-    control.showPasswordIcon = !control.showPasswordIcon;
+    // 2. Armazena o objeto 'inputConfigs' (o alvo) em uma variável local.
+    // Isso garante que o TypeScript saiba que o objeto existe (se não for null/undefined)
+    const inputConfigs = control.fieldsConfigs?.inputConfigs;
+
+    // 3. Verifica se o objeto alvo existe e se a propriedade existe DENTRO dele
+    if (inputConfigs && typeof inputConfigs.showPasswordIcon === 'boolean') {
+      // 4. Atribuição Segura: Como 'inputConfigs' não é null/undefined aqui,
+      // podemos atribuir diretamente à propriedade interna.
+      inputConfigs.showPasswordIcon = !inputConfigs.showPasswordIcon;
+    } else {
+      // Opcional: Tratar o caso em que o objeto de configs não existe
+      // ou a propriedade ainda não foi inicializada.
+      console.warn(
+        'As configurações de input não estão disponíveis ou showPasswordIcon não é booleano.'
+      );
+    }
   }
 
   getErrorMessage(errors: ValidationErrors | null): string | null {
@@ -228,16 +333,7 @@ export class DynamicFormComponent implements OnInit {
   getFormatDateValue(
     typeField: EFieldDynamicForm
   ): EFormatDateValueInInput | undefined {
-    switch (typeField) {
-      case EFieldDynamicForm.DATE:
-        return EFormatDateValueInInput.DATE;
-      case EFieldDynamicForm.TIME:
-        return EFormatDateValueInInput.TIME;
-      case EFieldDynamicForm.DATE_TIME:
-        return EFormatDateValueInInput.DATE_TIME;
-      default:
-        return undefined;
-    }
+    return getFormatDateValue(typeField);
   }
 
   /**
@@ -283,7 +379,10 @@ export class DynamicFormComponent implements OnInit {
       // 4. Formata a data válida para a string de exibição
       return format(dateObject, formatString, { locale: ptBR });
     } catch (error) {
-      console.error('Erro ao formatar data:', error);
+      console.error(
+        'Erro ao formatar data: - dynamic-form.component.ts:384',
+        error
+      );
       return undefined;
     }
   }
@@ -295,7 +394,7 @@ export class DynamicFormComponent implements OnInit {
     // 1. Cria o input de arquivo
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = field.fileAccept || 'image/*';
+    input.accept = field.fieldsConfigs?.mediasConfigs?.fileAccept || 'image/*';
 
     input.onchange = (event: any) => {
       const file: File = event.target.files[0];
@@ -339,7 +438,7 @@ export class DynamicFormComponent implements OnInit {
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
-    input.accept = field.fileAccept!;
+    input.accept = field.fieldsConfigs?.mediasConfigs?.fileAccept!;
 
     input.onchange = (event: any) => {
       const files: FileList = event.target.files;
@@ -352,8 +451,9 @@ export class DynamicFormComponent implements OnInit {
         this.form.get(field.name)?.value || [];
 
       // Configurações de limite
-      const maxVideos = field.maxVideos || 0;
-      const maxTotalMedia = field.maxTotalMedia || 5;
+      const maxVideos = field.fieldsConfigs?.mediasConfigs?.maxVideos || 0;
+      const maxTotalMedia =
+        field.fieldsConfigs?.mediasConfigs?.maxTotalMedia || 5;
       let currentVideoCount = this.countMediaType(currentArray, 'video'); // Obtém a contagem atual
 
       // Array para armazenar os arquivos que PASSARAM nas verificações
@@ -497,7 +597,7 @@ export class DynamicFormComponent implements OnInit {
 
   isMaxMediaReached(field: IDynamicFormConfig): boolean {
     const currentArray: string[] = this.form.get(field.name)?.value || [];
-    const max = field.maxTotalMedia;
+    const max = field.fieldsConfigs?.mediasConfigs?.maxTotalMedia;
 
     if (!max) return false;
 
@@ -527,5 +627,29 @@ export class DynamicFormComponent implements OnInit {
         itemIndex ?? 'Único ou 0'
       }`
     );
+  }
+
+  //**** parte de ajustar os dados para retorno por exemplo a data  */
+  private transformValueForBackend(
+    fieldValue: any,
+    fieldType: EFieldDynamicForm
+  ): string | null {
+    if (!fieldValue) {
+      return null;
+    }
+
+    if (this.isDateField(fieldType)) {
+      return formatDateFieldInputs(fieldValue, fieldType);
+    }
+
+    return fieldValue;
+  }
+
+  private isDateField(fieldType: EFieldDynamicForm): boolean {
+    return [
+      EFieldDynamicForm.DATE,
+      EFieldDynamicForm.TIME,
+      EFieldDynamicForm.DATE_TIME,
+    ].includes(fieldType);
   }
 }
