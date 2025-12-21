@@ -213,6 +213,10 @@
               field.itemContainerFieldsConfigs?.labelConfigs
                 ?.fontSizeLabelItemMain || '16px'
             "
+            [style.font-weight]="
+              field.itemContainerFieldsConfigs?.labelConfigs
+                ?.fontWeightLabelItemMain || '450'
+            "
           >
             {{
               field.itemContainerFieldsConfigs?.labelConfigs?.textLabelItemMain
@@ -343,10 +347,6 @@
           'var(--ion-color-primary)';
 
           <!--  -->
-          @let boderWidthInput = field.defaultAllFieldsConfigs?.borderWidthInput
-          || '1px';
-
-          <!--  -->
           @let colorLabelPlaceholderAndTextInput =
           field.fieldsConfigs?.inputConfigs?.colorLabelPlaceholderAndTextInput
           || 'var(--ion-color-primary)';
@@ -390,6 +390,7 @@
                 field.defaultAllFieldsConfigs?.borderRadius
               "
               [style.--padding-start]="paddingStart"
+              [style.--padding-end]="'10px'"
               [style.--background]="
                 field.fieldsConfigs?.inputConfigs?.backgroundInput
               "
@@ -405,6 +406,12 @@
                   )
               "
               [style.--color]="colorLabelPlaceholderAndTextInput"
+              [style.font-size]="
+                field.fieldsConfigs?.inputConfigs?.labeltextFontSize
+              "
+              [style.font-weight]="
+                field.fieldsConfigs?.inputConfigs?.labeltextFontWeight || '450'
+              "
               [style.margin-left]="
                 field.defaultAllFieldsConfigs?.marginLeftInput
               "
@@ -617,6 +624,12 @@
             [style.margin-top]="
               field.fieldsConfigs?.inputConfigs?.marginTopInput || '1px'
             "
+            [style.font-size]="
+              field.fieldsConfigs?.inputConfigs?.labeltextFontSize
+            "
+            [style.font-weight]="
+              field.fieldsConfigs?.inputConfigs?.labeltextFontWeight || '450'
+            "
           ></ion-textarea>
           }
 
@@ -650,6 +663,10 @@
                 [style.color]="
                   field.fieldsConfigs?.toggleConfigs?.toggleLabelColor ||
                   'var(--ion-color-primary)'
+                "
+                [style.font-weight]="
+                  field.fieldsConfigs?.toggleConfigs?.toggleLabelFontWeight ||
+                  450
                 "
                 >{{
                   field.fieldsConfigs?.toggleConfigs?.toggleLabel
@@ -741,6 +758,12 @@
               'color-mix(in srgb, var(--ion-color-primary), white 96%)'
             "
             [style.margin-top]="'4px'"
+            [style.font-size]="
+              field.fieldsConfigs?.selectConfigs?.selectTextFontSize
+            "
+            [style.font-weight]="
+              field.fieldsConfigs?.selectConfigs?.selectTextFontWeight || '450'
+            "
           >
             @for (option of field.fieldsConfigs?.selectConfigs?.selectOptions;
             track option.value) {
@@ -832,6 +855,13 @@
                 field.fieldsConfigs?.checkBoxConfigs
                   ?.chechBoxIconBorderRadius || '4px'
               "
+              [style.font-size]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxFontSize
+              "
+              [style.font-weight]="
+                field.fieldsConfigs?.checkBoxConfigs?.checkBoxFontWeight ||
+                '450'
+              "
             >
               {{
                 field.fieldsConfigs?.checkBoxConfigs?.checkBoxLabel ||
@@ -883,6 +913,12 @@
               [style.text-align]="
                 field.fieldsConfigs?.radioConfigs?.textRadioTitleTextAlign ||
                 'start'
+              "
+              [style.font-size]="
+                field.fieldsConfigs?.radioConfigs?.textRadioFontSize
+              "
+              [style.font-weight]="
+                field.fieldsConfigs?.radioConfigs?.textRadioFontWeight || '500'
               "
             >
               {{ field.fieldsConfigs?.radioConfigs?.radioLabel }}
@@ -1129,134 +1165,155 @@
             {{ getErrorMessage(form.controls[field.name].errors) }}
           </ion-note>
           }
-
-          <!--  -->
-          @if
-          (field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
-          ||
-          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
-          {
-
-          <!--  -->
-          @let sizeColumnDefault =
-          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
-          &&
-          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput)
-          &&
-          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
-          ||
-          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
-          ? 12 : null;
-
-          <ion-row [style.width]="'100%'">
-            <!-- vars button one -->
-            @if(field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput){
-            <!--  -->
-            @let sizeColumnButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
-            || 6;
-            <!--  -->
-            @let paddingLeftButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.paddingLeftButtonOneDownInput
-            || '5px';
-            <!--  -->
-            @let justifyContentButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.justifyContentButtonOneDownInput
-            || 'flex-start';
-            <!--  -->
-            @let linkButtonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.linkButtonOneDownInput;
-            <!--  -->
-            @let fontSizebuttonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontSizebuttonOneDownInput
-            || '10px';
-            <!--  -->
-            @let colorTextbuttonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.colorTextbuttonOneDownInput
-            || 'var(--ion-color-primary)';
-            <!--  -->
-
-            <ion-col
-              [size]="sizeColumnDefault || sizeColumnButtonOne"
-              [style.padding]="'0'"
-              [style.padding-left]="paddingLeftButtonOne"
-              [style.display]="'flex'"
-              [style.justify-content]="justifyContentButtonOne"
-            >
-              <ion-button
-                class="buttonDownInput"
-                fill="clear"
-                [routerLink]="linkButtonOneDownInput"
-                [style.font-size]="fontSizebuttonOneDownInput"
-                [style.padding]="'0'"
-                [style.color]="colorTextbuttonOneDownInput"
-                [style.margin-left]="'7px'"
-                [style.margin-right]="'7px'"
-              >
-                {{
-                  field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
-                    ?.textButtonOneDownInput ||
-                    "enviar texto do botão 1 abaixo do input"
-                }}
-              </ion-button>
-            </ion-col>
-            }
-
-            <!-- vars button 2 -->
-            @if(field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput){
-            <!--  -->
-            @let sizeColumnButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput
-            || 6;
-            <!--  -->
-            @let paddingRightButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.paddingLeftButtonTwoDownInput
-            || '5px';
-            <!--  -->
-            @let justifyContentButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.justifyContentButtonTwoDownInput
-            || 'flex-end';
-            <!--  -->
-            @let linkButtonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.linkButtonTwoDownInput;
-            <!--  -->
-            @let fontSizebuttonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontSizebuttonTwoDownInput
-            || '10px';
-            <!--  -->
-            @let colorTextbuttonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.colorTextbuttonTwoDownInput
-            || 'var(--ion-color-primary)';
-            <!--  -->
-
-            <ion-col
-              [size]="sizeColumnDefault || sizeColumnButtonTwo"
-              [style.padding]="'0'"
-              [style.padding-right]="paddingRightButtonTwo"
-              [style.display]="'flex'"
-              [style.justify-content]="justifyContentButtonTwo"
-            >
-              <ion-button
-                class="buttonDownInput"
-                fill="clear"
-                [routerLink]="linkButtonTwoDownInput"
-                [style.font-size]="fontSizebuttonTwoDownInput"
-                [style.padding]="'0'"
-                [style.color]="colorTextbuttonTwoDownInput"
-                [style.margin-left]="'7px'"
-                [style.margin-right]="'7px'"
-              >
-                {{
-                  field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput
-                    ?.textButtonTwoDownInput ||
-                    "enviar texto do botão 2 abaixo do input"
-                }}
-              </ion-button>
-            </ion-col>
-            }
-          </ion-row>
-          }
         </ion-item>
+
+        <!--  -->
+        @if
+        (field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+        ||
+        field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+        {
+
+        <!--  -->
+        @let sizeColumnDefault =
+        (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+        &&
+        !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput)
+        &&
+        (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+        ||
+        !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+        ? 12 : null;
+
+        <ion-row [style.width]="'100%'">
+          <!-- vars button one -->
+          @if(field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput){
+          <!--  -->
+          @let sizeColumnButtonOne =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+          || 6;
+          <!--  -->
+          @let paddingLeftButtonOne =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.paddingLeftButtonOneDownInput
+          || '5px';
+          <!--  -->
+          @let justifyContentButtonOne =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.justifyContentButtonOneDownInput
+          || 'flex-start';
+          <!--  -->
+          @let linkButtonOneDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.linkButtonOneDownInput;
+          <!--  -->
+          @let fontSizebuttonOneDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontSizebuttonOneDownInput
+          || '10px';
+          <!--  -->
+          @let colorTextbuttonOneDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.colorTextbuttonOneDownInput
+          || 'var(--ion-color-primary)';
+          <!--  -->
+
+          @let fontWeightButtonTwo =
+          field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontWeightButtonOneDownInput
+          || '500';
+          <!--  -->
+          <ion-col
+            [size]="sizeColumnDefault || sizeColumnButtonOne"
+            [style.padding]="'0'"
+            [style.padding-left]="paddingLeftButtonOne"
+            [style.display]="'flex'"
+            [style.justify-content]="justifyContentButtonOne"
+          >
+            <a
+              [routerLink]="linkButtonOneDownInput"
+              class="ion-activatable relative-container"
+              [style.font-size]="fontSizebuttonOneDownInput"
+              [style.color]="colorTextbuttonOneDownInput"
+              [style.font-weight]="fontWeightButtonTwo"
+              style="
+                position: relative;
+                overflow: hidden;
+                display: inline-block;
+                padding: 4px 8px; /* Um pouco de padding ajuda a ver o efeito */
+                text-decoration: none;
+                margin: 0 7px;
+              "
+            >
+              {{
+                field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
+                  ?.textButtonOneDownInput || "Texto aqui"
+              }}
+
+              <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+            </a>
+          </ion-col>
+          }
+
+          <!-- vars button 2 -->
+          @if(field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput){
+          <!--  -->
+          @let sizeColumnButtonTwo =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput
+          || 6;
+          <!--  -->
+          @let paddingRightButtonTwo =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.paddingLeftButtonTwoDownInput
+          || '5px';
+          <!--  -->
+          @let justifyContentButtonTwo =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.justifyContentButtonTwoDownInput
+          || 'flex-end';
+          <!--  -->
+          @let linkButtonTwoDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.linkButtonTwoDownInput;
+          <!--  -->
+          @let fontSizebuttonTwoDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontSizebuttonTwoDownInput
+          || '10px';
+          <!--  -->
+          @let colorTextbuttonTwoDownInput =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.colorTextbuttonTwoDownInput
+          || 'var(--ion-color-primary)';
+          <!--  -->
+
+          @let fontWeightButtonTwo =
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontWeightButtonTwoDownInput
+          || '500';
+
+          <!--  -->
+          <ion-col
+            [size]="sizeColumnDefault || sizeColumnButtonTwo"
+            [style.padding]="'0'"
+            [style.padding-right]="paddingRightButtonTwo"
+            [style.display]="'flex'"
+            [style.justify-content]="justifyContentButtonTwo"
+          >
+            <a
+              [routerLink]="linkButtonTwoDownInput"
+              class="ion-activatable relative-container"
+              [style.font-size]="fontSizebuttonTwoDownInput"
+              [style.color]="colorTextbuttonTwoDownInput"
+              [style.font-weight]="fontWeightButtonTwo"
+              style="
+                position: relative;
+                overflow: hidden;
+                display: inline-block;
+                padding: 4px 8px; /* Um pouco de padding ajuda a ver o efeito */
+                text-decoration: none;
+                margin: 0 7px;
+              "
+            >
+              {{
+                field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
+                  ?.textButtonOneDownInput || "Texto aqui"
+              }}
+
+              <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+            </a>
+          </ion-col>
+          }
+        </ion-row>
+        }
 
         <!--  -->
         }

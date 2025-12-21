@@ -98,6 +98,7 @@ export interface ILabelItemFieldMainConfigs {
   paddingLeftLabelItemMain?: string; // enviar '1px', '1rem',......
   marginBottomLabelItemMain?: string; //// enviar '1px', '1rem',......
   fontSizeLabelItemMain?: string; // enviar '1px', '1rem', .....
+  fontWeightLabelItemMain?: string; // enviar '300', '500', .....
 }
 
 export interface IIconHelpItemMainConfigs {
@@ -145,6 +146,8 @@ export interface IInputConfigs {
   maxLengthInput?: number; //max quantidade de caracteres que o input suporta
   minLengthInput?: number; //min caracteres que deve ter o input
   readonlyInput?: boolean; // true ou false
+  labeltextFontSize?: string; //enviar 300, 500
+  labeltextFontWeight?: string; //enviar 1px, 2rem etc
 
   //parte asteristico * de valor requerido no fim do input
   asteristicRequiredInput?: boolean; //true or false
@@ -183,6 +186,7 @@ export interface IButtonOneDownInput {
   fontSizebuttonOneDownInput?: string; //enviar '1px', '1rem', .....
   colorTextbuttonOneDownInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   textButtonOneDownInput?: string; //texto do que vai dizer o botao exemplo - esqueceu senha?
+  fontWeightButtonOneDownInput?: string; //default 500
 }
 
 export interface IButtonTwoDownInput {
@@ -195,6 +199,7 @@ export interface IButtonTwoDownInput {
   fontSizebuttonTwoDownInput?: string; //enviar '1px', '1rem', .....
   colorTextbuttonTwoDownInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   textButtonTwoDownInput?: string; //texto do que vai dizer o botao exemplo - esqueceu senha?
+  fontWeightButtonTwoDownInput?: string; //default 500
 }
 
 //*************************************************************************************************************** */
@@ -209,6 +214,7 @@ export interface IToggleFieldConfigs {
   toggleNoteColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   toggleNoteMarginLeft?: string; //enviar '1px', '1rem', .....
   toggleNoteFontSize?: string; //enviar '1px', '1rem', .....
+  toggleLabelFontWeight?: string; //enviar 300, 400 , 500
   toggleFill?: FillType; //"outline" ｜ "solid" - bordas no outline - background no solid
   toggleLabelPlacement?: LabelPlacementType; //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
   toggleMarginTop?: string; //enviar '1px', '1rem', .....
@@ -228,6 +234,8 @@ export interface ISelectFieldConfigs {
   selectModeType?: SelectModeType; //'single'  'multiple'  'tags';
   selectColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   selectBorderColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
+  selectTextFontSize?: string; //enviar 1px 1rem etc
+  selectTextFontWeight?: string; //enviar 300 500
   selectOptionIconColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   selectOptionIconFontSize?: string; //enviar '1px', '1rem',
   selectBackground?: string; //default primary....enviar 'var()'... rgb ...rgba etc
@@ -256,6 +264,8 @@ export interface ICheckBoxConfigs {
   checkBoxPaddingBottom?: string;
   checkBoxMarginTop?: string;
   checkBoxItemLinesDow?: linesShowType; //"full" ｜ "inset" ｜ "none".....
+  checkBoxFontSize?: string; //enviar 1px 1rem
+  checkBoxFontWeight?: string; //enviar 200 500
 
   buttonOneDownInput?: IButtonOneDownInput;
   buttonTwoDownInput?: IButtonTwoDownInput;
@@ -276,6 +286,8 @@ export interface IRadioConfigs {
   titleRadioPaddingLeft?: string; //enviar '1px', '1rem',
   textRadioTitleColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   textRadioTitleTextAlign?: TextAlignType; // onde vai ficar o titulo na linha para o Radio
+  textRadioFontSize?: string; //enviar 300, 500
+  textRadioFontWeight?: string; //enviar 1px, 2rem etc
   borderColorRadioCheck?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   backgroundColorRadioCheck?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   BorderRadiusradioCheck?: string; //enviar '1px', '1rem',

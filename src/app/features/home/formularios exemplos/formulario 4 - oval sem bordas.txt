@@ -18,11 +18,11 @@ const defaultAllFieldsConfigs: IDefaultAllFieldsConfigs = {
 
   marginLeftInput: undefined, // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
   marginRightInput: undefined, // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
-  border: 'bottom', //'full' | 'none' | 'bottom'
-  borderRadius: '8px', //30px....1rem etc
+  border: 'none', //'full' | 'none' | 'bottom'
+  borderRadius: '30px', //30px....1rem etc - quando colocaracima de 30 px para redonadas de ser o mesmo valor em padding start no item
   borderColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
   borderWidthInput: undefined, // enviar '1px', '1rem', .....//adiciona uma borda na parte de baixo do input quando tiver erro
-  fill: 'solid', //"outline" ｜ "solid" - bordas no outline - background no solid
+  fill: undefined, //"outline" ｜ "solid" - bordas no outline - background no solid
   labelPlacement: 'floating', //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
 };
 
@@ -34,7 +34,7 @@ const itemContainerFieldsConfigs: IItemContainerFieldsConfigs = {
     'color-mix(in srgb, var(--ion-color-primary), white 96%)', //default transparent....enviar 'var()'... rgb ...rgba etc
   marginTopItemFieldsMain: '1px', //30px....1rem etc
   asteristicRequiredColorLabelItem: undefined, //caso envie exibe um asteristico no campo indicando item obrigatorio - default primary....enviar 'var()'... rgb ...rgba etc
-  paddingStart: undefined, //caso envie border e border radius acima de 20px passar o mesmo valor da border radius porem no text area deve ser enviado 50px se nao corta as bordas
+  paddingStart: '30px', //caso envie border e border radius acima de 20px passar o mesmo valor da border radius porem no text area deve ser enviado 50px se nao corta as bordas
   paddingBottom: undefined, // enviar '1px', '1rem', .....
   paddingTop: undefined, // enviar '1px', '1rem', .....
 
@@ -105,8 +105,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
         labelConfigs: {
           ...itemContainerFieldsConfigs.labelConfigs,
           textLabelItemMain: 'Avatar',
-          fontSizeLabelItemMain: '22px',
-          fontWeightLabelItemMain: '500',
         },
       },
 
@@ -141,8 +139,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -215,8 +211,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -288,8 +282,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -361,8 +353,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -434,8 +424,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -507,8 +495,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -585,8 +571,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           backgroundInput:
             'color-mix(in srgb, var(--ion-color-primary), white 96%)', //'color-mix(in srgb, var(--ion-color-primary), white 96%)', //
           colorLabelPlaceholderAndTextInput: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          labeltextFontSize: undefined, //enviar 300, 500
-          labeltextFontWeight: undefined, //enviar 1px, 2rem etc
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
@@ -661,7 +645,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           toggleNoteColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
           toggleNoteMarginLeft: undefined, //enviar '1px', '1rem', .....
           toggleNoteFontSize: undefined, //enviar '1px', '1rem', .....
-          toggleLabelFontWeight: undefined, //enviar 300, 400 , 500
           toggleFill: 'outline', //"outline" ｜ "solid" - bordas no outline - background no solid
           toggleLabelPlacement: 'stacked', //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
           toggleMarginTop: undefined, //30px....1rem etc
@@ -701,8 +684,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           selectOptionIconColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
           selectOptionIconFontSize: undefined, //enviar '1px', '1rem',
           selectBackground: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
-          selectTextFontSize: undefined, //enviar 1px 1rem etc
-          selectTextFontWeight: undefined, //enviar 300 500
         },
       },
     },
@@ -735,8 +716,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           checkBoxMarginTop: undefined, // enviar '1px', '1rem',......
           checkBoxItemLinesDow: undefined, //"full" ｜ "inset" ｜ "none".....
           chechBoxIconBorderRadius: undefined, ////enviar '1px', '1rem - arrendonda o icon de chheck ',
-          checkBoxFontSize: undefined, //enviar 1px 1rem
-          checkBoxFontWeight: undefined, //enviar 200 500
         },
       },
     },
@@ -808,7 +787,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Nome', //label que aparece na parte superior do input
+          labelInput: 'Data de Nascimento', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 
@@ -878,7 +857,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Nome', //label que aparece na parte superior do input
+          labelInput: 'Data e hora do agendamento', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 
@@ -947,7 +926,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Nome', //label que aparece na parte superior do input
+          labelInput: 'Hora Inicial', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 
@@ -1011,8 +990,6 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
         labelConfigs: {
           ...itemContainerFieldsConfigs.labelConfigs,
           textLabelItemMain: 'IMAGE VIDEO OU DOCUMENTOS',
-          fontSizeLabelItemMain: '16px',
-          fontWeightLabelItemMain: '500',
         },
       },
 

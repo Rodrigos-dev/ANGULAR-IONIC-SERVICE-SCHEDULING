@@ -93,12 +93,14 @@ import {
   formatDateFieldInputs,
   getFormatDateValue,
 } from '../../utils/date.util';
+import { RouterModule } from '@angular/router';
 
 // MÓDULOS IONIC EQUIVALENTES
 const DYNAMIC_FORM_MODULES = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
+  RouterModule,
 
   // Pipes e Directives Customizados
   InputMaskDirective,
@@ -190,6 +192,7 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
+
     // 1. O valueChanges emite o valor bruto (ISO 8601)
     this.form.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged(), untilDestroyed(this))
@@ -243,7 +246,9 @@ export class DynamicFormComponent implements OnInit {
 
   private createForm() {
     if (!this.formConfigFields)
-      return console.log('formConfigFields undefined');
+      return console.log(
+        'formConfigFields undefined - dynamic-form.component.ts:249'
+      );
 
     for (const control of this.formConfigFields) {
       if (control.typeFieldForm !== this.eFieldDynamicForm.DIVIDER) {
@@ -413,10 +418,7 @@ export class DynamicFormComponent implements OnInit {
       // 4. Formata a data válida para a string de exibição
       return format(dateObject, formatString, { locale: ptBR });
     } catch (error) {
-      console.error(
-        'Erro ao formatar data: - dynamic-form.component.ts:418',
-        error
-      );
+      console.error('Erro ao formatar data:', error);
       return undefined;
     }
   }

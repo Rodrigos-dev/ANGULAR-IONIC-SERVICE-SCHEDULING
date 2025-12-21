@@ -28,13 +28,15 @@ export class FormStorageDirective implements OnInit, OnDestroy {
   }
 
   private updateFormValue(): void {
-    const storageValue = JSON.parse(
-      localStorage.getItem(this.mbFormStorageName!) || '{}'
-    );
+    setTimeout(() => {
+      const storageValue = JSON.parse(
+        localStorage.getItem(this.mbFormStorageName!) || '{}'
+      );
 
-    if (storageValue) {
-      this.formGroup.patchValue(storageValue);
-    }
+      if (storageValue) {
+        this.formGroup.patchValue(storageValue);
+      }
+    });
   }
 
   private listenUpdateValue(): void {
@@ -42,7 +44,10 @@ export class FormStorageDirective implements OnInit, OnDestroy {
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe((value) => {
         const formattedValue = this.formatValuesForStorage(value);
-        console.log('SALVANDO NO STORAGE:', value);
+        console.log(
+          'SALVANDO NO STORAGE: - form-storage.directive.ts:47',
+          value
+        );
         localStorage.setItem(
           this.mbFormStorageName!,
           JSON.stringify(formattedValue)
