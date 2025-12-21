@@ -20,5 +20,11 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideNgxMask(),
+
+    provideIonicAngular({
+      scrollAssist: false,
+      scrollPadding: false,
+      // Você pode adicionar outras configs aqui, como mode: 'md' ou 'ios'
+    }),
   ],
 });

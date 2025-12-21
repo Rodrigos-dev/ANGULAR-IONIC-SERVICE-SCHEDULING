@@ -18,11 +18,11 @@ const defaultAllFieldsConfigs: IDefaultAllFieldsConfigs = {
 
   marginLeftInput: undefined, // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
   marginRightInput: undefined, // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
-  border: 'none', //'full' | 'none' | 'bottom'
+  border: 'full', //'full' | 'none' | 'bottom'
   borderRadius: '8px', //30px....1rem etc
   borderColor: undefined, //default primary....enviar 'var()'... rgb ...rgba etc
   borderWidthInput: undefined, // enviar '1px', '1rem', .....//adiciona uma borda na parte de baixo do input quando tiver erro
-  fill: undefined, //"outline" ｜ "solid" - bordas no outline - background no solid
+  fill: 'outline', //"outline" ｜ "solid" - bordas no outline - background no solid
   labelPlacement: 'floating', //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
 };
 
@@ -787,7 +787,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Data de Nascimento', //label que aparece na parte superior do input
+          labelInput: 'Nome', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 
@@ -857,7 +857,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Data e hora do agendamento', //label que aparece na parte superior do input
+          labelInput: 'Nome', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 
@@ -926,7 +926,7 @@ export const TEST_ALL_FIELDS_FORM_CONFIG = (): IDynamicFormFieldsConfig[] => {
           maxLengthInput: undefined, //max quantidade de caracteres que o input suporta
           minLengthInput: undefined, //min caracteres que deve ter o input
 
-          labelInput: 'Hora Inicial', //label que aparece na parte superior do input
+          labelInput: 'Nome', //label que aparece na parte superior do input
           autofocusInput: undefined, //true, false
           maskInput: undefined, //EMaskType : Telephone, Plate, PostalCode, Cpf, Cnpj, Rg, Weight, Measure, Money.....
 

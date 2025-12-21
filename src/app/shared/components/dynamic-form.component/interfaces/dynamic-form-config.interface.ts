@@ -8,7 +8,16 @@ import {
   IItemDividerConfigs,
 } from './fields.configs.interface';
 
-export interface IDynamicFormConfig {
+export interface IDynamicFormContainerConfig {
+  paddingRightForm?: string;
+  paddingLeftForm?: string;
+  paddingBottomForm?: string;
+  paddingTopForm?: string;
+  maxWidthForm?: string;
+  gapFieldsForm?: string;
+}
+
+export interface IDynamicFormFieldsConfig {
   name: string; //nome do campo no formulario formname
   typeFieldForm: EFieldDynamicForm; //tipo de campo do formulario desejado ...input..select etc
   initialValue?: DateFieldInitialValue; //valor inicial do input - para updates etc - caso seja data ou time o input YYYY-MM-DDTHH:mm, YYYY-MM-DD, HH:mm

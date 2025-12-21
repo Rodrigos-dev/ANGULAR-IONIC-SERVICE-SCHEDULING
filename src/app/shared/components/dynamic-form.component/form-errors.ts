@@ -7,12 +7,14 @@ export interface ErrorMessages {
 export const DEFAULT_ERRORS = {
   required: () => `Campo obrigatório`,
   email: () => `E-mail inválido`,
-  minlength: ({ requiredLength }: { requiredLength: number }) => `Mínimo de ${requiredLength} caracteres`,
-  maxlength: ({ requiredLength }: { requiredLength: number }) => `Máximo de ${requiredLength} caracteres`,
+  minlength: ({ requiredLength }: { requiredLength: number }) =>
+    `Mínimo de ${requiredLength} caracteres`,
+  maxlength: ({ requiredLength }: { requiredLength: number }) =>
+    `Máximo de ${requiredLength} caracteres`,
   min: ({ min }: { min: number }) => `Valor mínimo: ${min}`,
   max: ({ max }: { max: number }) => `Valor máximo: ${max}`,
   mask: () => `Valor inválido`,
-  passwordNotMatch: () => `As senhas não coincidem`,
+  passwordNotMatch: () => `Confirmação de senha não coincide com a senha`,
   fullName: () => `Sobrenome obrigatório`,
   invalidDate: () => `Data inválida`,
 };

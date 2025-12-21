@@ -33,6 +33,8 @@ export interface IDefaultAllFieldsConfigs {
   sizeGridMainColumn?: number; //tamanho da grid em desktop 'LG' na column porexemplo 3 6 9 12
   mobileSizeGridMainColumn?: number; //tamanho da grid em celular 'XS' na colunn por exemplo 3 6 9 12
   hiddenMainColumn?: boolean; //esconde o campo
+  marginLeftInput?: string; // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
+  marginRightInput?: string; // caso seja borda redonda ou oval dependendo enviar 7px para nao cortar as bordas
   border?: BorderType; //'full' | 'none' | 'bottom'
   borderRadius?: string; //30px....1rem etc
   borderColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
@@ -76,7 +78,7 @@ export interface IItemContainerFieldsConfigs {
   backgroundItemFieldsMain?: string; //default transparent....enviar 'var()'... rgb ...rgba etc
   marginTopItemFieldsMain?: string; //30px....1rem etc
 
-  paddingStart?: string; // enviar '1px', '1rem', .....
+  paddingStart?: string; ////caso envie border e border radius acima de 20px passar o mesmo valor da border radius porem no text area deve ser enviado 50px se nao corta as bordas enviar '1px', '1rem', .....//se o border radius for maior que 20 o padding start deve conter o mesmo valor
   paddingBottom?: string; // enviar '1px', '1rem', .....
   paddingTop?: string; // enviar '1px', '1rem', .....
 
@@ -121,6 +123,9 @@ export interface IHintItemMainConfigs {
 export interface IAvatarFieldConfigs {
   avatarOrImageHeight?: string; //30px....1rem etc
   avatarOrImageWidth?: string; //30px....1rem etc
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }
 
 //********************************************************************************************************************************** */
@@ -148,6 +153,7 @@ export interface IInputConfigs {
 
   iconNameInput?: string; //
   iconMarginLeftInput?: string; // enviar '1px', '1rem', .....
+  iconMarginRightInput?: string; // enviar '1px', '1rem', .....
   iconFontSizeInput?: string; //enviar '1px', '1rem', .....
   iconColorInput?: string; //default primary....enviar 'var()'... rgb ...rgba etc
 
@@ -207,6 +213,9 @@ export interface IToggleFieldConfigs {
   toggleLabelPlacement?: LabelPlacementType; //fixed, floating, stacked, start.... escrita dentro do input ou aquela que movimaneta de dentro para cima etc...fixed - com input label mantem o testo fixo no incio do input -
   toggleMarginTop?: string; //enviar '1px', '1rem', .....
   toggleMarginBottom?: string; //enviar '1px', '1rem', .....
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }
 
 //******************************************************************************************************************* */
@@ -223,6 +232,9 @@ export interface ISelectFieldConfigs {
   selectOptionIconFontSize?: string; //enviar '1px', '1rem',
   selectBackground?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   selectPlaceholder?: string;
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }
 
 //************************************************************************************************************************** */
@@ -244,6 +256,9 @@ export interface ICheckBoxConfigs {
   checkBoxPaddingBottom?: string;
   checkBoxMarginTop?: string;
   checkBoxItemLinesDow?: linesShowType; //"full" ｜ "inset" ｜ "none".....
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }
 
 //************************************************************************************************************************** */
@@ -266,6 +281,9 @@ export interface IRadioConfigs {
   BorderRadiusradioCheck?: string; //enviar '1px', '1rem',
   textOptionRadioColor?: string; //default primary....enviar 'var()'... rgb ...rgba etc
   selectOptions?: ISelectOptions[];
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }
 
 //********************************************************************************************************************** */
@@ -277,4 +295,7 @@ export interface IMediasConfigs {
   maxVideos?: number; //quantidade maxima de videos para adcionar
   maxTotalMedia?: number; ////quantidade maxima de medias - doc+video+image para adcionar
   mediasCustomColorAndBorderColor?: string; ////default primary....enviar 'var()'... rgb ...rgba etc
+
+  buttonOneDownInput?: IButtonOneDownInput;
+  buttonTwoDownInput?: IButtonTwoDownInput;
 }

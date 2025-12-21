@@ -4,14 +4,6 @@
 
 /* Grid responsivo */
 
-.my-grid {
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  max-width: 1000px;
-}
-
 ion-grid {
   --ion-grid-padding: 0;
   --ion-grid-column-padding: 8px;
@@ -42,15 +34,17 @@ ion-item {
   --min-height: 40px;
   --border-width: 0;
   --border-style: none;
+
+  overflow: hidden;
 }
 
 //container das medias usa
-.itemWithScroll {
-  overflow-x: auto;
-  overflow-y: hidden;
-  /*(Opcional) Ajuste para o scroll ser mais suave (em alguns navegadores) */
-  -webkit-overflow-scrolling: touch;
-}
+// .itemWithScroll {
+//   overflow-x: auto;
+//   overflow-y: hidden;
+//   /*(Opcional) Ajuste para o scroll ser mais suave (em alguns navegadores) */
+//   -webkit-overflow-scrolling: touch;
+// }
 
 //--------------------- parte avatar
 
@@ -89,6 +83,11 @@ ion-item {
   display: flex !important;
 }
 
+.borderSolid.has-focus {
+  --background: #f0f0f0; /* Muda o fundo ao focar */
+  border-bottom: 1px solid var(--ion-color-primary); /* Adiciona uma borda manual */
+}
+
 //-------------------------------ion notes
 
 ion-note {
@@ -116,10 +115,6 @@ ion-note {
 
 //-------------parte select
 
-ion-select {
-  padding-right: 10px;
-}
-
 /* Estilo para itens de select com ícones */
 ion-select-option {
   display: flex;
@@ -131,15 +126,14 @@ ion-select-option {
 
 /* APLICA BORDA COMPLETA QUANDO O ATRIBUTO 'fill' ESTÁ PRESENTE */
 .itemCheckboxWithFill {
-  /* 2. Aplica a borda CSS tradicional ao redor do componente */
-  border: 1px solid var(--ion-color-secondary, #cccccc);
-
   /* 4. Garante que o fundo seja sólido */
   --background: var(--ion-background-color, #ffffff);
 
   /* 5. Zera a linha divisória interna padrão do Ionic para evitar duplicidade */
   --inner-border-width: 0 !important;
   --border-width: 0 !important;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 ion-checkbox {
@@ -252,12 +246,34 @@ ion-datetime.compact-datetime .datetime-grid {
 }
 
 .media-gallery-container {
-  padding: 10px;
+  display: flex; /* Alinha os itens em linha */
+  flex-wrap: nowrap; /* IMPEDE a quebra de linha (essencial) */
+  overflow-x: auto; /* Ativa o scroll horizontal */
+  overflow-y: hidden; /* Esconde o scroll vertical indesejado */
+  width: 100%; /* Garante que ocupe a largura disponível */
+  gap: 10px; /* Espaçamento entre as mídias */
+  padding: 10px 0; /* Respiro vertical para não cortar sombras ou bordas */
+
+  /* Melhora a experiência no mobile */
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory; /* Faz os itens "travarem" no lugar ao rolar */
+
+  /* Esconde a barra de scroll feia no desktop (opcional) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* IMPORTANTE: Os itens dentro da galeria */
+.media-gallery-container > * {
+  flex: 0 0 auto; /* IMPEDE que os itens encolham para caber na tela */
+  scroll-snap-align: start; /* Alinha o item ao início ao rolar */
 }
 
 .media-list-wrapper {
   display: flex;
-  gap: 15px; /* Espaço entre os itens */
+  gap: 25px; /* Espaço entre os itens */
+  padding: 0 30px 0 30px;
 }
 
 .media-item-card {
@@ -270,9 +286,9 @@ ion-datetime.compact-datetime .datetime-grid {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   border-radius: 8px; /* Cantos arredondados */
   border: 1px solid var(--medias-custom-and-border-color);
+  overflow: hidden;
 }
 
 .videoInGalleryForm {

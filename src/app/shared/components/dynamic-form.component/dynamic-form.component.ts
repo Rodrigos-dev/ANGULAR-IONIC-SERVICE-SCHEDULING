@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 
 //angular
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
@@ -60,7 +61,10 @@ import {
   IMediaRemovalData,
 } from './interfaces/medias.interface';
 import { MediaService } from '../../services/medias.service';
-import { IDynamicFormConfig } from './interfaces/dynamic-form-config.interface';
+import {
+  IDynamicFormContainerConfig,
+  IDynamicFormFieldsConfig,
+} from './interfaces/dynamic-form-config.interface';
 import { IsMediaTypePipe } from '../../pipes/is-media-type.pipe';
 import { FormStorageDirective } from '../../directives/form-storage/form-storage.directive';
 import {
@@ -136,12 +140,17 @@ const DYNAMIC_FORM_MODULES = [
   ],
 })
 export class DynamicFormComponent implements OnInit {
-  @Input() formConfigFields?: IDynamicFormConfig[];
+  @Input() formContainerConfig?: IDynamicFormContainerConfig;
+
+  @Input() formConfigFields?: IDynamicFormFieldsConfig[];
   @Input() mbFormStorageName?: string; //enviar apenas se for salvar no storage e manter salvo para usuario continuar a preencher//deve limpar o storage depois do submit
   @Input() mbFormStorageFieldTypes?: Record<string, EFieldDynamicForm>;
   @Output() formValueChange = new EventEmitter();
 
-  form: FormGroup = new FormGroup({});
+  form: FormGroup = new FormGroup(
+    {},
+    { validators: this.passwordMatchValidator }
+  );
 
   @ViewChild('dateModal') dateModal?: IonModal;
 
@@ -272,7 +281,32 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  togglePasswordIconVisibility(field: IDynamicFormConfig) {
+  private passwordMatchValidator(
+    group: AbstractControl
+  ): ValidationErrors | null {
+    const pass = group.get('password');
+    const confirmPass = group.get('confirmPassword');
+
+    if (!pass || !confirmPass) return null;
+
+    if (pass.value === confirmPass.value) {
+      // Se as senhas ficarem iguais, removemos APENAS o erro de comparação
+      if (confirmPass.hasError('passwordNotMatch')) {
+        const { passwordNotMatch, ...remainingErrors } =
+          confirmPass.errors || {};
+        const hasRemaining = Object.keys(remainingErrors).length > 0;
+        confirmPass.setErrors(hasRemaining ? remainingErrors : null);
+      }
+      return null;
+    } else {
+      // Adiciona o erro de senha sem apagar o que já existia (como required)
+      const errors = { ...confirmPass.errors, passwordNotMatch: true };
+      confirmPass.setErrors(errors);
+      return { passwordNotMatch: true };
+    }
+  }
+
+  togglePasswordIconVisibility(field: IDynamicFormFieldsConfig) {
     const control = this.formConfigFields?.find((c) => c.name === field.name);
     if (!control) return;
 
@@ -380,17 +414,35 @@ export class DynamicFormComponent implements OnInit {
       return format(dateObject, formatString, { locale: ptBR });
     } catch (error) {
       console.error(
-        'Erro ao formatar data: - dynamic-form.component.ts:384',
+        'Erro ao formatar data: - dynamic-form.component.ts:418',
         error
       );
       return undefined;
     }
   }
+
+  /**
+   * Verifica se o valor é uma string ISO ou um objeto Date,
+   * evitando que o DatePipe tente processar strings já formatadas (ex: dd/MM/yyyy).
+   * quando tinha uma data formatada no storage dava erro dizendo que formato era invalido ento essa funcao resolve isso
+   */
+  isPipeableDate(value: any): boolean {
+    if (!value) return false;
+    // Se contiver '/' provavelmente já está formatado como dd/MM/yyyy, então não passa pelo pipe
+    if (typeof value === 'string' && value.includes('/')) return false;
+
+    // Verifica se é um objeto Date ou uma string ISO (contém 'T' ou '-')
+    return (
+      value instanceof Date ||
+      (typeof value === 'string' &&
+        (value.includes('T') || value.includes('-')))
+    );
+  }
   //#### Fim da Parte do input tipo DATA TIME ou DATE-TIME
 
   // PARTE IMAGE - OBEJTO UNICO
   // upload para avatar que sobe uma midia apenas.....se usar uma midia usar essa
-  uploadImage(field: IDynamicFormConfig) {
+  uploadImage(field: IDynamicFormFieldsConfig) {
     // 1. Cria o input de arquivo
     const input = document.createElement('input');
     input.type = 'file';
@@ -424,7 +476,7 @@ export class DynamicFormComponent implements OnInit {
 
   // PARTE MEDIAS ARRAY
   // parte medias - para campo que recebe array de midias usa essa - image - video e documents
-  uploadMedia(field: IDynamicFormConfig) {
+  uploadMedia(field: IDynamicFormFieldsConfig) {
     // 1. VERIFICAÇÃO INICIAL: Limite Total
     if (field && this.isMaxMediaReached(field)) {
       // Exibe uma notificação ou alerta de que o limite total foi atingido
@@ -595,7 +647,7 @@ export class DynamicFormComponent implements OnInit {
     }).length;
   }
 
-  isMaxMediaReached(field: IDynamicFormConfig): boolean {
+  isMaxMediaReached(field: IDynamicFormFieldsConfig): boolean {
     const currentArray: string[] = this.form.get(field.name)?.value || [];
     const max = field.fieldsConfigs?.mediasConfigs?.maxTotalMedia;
 

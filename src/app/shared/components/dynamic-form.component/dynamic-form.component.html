@@ -4,16 +4,22 @@
   [mbFormStorageName]="mbFormStorageName"
   [mbFormStorageFieldTypes]="formFieldTypes"
 >
-  <ion-grid class="my-grid">
-    <ion-col size-lg="12" size-lg="6"></ion-col>
-    <ion-row>
+  <ion-grid
+    [style.padding-top]="formContainerConfig?.paddingTopForm || '1px'"
+    [style.padding-right]="formContainerConfig?.paddingRightForm || '15px'"
+    [style.padding-bottom]="formContainerConfig?.paddingBottomForm || '20px'"
+    [style.padding-left]="formContainerConfig?.paddingLeftForm || '15px'"
+    [style.max-width]="formContainerConfig?.maxWidthForm || '1000px'"
+  >
+    <ion-col size-lg="12" size-lg="6"> </ion-col>
+    <ion-row [style.row-gap]="formContainerConfig?.gapFieldsForm || '9px'">
       <!-- loop com os campos enviados na configuracao do formulario -->
       @for (field of formConfigFields; track field.name) {
       <!-- COLUNA CONTAINER -->
+
       <ion-col
-        [ngStyle]="{
-          '--padding-start': '0px',
-          '--padding-end': '0px'
+        [ngStyle]="{                
+          'padding': '0 3px',          
         }"
         [attr.size-lg]="field.defaultAllFieldsConfigs?.sizeGridMainColumn ?? 12"
         [attr.size-xs]="
@@ -30,22 +36,22 @@
         @let dividerMarginBottom =
         field.itemDividerConfigs?.marginBottomItemDivider || '1px';
         <!--  -->
-        @let dividerPaddingStart=
-        field.itemDividerConfigs?.paddingStartItemDivider ?
-        field.itemDividerConfigs?.paddingStartItemDivider : '1.2rem';
+        <!--  -->
+        @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ||
+        '20px';
         <!--  -->
         @let dividerBorder = field.itemDividerConfigs?.borderItemDivider ===
-        'full' ? '1px solid var(--ion-color-primary)' : null;
+        'full' ? '1.5px solid var(--ion-color-primary)' : null;
         <!--  -->
         @let dividerBorderColor = field.itemDividerConfigs?.borderItemDivider
-        === 'full' ? '1px solid var(--ion-color-primary)' : null;
+        === 'full' ? '1.5px solid var(--ion-color-primary)' : null;
 
         <ion-item-divider
           [ngStyle]="{
             width: '100%',
             'margin-bottom': dividerMarginBottom
           }"
-          [style.--padding-start]="dividerPaddingStart"
+          [style.--padding-start]="paddingStart"
           [style.border]="dividerBorder"
           [style.border-color]="dividerBorderColor"
           [sticky]="field.itemDividerConfigs?.stickItemDivider"
@@ -55,6 +61,17 @@
           [style.background]="
             field.itemDividerConfigs?.backgroundItemItemDivider
           "
+          [style.border]="
+            field.defaultAllFieldsConfigs?.border === 'full'
+              ? '1.5px solid var(--ion-color-primary)'
+              : null
+          "
+          [style.border-bottom]="
+            field.defaultAllFieldsConfigs?.border === 'bottom'
+              ? '1.5px solid var(--ion-color-primary)'
+              : 'undefined'
+          "
+          [style.borderRadius]="field.defaultAllFieldsConfigs?.borderRadius"
         >
           <!-- caso queira exibir o titulo se nao enviar fica uma linha apenas ou um quadrado dependendo da config do item divider -->
           @if(field.itemDividerConfigs?.textLabelItemDivider){
@@ -104,6 +121,13 @@
 
         <!-- CAMPOS DE FORMULÁRIO -->
         @if (field.typeFieldForm !== eFieldDynamicForm.DIVIDER) {
+        <!--  -->
+        @let inputField = field.typeFieldForm === eFieldDynamicForm.INPUT||
+        field.typeFieldForm === eFieldDynamicForm.DATE || field.typeFieldForm
+        === eFieldDynamicForm.TIME || field.typeFieldForm ===
+        eFieldDynamicForm.DATE_TIME || field.typeFieldForm ===
+        eFieldDynamicForm.TEXTAREA || field.typeFieldForm ===
+        eFieldDynamicForm.SELECT;
 
         <!-- item que envolve os campos -->
         <ion-item
@@ -120,26 +144,35 @@
           [detail]="field.itemContainerFieldsConfigs?.detailItemFieldsMain"
           [lines]="field.itemContainerFieldsConfigs?.noneLinesItemFieldsMain"
           [style.border]="
-            field.defaultAllFieldsConfigs?.border === 'full'
-              ? '1px solid var(--ion-color-primary)'
+            !inputField && field.defaultAllFieldsConfigs?.border === 'full'
+              ? '1.5px solid var(--ion-color-primary)'
               : null
           "
+          [style.border-bottom]="
+            !inputField && field.defaultAllFieldsConfigs?.border === 'bottom'
+              ? '1.5px solid var(--ion-color-primary)'
+              : 'undefined'
+          "
+          [style.box-sizing]="'border-box'"
           [style.border-color]="
-            field.defaultAllFieldsConfigs?.border === 'none'
-              ? 'transparent'
-              : field.defaultAllFieldsConfigs?.borderColor
-              ? field.defaultAllFieldsConfigs?.borderColor
-              : 'var(--ion-color-primary)'
+            !inputField
+              ? field.defaultAllFieldsConfigs?.border === 'none'
+                ? 'transparent'
+                : field.defaultAllFieldsConfigs?.borderColor
+                ? field.defaultAllFieldsConfigs?.borderColor
+                : 'var(--ion-color-primary)'
+              : undefined
           "
           [style.borderRadius]="field.defaultAllFieldsConfigs?.borderRadius"
           [style.--background]="
+            !inputField &&
             field.itemContainerFieldsConfigs?.backgroundItemFieldsMain
           "
           [style.margin-top]="
             field.itemContainerFieldsConfigs?.marginTopItemFieldsMain
           "
           [style.--padding-bottom]="
-            field.itemContainerFieldsConfigs?.paddingBottom
+            field.itemContainerFieldsConfigs?.paddingBottom || '3px'
           "
           [style.--padding-top]="field.itemContainerFieldsConfigs?.paddingTop"
         >
@@ -168,7 +201,9 @@
             "
             [style.padding-left]="
               field.itemContainerFieldsConfigs?.labelConfigs
-                ?.paddingLeftLabelItemMain || '20px'
+                ?.paddingLeftLabelItemMain ||
+              field.itemContainerFieldsConfigs?.paddingStart ||
+              '20px'
             "
             [style.margin-bottom]="
               field.itemContainerFieldsConfigs?.labelConfigs
@@ -263,7 +298,6 @@
           field.typeFieldForm === eFieldDynamicForm.DATE || field.typeFieldForm
           === eFieldDynamicForm.TIME || field.typeFieldForm ===
           eFieldDynamicForm.DATE_TIME) {
-
           <!-- VERIFICA SE O INPUT VAI SER TIPO DATE -->
           @let isDateOrTimeInput = field.typeFieldForm !==
           eFieldDynamicForm.INPUT;
@@ -292,10 +326,8 @@
           field.defaultAllFieldsConfigs?.labelPlacement;
 
           <!--  -->
-          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ?
-          field.itemContainerFieldsConfigs?.paddingStart :
-          field.defaultAllFieldsConfigs?.borderRadius ?
-          field.defaultAllFieldsConfigs?.borderRadius : '20px';
+          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ||
+          '20px';
 
           <!--  -->
           @let iconNameInput = (isPasswordField ||
@@ -320,9 +352,14 @@
           || 'var(--ion-color-primary)';
 
           <!-- tags -->
-          <ion-row [style.width]="'100%'">
+          <ion-row [style.width]="'100%'" [style.padding-top]="'5px'">
+            <!-- class borderSolid é pq o bottom quando esta sem solida nao funciona quando recebe focus dentro de um item-->
             <ion-input
               mode="md"
+              [class.borderSolid]="
+                field.defaultAllFieldsConfigs?.fill === 'solid' ||
+                !field.defaultAllFieldsConfigs?.fill
+              "
               [autofocus]="field.fieldsConfigs?.inputConfigs?.autofocusInput"
               [formControlName]="field.name"
               [appInputMask]="field.fieldsConfigs?.inputConfigs?.maskInput"
@@ -357,7 +394,6 @@
                 field.fieldsConfigs?.inputConfigs?.backgroundInput
               "
               [style.--border-color]="boderColorInput"
-              [style.--border-width]="boderWidthInput"
               [style.margin-top]="
                 field.fieldsConfigs?.inputConfigs?.marginTopInput || '1px'
               "
@@ -369,10 +405,18 @@
                   )
               "
               [style.--color]="colorLabelPlaceholderAndTextInput"
+              [style.margin-left]="
+                field.defaultAllFieldsConfigs?.marginLeftInput
+              "
+              [style.margin-right]="
+                field.defaultAllFieldsConfigs?.marginRightInput
+              "
               [value]="
                 isDateOrTimeInput
-                  ? (form.controls[field.name]?.value
-                    | date : formatValueWhenDate)
+                  ? isPipeableDate(form.controls[field.name]?.value)
+                    ? (form.controls[field.name]?.value
+                      | date : formatValueWhenDate : 'UTC')
+                    : form.controls[field.name]?.value
                   : undefined
               "
             >
@@ -399,6 +443,9 @@
                 slot="end"
                 [id]="'modal-trigger-' + field.name"
                 (click)="dateModal.present()"
+                [style.margin-right]="
+                  field.fieldsConfigs?.inputConfigs?.iconMarginRightInput
+                "
               >
                 <ion-icon
                   [name]="
@@ -406,14 +453,18 @@
                       ? 'timer-outline'
                       : 'calendar-outline'
                   "
+                  [style.font-size]="
+                    field.fieldsConfigs?.inputConfigs?.iconFontSizeInput ||
+                    '20px'
+                  "
                 ></ion-icon>
               </ion-button>
 
               <!--  DATE TIME MODAL -->
               <ion-modal
                 #dateModal
-                [keepContentsMounted]="true"
-                [breakpoints]="[0, 0.7, 1.0]"
+                [trigger]="'modal-trigger-' + field.name"
+                [breakpoints]="[0, 0.5, 0.9, 1]"
                 [initialBreakpoint]="0.9"
               >
                 <ng-template>
@@ -455,7 +506,11 @@
                   </ion-header>
                   <ion-content
                     class="ion-padding ion-padding ion-justify-content-center"
-                    [style.display]="'flex'"
+                    style="
+                      min-height: 350px;
+                      display: flex;
+                      justify-content: center;
+                    "
                   >
                     <ion-datetime
                       [formControlName]="field.name"
@@ -485,6 +540,9 @@
                     : field.defaultAllFieldsConfigs?.onAddOnIconClick &&
                       field.defaultAllFieldsConfigs?.onAddOnIconClick(form)
                 "
+                [style.margin-right]="
+                  field.fieldsConfigs?.inputConfigs?.iconMarginRightInput
+                "
               >
                 <ion-icon
                   slot="icon-only"
@@ -495,7 +553,7 @@
                   "
                   [style.font-size]="
                     field.fieldsConfigs?.inputConfigs?.iconFontSizeInput ||
-                    '13px'
+                    '20px'
                   "
                   [style.color]="
                     field.fieldsConfigs?.inputConfigs?.iconColorInput ||
@@ -507,128 +565,6 @@
             </ion-input>
           </ion-row>
 
-          @if
-          (field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
-          ||
-          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
-          {
-
-          <!--  -->
-          @let sizeColumnDefault =
-          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
-          &&
-          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput)
-          &&
-          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
-          ||
-          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
-          ? 12 : null;
-
-          <ion-row [style.width]="'100%'">
-            <!-- vars button one -->
-            @if(field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput){
-            <!--  -->
-            @let sizeColumnButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
-            || 6;
-            <!--  -->
-            @let paddingLeftButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.paddingLeftButtonOneDownInput
-            || '5px';
-            <!--  -->
-            @let justifyContentButtonOne =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.justifyContentButtonOneDownInput
-            || 'flex-start';
-            <!--  -->
-            @let linkButtonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.linkButtonOneDownInput;
-            <!--  -->
-            @let fontSizebuttonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontSizebuttonOneDownInput
-            || '10px';
-            <!--  -->
-            @let colorTextbuttonOneDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.colorTextbuttonOneDownInput
-            || 'var(--ion-color-primary)';
-            <!--  -->
-
-            <ion-col
-              [size]="sizeColumnDefault || sizeColumnButtonOne"
-              [style.padding]="'0'"
-              [style.padding-left]="paddingLeftButtonOne"
-              [style.display]="'flex'"
-              [style.justify-content]="justifyContentButtonOne"
-            >
-              <ion-button
-                class="buttonDownInput"
-                fill="clear"
-                [routerLink]="linkButtonOneDownInput"
-                [style.font-size]="fontSizebuttonOneDownInput"
-                [style.padding]="'0'"
-                [style.color]="colorTextbuttonOneDownInput"
-              >
-                {{
-                  field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
-                    ?.textButtonOneDownInput ||
-                    "enviar texto do botão 1 abaixo do input"
-                }}
-              </ion-button>
-            </ion-col>
-            }
-
-            <!-- vars button 2 -->
-            @if(field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput){
-            <!--  -->
-            @let sizeColumnButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput
-            || 6;
-            <!--  -->
-            @let paddingRightButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.paddingLeftButtonTwoDownInput
-            || '5px';
-            <!--  -->
-            @let justifyContentButtonTwo =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.justifyContentButtonTwoDownInput
-            || 'flex-end';
-            <!--  -->
-            @let linkButtonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.linkButtonTwoDownInput;
-            <!--  -->
-            @let fontSizebuttonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontSizebuttonTwoDownInput
-            || '10px';
-            <!--  -->
-            @let colorTextbuttonTwoDownInput =
-            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.colorTextbuttonTwoDownInput
-            || 'var(--ion-color-primary)';
-            <!--  -->
-
-            <ion-col
-              [size]="sizeColumnDefault || sizeColumnButtonTwo"
-              [style.padding]="'0'"
-              [style.padding-right]="paddingRightButtonTwo"
-              [style.display]="'flex'"
-              [style.justify-content]="justifyContentButtonTwo"
-            >
-              <ion-button
-                class="buttonDownInput"
-                fill="clear"
-                [routerLink]="linkButtonTwoDownInput"
-                [style.font-size]="fontSizebuttonTwoDownInput"
-                [style.padding]="'0'"
-                [style.color]="colorTextbuttonTwoDownInput"
-              >
-                {{
-                  field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput
-                    ?.textButtonTwoDownInput ||
-                    "enviar texto do botão 2 abaixo do input"
-                }}
-              </ion-button>
-            </ion-col>
-            }
-          </ion-row>
-
-          }
           <!-- fim if eDynamicField.INPUT -->
           }
 
@@ -636,26 +572,28 @@
           @if (field.typeFieldForm === eFieldDynamicForm.TEXTAREA) {
 
           <!--  -->
-          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ?
-          field.itemContainerFieldsConfigs?.paddingStart :
-          field.defaultAllFieldsConfigs?.borderRadius ?
-          field.defaultAllFieldsConfigs?.borderRadius : '20px';
+          @let paddingStart = field.itemContainerFieldsConfigs?.paddingStart ||
+          '20px';
 
           <!--  -->
           @let boderColorInput = field.defaultAllFieldsConfigs?.borderColor ||
           'var(--ion-color-primary)';
 
           <!--  -->
-          @let boderWidthInput = field.defaultAllFieldsConfigs?.borderWidthInput
-          || '1px';
+          <!-- @let boderWidthInput = field.defaultAllFieldsConfigs?.borderWidthInput
+          || '1px'; -->
 
           <!--  -->
           @let colorLabelPlaceholderAndTextInput =
           field.fieldsConfigs?.inputConfigs?.colorLabelPlaceholderAndTextInput
           || 'var(--ion-color-primary)';
 
+          <!-- class borderSolid é pq o bottom quando esta sem solida nao funciona quando recebe focus dentro de um item-->
           <ion-textarea
             mode="md"
+            [class.borderSolid]="
+              field.defaultAllFieldsConfigs?.fill === 'solid'
+            "
             [formControlName]="field.name"
             [rows]="field.fieldsConfigs?.inputConfigs?.textAreaRows || 4"
             [placeholder]="field.fieldsConfigs?.inputConfigs?.placeholderInput"
@@ -667,14 +605,14 @@
             [style.--border-radius]="
               field.defaultAllFieldsConfigs?.borderRadius
             "
-            [style.--padding-start]="paddingStart"
+            [style.--padding-start]="paddingStart || '20px'"
             [style.--background]="
               field.fieldsConfigs?.inputConfigs?.backgroundInput
             "
             [style.--border-color]="boderColorInput"
-            [style.--border-width]="boderWidthInput"
             [style.--color]="colorLabelPlaceholderAndTextInput"
-            [style.--padding-top]="'20px'"
+            [style.padding-top]="'5px'"
+            [style.--padding-top]="'10px'"
             [style.--padding-bottom]="'20px'"
             [style.margin-top]="
               field.fieldsConfigs?.inputConfigs?.marginTopInput || '1px'
@@ -703,7 +641,7 @@
                 "
                 [style.margin-left]="
                   field.fieldsConfigs?.toggleConfigs?.toggleLabelMarginLeft ||
-                  '0.2rem'
+                  '20px'
                 "
                 [style.font-size]="
                   field.fieldsConfigs?.toggleConfigs?.toggleLabelFontSize ||
@@ -737,7 +675,9 @@
             </div>
             <ion-toggle
               slot="end"
+              [mode]="'md'"
               [formControlName]="field.name"
+              [label-placement]="'end'"
               (ionChange)="
                 field.defaultAllFieldsConfigs?.onChange &&
                   field.defaultAllFieldsConfigs?.onChange(
@@ -785,12 +725,9 @@
               field.defaultAllFieldsConfigs?.borderRadius
             "
             [style.--padding-start]="
-              field.itemContainerFieldsConfigs?.paddingStart
-                ? field.itemContainerFieldsConfigs?.paddingStart
-                : field.defaultAllFieldsConfigs?.borderRadius
-                ? field.defaultAllFieldsConfigs?.borderRadius
-                : '20px'
+              field.itemContainerFieldsConfigs?.paddingStart || '20px'
             "
+            [style.--padding-end]="'30px'"
             [style.color]="
               field.fieldsConfigs?.selectConfigs?.selectColor ||
               'var(--ion-color-primary)'
@@ -803,6 +740,7 @@
               field.fieldsConfigs?.selectConfigs?.selectBackground ||
               'color-mix(in srgb, var(--ion-color-primary), white 96%)'
             "
+            [style.margin-top]="'4px'"
           >
             @for (option of field.fieldsConfigs?.selectConfigs?.selectOptions;
             track option.value) {
@@ -842,7 +780,10 @@
             [class.itemCheckboxWithFill]="field.defaultAllFieldsConfigs?.fill"
             [style.border-radius]="field.defaultAllFieldsConfigs?.borderRadius"
             [style.width]="'100%'"
-            [lines]="field.fieldsConfigs?.checkBoxConfigs?.checkBoxItemLinesDow"
+            [lines]="
+              field.fieldsConfigs?.checkBoxConfigs?.checkBoxItemLinesDow ||
+              'none'
+            "
             [style.margin-top]="
               field.fieldsConfigs?.checkBoxConfigs?.checkBoxMarginTop || '0'
             "
@@ -861,7 +802,7 @@
               "
               [style.padding-left]="
                 field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingLeft ||
-                '20px'
+                '10px'
               "
               [style.padding-right]="
                 field.fieldsConfigs?.checkBoxConfigs?.checkBoxPaddingStart ||
@@ -1158,8 +1099,7 @@
           @if (field.itemContainerFieldsConfigs?.hintConfigs?.hintText) {
           <ion-note
             [style.margin-left]="
-              field.itemContainerFieldsConfigs?.hintConfigs?.hintMarginLeft ||
-              '0.3rem'
+              field.itemContainerFieldsConfigs?.paddingStart || '20px'
             "
             [style.font-size]="
               field.itemContainerFieldsConfigs?.hintConfigs?.hintFontSize ||
@@ -1181,13 +1121,140 @@
           form.controls[field.name]?.dirty)) {
           <ion-note
             color="danger"
+            [style.width]="'100%'"
             [style.margin-left]="
-              field.itemContainerFieldsConfigs?.hintConfigs?.hintMarginLeft ||
-              '0.3rem'
+              field.itemContainerFieldsConfigs?.paddingStart || '20px'
             "
           >
             {{ getErrorMessage(form.controls[field.name].errors) }}
           </ion-note>
+          }
+
+          <!--  -->
+          @if
+          (field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+          ||
+          field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+          {
+
+          <!--  -->
+          @let sizeColumnDefault =
+          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+          &&
+          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput)
+          &&
+          (!field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput
+          ||
+          !field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput)
+          ? 12 : null;
+
+          <ion-row [style.width]="'100%'">
+            <!-- vars button one -->
+            @if(field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.showButtonOneDownInput){
+            <!--  -->
+            @let sizeColumnButtonOne =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.sizeColumnButtonOneDownInput
+            || 6;
+            <!--  -->
+            @let paddingLeftButtonOne =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.paddingLeftButtonOneDownInput
+            || '5px';
+            <!--  -->
+            @let justifyContentButtonOne =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.justifyContentButtonOneDownInput
+            || 'flex-start';
+            <!--  -->
+            @let linkButtonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.linkButtonOneDownInput;
+            <!--  -->
+            @let fontSizebuttonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.fontSizebuttonOneDownInput
+            || '10px';
+            <!--  -->
+            @let colorTextbuttonOneDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonOneDownInput?.colorTextbuttonOneDownInput
+            || 'var(--ion-color-primary)';
+            <!--  -->
+
+            <ion-col
+              [size]="sizeColumnDefault || sizeColumnButtonOne"
+              [style.padding]="'0'"
+              [style.padding-left]="paddingLeftButtonOne"
+              [style.display]="'flex'"
+              [style.justify-content]="justifyContentButtonOne"
+            >
+              <ion-button
+                class="buttonDownInput"
+                fill="clear"
+                [routerLink]="linkButtonOneDownInput"
+                [style.font-size]="fontSizebuttonOneDownInput"
+                [style.padding]="'0'"
+                [style.color]="colorTextbuttonOneDownInput"
+                [style.margin-left]="'7px'"
+                [style.margin-right]="'7px'"
+              >
+                {{
+                  field.fieldsConfigs?.inputConfigs?.buttonOneDownInput
+                    ?.textButtonOneDownInput ||
+                    "enviar texto do botão 1 abaixo do input"
+                }}
+              </ion-button>
+            </ion-col>
+            }
+
+            <!-- vars button 2 -->
+            @if(field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.showButtonTwoDownInput){
+            <!--  -->
+            @let sizeColumnButtonTwo =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.sizeColumnButtonTwoDownInput
+            || 6;
+            <!--  -->
+            @let paddingRightButtonTwo =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.paddingLeftButtonTwoDownInput
+            || '5px';
+            <!--  -->
+            @let justifyContentButtonTwo =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.justifyContentButtonTwoDownInput
+            || 'flex-end';
+            <!--  -->
+            @let linkButtonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.linkButtonTwoDownInput;
+            <!--  -->
+            @let fontSizebuttonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.fontSizebuttonTwoDownInput
+            || '10px';
+            <!--  -->
+            @let colorTextbuttonTwoDownInput =
+            field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput?.colorTextbuttonTwoDownInput
+            || 'var(--ion-color-primary)';
+            <!--  -->
+
+            <ion-col
+              [size]="sizeColumnDefault || sizeColumnButtonTwo"
+              [style.padding]="'0'"
+              [style.padding-right]="paddingRightButtonTwo"
+              [style.display]="'flex'"
+              [style.justify-content]="justifyContentButtonTwo"
+            >
+              <ion-button
+                class="buttonDownInput"
+                fill="clear"
+                [routerLink]="linkButtonTwoDownInput"
+                [style.font-size]="fontSizebuttonTwoDownInput"
+                [style.padding]="'0'"
+                [style.color]="colorTextbuttonTwoDownInput"
+                [style.margin-left]="'7px'"
+                [style.margin-right]="'7px'"
+              >
+                {{
+                  field.fieldsConfigs?.inputConfigs?.buttonTwoDownInput
+                    ?.textButtonTwoDownInput ||
+                    "enviar texto do botão 2 abaixo do input"
+                }}
+              </ion-button>
+            </ion-col>
+            }
+          </ion-row>
           }
         </ion-item>
 

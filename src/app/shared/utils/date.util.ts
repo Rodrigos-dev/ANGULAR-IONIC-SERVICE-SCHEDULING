@@ -7,53 +7,15 @@ export const formatDateFieldInputs = (
   fieldValue: any,
   fieldType: EFieldDynamicForm
 ): string => {
-  // const formatString = getFormatDateValue(fieldType);
-
-  // if (!formatString) {
-  //   return fieldValue;
-  // }
-
-  // let dateObject: Date;
-
-  // try {
-  //   switch (fieldType) {
-  //     case EFieldDynamicForm.TIME:
-  //       if (fieldValue instanceof Date) {
-  //         dateObject = fieldValue;
-  //       } else if (typeof fieldValue === 'string' && fieldValue.length <= 5) {
-  //         dateObject = parse(fieldValue, 'HH:mm', new Date());
-  //       } else {
-  //         dateObject = new Date(fieldValue);
-  //       }
-  //       break;
-
-  //     case EFieldDynamicForm.DATE_TIME:
-  //       dateObject = parseISO(fieldValue);
-  //       break;
-
-  //     case EFieldDynamicForm.DATE:
-  //     default:
-  //       dateObject =
-  //         fieldValue instanceof Date ? fieldValue : parseISO(fieldValue);
-  //       break;
-  //   }
-
-  //   if (!isValid(dateObject)) {
-  //     console.warn(
-  //       `Valor inválido detectado para o campo ${fieldType}.`,
-  //       fieldValue
-  //     );
-  //     return fieldValue;
-  //   }
-
-  //   // 🔑 TIME sempre retorna só HH:mm
-  //   if (fieldType === EFieldDynamicForm.TIME) {
-  //     return format(dateObject, 'HH:mm');
-  //   }
-
-  //   return format(dateObject, formatString, { locale: ptBR });
-
   if (!fieldValue) {
+    return fieldValue;
+  }
+
+  if (
+    fieldType !== EFieldDynamicForm.TIME &&
+    fieldType !== EFieldDynamicForm.DATE &&
+    fieldType !== EFieldDynamicForm.DATE_TIME
+  ) {
     return fieldValue;
   }
 
@@ -62,39 +24,38 @@ export const formatDateFieldInputs = (
   try {
     switch (fieldType) {
       case EFieldDynamicForm.TIME:
-        // input[type=time] → "HH:mm"
-        if (typeof fieldValue === 'string' && fieldValue.length <= 5) {
+        // 1. Verificação crucial: se já for Date, não precisa de parse
+        if (fieldValue instanceof Date) {
+          dateObject = fieldValue;
+        }
+        // 2. Se for string curta (ex: "14:30")
+        else if (typeof fieldValue === 'string' && fieldValue.length <= 5) {
           dateObject = parse(fieldValue, 'HH:mm', new Date());
-        } else {
+        }
+        // 3. Se for string ISO (ex: "2025-12-10T17:41...")
+        else {
           dateObject = parseISO(fieldValue);
         }
 
         if (!isValid(dateObject)) return fieldValue;
-
         return format(dateObject, 'HH:mm');
 
       case EFieldDynamicForm.DATE_TIME:
-        // input[type=datetime-local] → "2025-12-10T17:41"
+        // Aqui você já tinha a proteção 'instanceof Date', por isso não dava erro aqui
         dateObject =
           fieldValue instanceof Date ? fieldValue : parseISO(fieldValue);
 
         if (!isValid(dateObject)) return fieldValue;
-
-        return format(dateObject, 'dd/MM/yyyy HH:mm', {
-          locale: ptBR,
-        });
+        return format(dateObject, "yyyy-MM-dd'T'HH:mm", { locale: ptBR });
 
       case EFieldDynamicForm.DATE:
       default:
-        // input[type=date] → "2025-12-02"
+        // Aqui também já estava protegido
         dateObject =
           fieldValue instanceof Date ? fieldValue : parseISO(fieldValue);
 
         if (!isValid(dateObject)) return fieldValue;
-
-        return format(dateObject, 'dd/MM/yyyy', {
-          locale: ptBR,
-        });
+        return format(dateObject, 'yyyy-MM-dd', { locale: ptBR });
     }
   } catch (error) {
     console.error('Erro ao formatar data para Backend:', error);
